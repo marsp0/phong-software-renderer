@@ -3,7 +3,7 @@
 CXX           	:= g++
 SRCDIR 			:= .
 OBJDIR			:= ./out
-EXECUTABLE    	:= ray
+EXECUTABLE    	:= renderer
 EXECUTABLE_GCOV := gcov
 CXXFLAGS      	:= -std=c++14
 SRCFILES	 	:= $(shell find $(SRCDIR) -name "*.cpp")
