@@ -12,9 +12,8 @@ class DisplayManager {
 
 		int width;
 		int height;
+		SDL_Surface* surface;
+		SDL_Window* window;
 
 	private:
-
-		SDL_Window *window;
-		SDL_Surface *surface;
 };
