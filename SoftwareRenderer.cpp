@@ -23,14 +23,15 @@ void SoftwareRenderer::Run() {
 	    // draw frame
 	    Math::Vector3 p2(30.f, 400.f, 30.f, 1.f);
 	    Math::Vector3 p1(20.f, 20.f, 20.f, 1.f);
+	    Math::Vector3 p3(40.f, 200.f, 20.f, 1.f);
 	    
-	    this->Line(p1, p2);
+	    this->DrawTriangle(p1, p2, p3);
 	    this->displayManager.SwapBuffers(this->pixelData);
 	}
 
 }
 
-void SoftwareRenderer::Line(Math::Vector3& p1, Math::Vector3& p2) {
+void SoftwareRenderer::DrawLine(Math::Vector3& p1, Math::Vector3& p2) {
 	int x0 = p1.x;
 	int y0 = p1.y;
 	int x1 = p2.x;
@@ -62,4 +63,10 @@ void SoftwareRenderer::Line(Math::Vector3& p1, Math::Vector3& p2) {
             error2 -= dx*2; 
         } 
     } 
+}
+
+void SoftwareRenderer::DrawTriangle(Math::Vector3& p1, Math::Vector3& p2, Math::Vector3& p3) {
+	this->DrawLine(p1, p2);
+	this->DrawLine(p2, p3);
+	this->DrawLine(p3, p1);
 }

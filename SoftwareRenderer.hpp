@@ -12,7 +12,8 @@ class SoftwareRenderer {
 		~SoftwareRenderer();
 		void Run();
 
-		void Line(Math::Vector3& p1, Math::Vector3& p2);
+		void DrawLine(Math::Vector3& p1, Math::Vector3& p2);
+		void DrawTriangle(Math::Vector3& p1, Math::Vector3& p2, Math::Vector3& p3);
 
 		int width;
 		int height;
