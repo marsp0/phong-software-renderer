@@ -1,11 +1,12 @@
 # https://en.wikipedia.org/wiki/Makefile
 
-CXX           	:= g++
+CXX         	:= gcc
 SRCDIR 			:= .
 OBJDIR			:= ./out
 EXECUTABLE    	:= renderer
-EXECUTABLE_GCOV := gcov
-CXXFLAGS      	:= -std=c++14
+leak		 	:= 
+FLAGS.leak 		:= -fsanitize=address
+CXXFLAGS      	:= -std=c11 ${FLAGS.${leak}} 
 SRCFILES	 	:= $(shell find $(SRCDIR) -name "*.c")
 SRCNAMES		:= $(notdir $(SRCFILES))
 OBJFILES 	    := $(SRCNAMES:%.c=$(OBJDIR)/%.o)
@@ -19,10 +20,10 @@ VPATH := $(subst $(space),:,$(shell find . -type d))
 all: out/$(EXECUTABLE)
 
 out/$(EXECUTABLE): $(OBJFILES)
-	@$(CXX) $(OBJFILES) -o $@ $(LDFLAGS) && echo "[OK] $@"
+	@$(CXX) $(OBJFILES) -o $@ $(LDFLAGS) $(CXXFLAGS) && echo "[OK] $@"
 
 $(OBJDIR)/%.o: %.c
-	@$(CXX) -c -g $< -o $@ $(LDFLAGS) && echo "[OK]  $@"
+	@$(CXX) -c -g $< -o $@ $(LDFLAGS) $(CXXFLAGS) && echo "[OK]  $@"
 
 
 # CLEAN

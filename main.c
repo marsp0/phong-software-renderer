@@ -1,6 +1,6 @@
 #include <stdio.h> /* printf and fprintf */
 #include <SDL2/SDL.h> /* macOS- and GNU/Linux-specific */
-#include "SoftwareRenderer.h"
+#include "Renderer.h"
 
 /* Sets constants */
 #define WIDTH 800
@@ -9,7 +9,8 @@
 
 int main(int argc, char* argv[])
 {
-    // SoftwareRenderer renderer(800, 600);
-    // renderer.Run();
+    Renderer* renderer = create_renderer(WIDTH, HEIGHT);
+    start_rendering(renderer);
+    free_renderer(renderer);
     return 0;
 }
