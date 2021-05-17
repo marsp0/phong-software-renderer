@@ -34,12 +34,12 @@ DisplayManager::~DisplayManager() {
     SDL_Quit();
 }
 
-void DisplayManager::SwapBuffers(std::vector<uint32_t>& pixelData) {
+void DisplayManager::SwapBuffers(std::vector<uint32_t>& frameBuffer) {
 	//Allows surface editing 
     SDL_LockSurface(this->surface);
 
     //Copy pixels buffer resuls to screen surface
-    memcpy(this->surface->pixels, pixelData.data(), pixelData.size() * sizeof(uint32_t));
+    memcpy(this->surface->pixels, frameBuffer.data(), frameBuffer.size() * sizeof(uint32_t));
     SDL_UnlockSurface(this->surface);
 
     //Apply surface changes to window

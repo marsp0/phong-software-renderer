@@ -8,7 +8,7 @@ class DisplayManager {
 		
 		DisplayManager(int width, int height);
 		~DisplayManager();
-		void SwapBuffers(std::vector<uint32_t>& pixelData);
+		void SwapBuffers(std::vector<uint32_t>& frameBuffer);
 
 		int width;
 		int height;
