@@ -1,10 +1,11 @@
 # Software Renderer
 
-References
+## References
 
 ### General
 
 - [Scratchapixel](https://www.scratchapixel.com/)
+- [Software Renderer by Angelo1211](https://github.com/Angelo1211/SoftwareRenderer)
 
 ### Drawing a line
 
