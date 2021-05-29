@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL.h>
 #include <iostream>
+#include <algorithm>
 
 SoftwareRenderer::SoftwareRenderer(int width, int height): width(width), height(height), displayManager(width, height) {
 	this->frameBuffer.resize(width * height);
@@ -32,7 +33,7 @@ void SoftwareRenderer::Run() {
         Math::Vector3 p1(100.f, 400.f, 30.f, 1.f);
         Math::Vector3 p2(300.f, 400.f, 20.f, 1.f);
         Math::Vector3 p3(200.f, 20.f, 20.f, 1.f);
-        this->DrawTriangleAABBMethod(p1, p2, p3);
+        this->DrawTriangleAABB(p1, p2, p3);
 	    this->displayManager.SwapBuffers(this->frameBuffer);
 	}
 }
@@ -70,7 +71,8 @@ void SoftwareRenderer::DrawLine(Math::Vector3& p1, Math::Vector3& p2) {
         if (steep) { 
             index = y + x * this->width;
         }
-        this->frameBuffer[index] = SDL_MapRGBA(this->displayManager.surface->format, 0, 255, 0, 255);
+        // this->frameBuffer[index] = SDL_MapRGBA(this->displayManager.surface->format, 0, 255, 0, 255);
+        this->frameBuffer[index] = 4294967295;
         error += errorStep;
         if (error > dx) { 
             y += (y1 > y0 ? 1 : -1); 
@@ -104,7 +106,8 @@ void SoftwareRenderer::DrawTriangle(Math::Vector3& p1, Math::Vector3& p2, Math::
 
 // AABB rasterizing functions
 
-void SoftwareRenderer::DrawTriangleAABBMethod(Math::Vector3& p1, Math::Vector3& p2, Math::Vector3& p3) {
+void SoftwareRenderer::DrawTriangleAABB(Math::Vector3& p1, Math::Vector3& p2, Math::Vector3& p3) {
+    // https://www.cs.drexel.edu/~david/Classes/Papers/comp175-06-pineda.pdf
     // https://fgiesen.wordpress.com/2013/02/08/triangle-rasterization-in-practice/
     int x0 = p1.x;
     int y0 = p1.y;
@@ -112,17 +115,17 @@ void SoftwareRenderer::DrawTriangleAABBMethod(Math::Vector3& p1, Math::Vector3& 
     int y1 = p2.y;
     int x2 = p3.x;
     int y2 = p3.y;
-    int minx = this->min(x0, x1, x2);
-    int maxx = this->max(x0, x1, x2);
-    int miny = this->min(y0, y1, y2);
-    int maxy = this->max(y0, y1, y2);
+    int minx = std::min({x0, x1, x2});
+    int maxx = std::max({x0, x1, x2});
+    int miny = std::min({y0, y1, y2});
+    int maxy = std::max({y0, y1, y2});
     for (int i = minx; i <= maxx; i++) {
         for (int j = miny; j <= maxy; j++) {
             int index = i + j * this->width;
             int w1 = this->EdgeCheck(x0, y0, x1, y1, i, j);
             int w2 = this->EdgeCheck(x1, y1, x2, y2, i, j);
             int w3 = this->EdgeCheck(x2, y2, x0, y0, i, j);
-            if (w1 <= 0 && w2 <= 0 && w3 <= 0) {
+            if (w1 >= 0 && w2 >= 0 && w3 >= 0) {
                 int index = i + j * this->width;
                 this->frameBuffer[index] = SDL_MapRGBA(this->displayManager.surface->format, 0, 255, 0, 255);
             }
@@ -132,31 +135,7 @@ void SoftwareRenderer::DrawTriangleAABBMethod(Math::Vector3& p1, Math::Vector3& 
 
 
 int SoftwareRenderer::EdgeCheck(int x0, int y0, int x1, int y1, int x2, int y2) {
-    // Article - https://fgiesen.wordpress.com/2013/02/06/the-barycentric-conspirac/
-    // 
-    // | (bx - ax) (px - ax) |
-    // | (by - ay) (py - ay) |
-    // result > 0 -> point is to the left of the edge
-    // result < 0 -> point is to the right of the edge
-    return (x1 - x0)*(y2 - y0) - (y1 - y0)*(x2 - x0);
-}
-
-int SoftwareRenderer::min(int x0, int x1, int x2) {
-    int result = x0;
-    if (result > x1) {
-        result = x1;
-    } else if (result > x2) {
-        result = x2;
-    }
-    return result;
-}
-
-int SoftwareRenderer::max(int x0, int x1, int x2) {
-    int result = x0;
-    if (result < x1) {
-        result = x1;
-    } else if (result < x2) {
-        result = x2;
-    }
-    return result;
+    // Article 1 - https://fgiesen.wordpress.com/2013/02/06/the-barycentric-conspirac/
+    // Article 2 - https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/rasterization-stage
+    return (y1 - y0)*(x2 - x0) - (x1 - x0)*(y2 - y0);
 }
