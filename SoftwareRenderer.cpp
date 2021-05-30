@@ -4,7 +4,10 @@
 #include <iostream>
 #include <algorithm>
 
-SoftwareRenderer::SoftwareRenderer(int width, int height): width(width), height(height), displayManager(width, height) {
+SoftwareRenderer::SoftwareRenderer(int width, int height):  width(width), 
+                                                            height(height), 
+                                                            displayManager(width, height),
+                                                            triangleRasterMethod(RasterMethod::FLAT_SPLIT) {
 	this->frameBuffer.resize(width * height);
 }
 
@@ -21,19 +24,12 @@ void SoftwareRenderer::Run() {
 	        	running = false;
 	        }
 	    }
-	    // draw frame
-	    // Math::Vector3 p1(20.f, 400.f, 30.f, 1.f);
-        // Math::Vector3 p2(80.f, 20.f, 20.f, 1.f);
-        // Math::Vector3 p3(40.f, 200.f, 20.f, 1.f);
-	    
-	    // this->DrawLine(p1, p2);
-        // this->DrawLine(p2, p3);
-        // this->DrawLine(p3, p1);
 
-        Math::Vector3 p1(100.f, 400.f, 30.f, 1.f);
+        Math::Vector3 p1(100.f, 300.f, 30.f, 1.f);
         Math::Vector3 p2(300.f, 400.f, 20.f, 1.f);
-        Math::Vector3 p3(200.f, 20.f, 20.f, 1.f);
-        this->DrawTriangleAABB(p1, p2, p3);
+        Math::Vector3 p3(200.f, 200.f, 20.f, 1.f);
+        // Math::Vector3 p4(200.f, 500.f, 20.f, 1.f);
+        this->DrawTriangle(p1, p2, p3);
 	    this->displayManager.SwapBuffers(this->frameBuffer);
 	}
 }
@@ -71,8 +67,7 @@ void SoftwareRenderer::DrawLine(Math::Vector3& p1, Math::Vector3& p2) {
         if (steep) { 
             index = y + x * this->width;
         }
-        // this->frameBuffer[index] = SDL_MapRGBA(this->displayManager.surface->format, 0, 255, 0, 255);
-        this->frameBuffer[index] = 4294967295;
+        this->frameBuffer[index] = SDL_MapRGBA(this->displayManager.surface->format, 0, 255, 0, 255);
         error += errorStep;
         if (error > dx) { 
             y += (y1 > y0 ? 1 : -1); 
@@ -82,29 +77,12 @@ void SoftwareRenderer::DrawLine(Math::Vector3& p1, Math::Vector3& p2) {
 }
 
 void SoftwareRenderer::DrawTriangle(Math::Vector3& p1, Math::Vector3& p2, Math::Vector3& p3) {
-    int x0 = p1.x;
-    int y0 = p1.y;
-    int x1 = p2.x;
-    int y1 = p2.y;
-    int x2 = p3.x;
-    int y2 = p3.y;
-    // sort points based on y
-    if (y1 < y0)
-    {
-        std::swap(x0, x1);
-        std::swap(y0, y1);
-    }
-    if (y2 < y0) {
-        std::swap(x0, x2);
-        std::swap(y0, y2);
-    }
-    if (y2 < y1) {
-        std::swap(x2, x1);
-        std::swap(y2, y1);
+    if (this->triangleRasterMethod == RasterMethod::EDGE_AABB) {
+        this->DrawTriangleAABB(p1, p2, p3);
+    } else if (this->triangleRasterMethod == RasterMethod::FLAT_SPLIT) {
+        this->DrawTriangleFlat(p1, p2, p3);
     }
 }
-
-// AABB rasterizing functions
 
 void SoftwareRenderer::DrawTriangleAABB(Math::Vector3& p1, Math::Vector3& p2, Math::Vector3& p3) {
     // https://www.cs.drexel.edu/~david/Classes/Papers/comp175-06-pineda.pdf
@@ -138,4 +116,65 @@ int SoftwareRenderer::EdgeCheck(int x0, int y0, int x1, int y1, int x2, int y2) 
     // Article 1 - https://fgiesen.wordpress.com/2013/02/06/the-barycentric-conspirac/
     // Article 2 - https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/rasterization-stage
     return (y1 - y0)*(x2 - x0) - (x1 - x0)*(y2 - y0);
+}
+
+void SoftwareRenderer::DrawTriangleFlat(Math::Vector3 p1, Math::Vector3 p2, Math::Vector3 p3) {
+    // http://www.sunshine2k.de/coding/java/TriangleRasterization/TriangleRasterization.html
+    // sort points based on y
+    if (p2.y < p1.y) {
+        std::swap(p1, p2);
+    }
+    if (p3.y < p1.y) {
+        std::swap(p1, p3);
+    }
+    if (p3.y < p2.y) {
+        std::swap(p3, p2);
+    }
+    if (p2.y == p3.y) {
+        this->DrawTriangleFlatBottom(p1, p2, p3);
+    } else if (p1.y == p2.y) {
+        this->DrawTriangleFlatTop(p1, p2, p3);
+    } else {
+        float x4 = p1.x + ((p2.y - p1.y)/(p3.y - p1.y)) * (p3.x - p1.x);
+        Math::Vector3 p4 = Math::Vector3(x4, p2.y, 0.f, 0.f);
+        this->DrawTriangleFlatTop(p2, p4, p3);
+        this->DrawTriangleFlatBottom(p1, p2, p4);
+    }
+}
+
+void SoftwareRenderer::DrawTriangleFlatBottom(Math::Vector3& p1, Math::Vector3& p2, Math::Vector3& p3) {
+    float inverseSlope2 = (p3.x - p1.x) / (p3.y - p1.y);
+    float inverseSlope1 = (p2.x - p1.x) / (p2.y - p1.y);
+    float x1 = p1.x;
+    float x2 = p1.x;
+    Math::Vector3 first = Math::Vector3(x1, p1.y, 0.f, 0.f);
+    Math::Vector3 second = Math::Vector3(x1, p1.y, 0.f, 0.f);
+
+    for (int y = p1.y; y <= p2.y; y++) {
+        first.x = x1;
+        first.y = y;
+        second.x = x2;
+        second.y = y;
+        this->DrawLine(first, second);
+        x1 += inverseSlope1;
+        x2 += inverseSlope2;
+    }
+}
+
+void SoftwareRenderer::DrawTriangleFlatTop(Math::Vector3& p1, Math::Vector3& p2, Math::Vector3& p3) {
+    float inverseSlope1 = (p1.x - p3.x) / (p1.y - p3.y);
+    float inverseSlope2 = (p2.x - p3.x) / (p2.y - p3.y);
+    float x1 = p3.x;
+    float x2 = p3.x;
+    Math::Vector3 first = Math::Vector3(x1, p3.y, 0.f, 0.f);
+    Math::Vector3 second = Math::Vector3(x1, p3.y, 0.f, 0.f);
+    for (int y = p3.y; y >= p1.y; y--) {
+        first.x = x1;
+        first.y = y;
+        second.x = x2;
+        second.y = y;
+        this->DrawLine(first, second);
+        x1 -= inverseSlope1;
+        x2 -= inverseSlope2;
+    }
 }
