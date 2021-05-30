@@ -22,7 +22,6 @@ class SoftwareRenderer {
 		// - scanline draw triangle
 		// - draw with edge but with smarter iteration than AABB
 
-
 		// AABB rasterizing functions
 		void DrawTriangleAABB(Math::Vector3& p1, Math::Vector3& p2, Math::Vector3& p3);
 		int EdgeCheck(int x0, int y0, int x1, int y1, int x2, int y2);
