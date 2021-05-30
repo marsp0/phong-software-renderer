@@ -6,6 +6,8 @@
 
 - [Scratchapixel](https://www.scratchapixel.com/)
 - [Software Renderer by Angelo1211](https://github.com/Angelo1211/SoftwareRenderer)
+- [Software Renderer by Zauonlok](https://github.com/zauonlok/renderer)
+- [Software Renderer by Ssloy](https://github.com/ssloy/tinyrenderer)
 
 ### Drawing a line
 
