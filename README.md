@@ -13,6 +13,7 @@
 
 - [The Bresenham Line-Drawing Algorithm](https://www.cs.helsinki.fi/group/goa/mallinnus/lines/bresenh.html)
 - [Computer Graphics from Scratch - Lines](https://www.gabrielgambetta.com/computer-graphics-from-scratch/06-lines.html)
+- [Another article on Bresenham algorithm](http://www.sunshine2k.de/coding/java/Bresenham/RasterisingLinesCircles.pdf)
 
 ### Drawing a triangle
 
