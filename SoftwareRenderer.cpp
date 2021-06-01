@@ -25,16 +25,16 @@ void SoftwareRenderer::Run() {
 	        }
 	    }
 
-        Math::Vector3 v1(100.f, 300.f, 30.f, 1.f);
-        Math::Vector3 v2(300.f, 400.f, 20.f, 1.f);
-        Math::Vector3 v3(200.f, 200.f, 20.f, 1.f);
-        // Math::Vector3 p4(200.f, 500.f, 20.f, 1.f);
+        Vector3f v1(100.f, 300.f, 30.f);
+        Vector3f v2(300.f, 400.f, 20.f);
+        Vector3f v3(200.f, 200.f, 20.f);
+        // Vector3f p4(200.f, 500.f, 20.f, 1.f);
         this->DrawTriangle(v1, v2, v3);
 	    this->displayManager.SwapBuffers(this->frameBuffer);
 	}
 }
 
-void SoftwareRenderer::DrawLine(Math::Vector3& v1, Math::Vector3& v2) {
+void SoftwareRenderer::DrawLine(Vector3f& v1, Vector3f& v2) {
     // https://www.cs.helsinki.fi/group/goa/mallinnus/lines/bresenh.html
 	int x0 = v1.x;
 	int y0 = v1.y;
@@ -76,7 +76,7 @@ void SoftwareRenderer::DrawLine(Math::Vector3& v1, Math::Vector3& v2) {
     } 
 }
 
-void SoftwareRenderer::DrawTriangle(Math::Vector3& v1, Math::Vector3& v2, Math::Vector3& v3) {
+void SoftwareRenderer::DrawTriangle(Vector3f& v1, Vector3f& v2, Vector3f& v3) {
     if (this->triangleRasterMethod == RasterMethod::EDGE_AABB) {
         this->DrawTriangleAABB(v1, v2, v3);
     } else if (this->triangleRasterMethod == RasterMethod::FLAT_SPLIT) {
@@ -84,7 +84,7 @@ void SoftwareRenderer::DrawTriangle(Math::Vector3& v1, Math::Vector3& v2, Math::
     }
 }
 
-void SoftwareRenderer::DrawTriangleAABB(Math::Vector3& v1, Math::Vector3& v2, Math::Vector3& v3) {
+void SoftwareRenderer::DrawTriangleAABB(Vector3f& v1, Vector3f& v2, Vector3f& v3) {
     // https://www.cs.drexel.edu/~david/Classes/Papers/comv175-06-pineda.pdf
     // https://fgiesen.wordpress.com/2013/02/08/triangle-rasterization-in-practice/
     int x0 = v1.x;
@@ -118,7 +118,7 @@ int SoftwareRenderer::EdgeCheck(int x0, int y0, int x1, int y1, int x2, int y2) 
     return (y1 - y0)*(x2 - x0) - (x1 - x0)*(y2 - y0);
 }
 
-void SoftwareRenderer::DrawTriangleFlat(Math::Vector3 v1, Math::Vector3 v2, Math::Vector3 v3) {
+void SoftwareRenderer::DrawTriangleFlat(Vector3f v1, Vector3f v2, Vector3f v3) {
     // http://www.sunshine2k.de/coding/java/TriangleRasterization/TriangleRasterization.html
     // sort points based on y
     if (v2.y < v1.y) {
@@ -136,19 +136,19 @@ void SoftwareRenderer::DrawTriangleFlat(Math::Vector3 v1, Math::Vector3 v2, Math
         this->DrawTriangleFlatTop(v1, v2, v3);
     } else {
         float x4 = v1.x + ((v2.y - v1.y)/(v3.y - v1.y)) * (v3.x - v1.x);
-        Math::Vector3 p4 = Math::Vector3(x4, v2.y, 0.f, 0.f);
+        Vector3f p4 = Vector3f(x4, v2.y, 0.f);
         this->DrawTriangleFlatTop(v2, p4, v3);
         this->DrawTriangleFlatBottom(v1, v2, p4);
     }
 }
 
-void SoftwareRenderer::DrawTriangleFlatBottom(Math::Vector3& v1, Math::Vector3& v2, Math::Vector3& v3) {
+void SoftwareRenderer::DrawTriangleFlatBottom(Vector3f& v1, Vector3f& v2, Vector3f& v3) {
     float inverseSlope2 = (v3.x - v1.x) / (v3.y - v1.y);
     float inverseSlope1 = (v2.x - v1.x) / (v2.y - v1.y);
     float x1 = v1.x;
     float x2 = v1.x;
-    Math::Vector3 first = Math::Vector3(x1, v1.y, 0.f, 0.f);
-    Math::Vector3 second = Math::Vector3(x1, v1.y, 0.f, 0.f);
+    Vector3f first = Vector3f(x1, v1.y, 0.f);
+    Vector3f second = Vector3f(x1, v1.y, 0.f);
 
     for (int y = v1.y; y <= v2.y; y++) {
         first.x = x1;
@@ -161,13 +161,13 @@ void SoftwareRenderer::DrawTriangleFlatBottom(Math::Vector3& v1, Math::Vector3& 
     }
 }
 
-void SoftwareRenderer::DrawTriangleFlatTop(Math::Vector3& v1, Math::Vector3& v2, Math::Vector3& v3) {
+void SoftwareRenderer::DrawTriangleFlatTop(Vector3f& v1, Vector3f& v2, Vector3f& v3) {
     float inverseSlope1 = (v1.x - v3.x) / (v1.y - v3.y);
     float inverseSlope2 = (v2.x - v3.x) / (v2.y - v3.y);
     float x1 = v3.x;
     float x2 = v3.x;
-    Math::Vector3 first = Math::Vector3(x1, v3.y, 0.f, 0.f);
-    Math::Vector3 second = Math::Vector3(x1, v3.y, 0.f, 0.f);
+    Vector3f first = Vector3f(x1, v3.y, 0.f);
+    Vector3f second = Vector3f(x1, v3.y, 0.f);
     for (int y = v3.y; y >= v1.y; y--) {
         first.x = x1;
         first.y = y;

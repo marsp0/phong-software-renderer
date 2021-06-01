@@ -4,7 +4,7 @@
 
 #include <vector>
 
-#include "utils/math/math.hpp"
+#include "Vector.hpp"
 
 enum RasterMethod
 {
@@ -18,18 +18,18 @@ class SoftwareRenderer {
 		~SoftwareRenderer();
 		void Run();
 
-		void DrawLine(Math::Vector3& v1, Math::Vector3& v2);
-		void DrawTriangle(Math::Vector3& v1, Math::Vector3& v2, Math::Vector3& v3);
+		void DrawLine(Vector3f& v1, Vector3f& v2);
+		void DrawTriangle(Vector3f& v1, Vector3f& v2, Vector3f& v3);
 
 	private:
 
 		// DrawTriangleFlat - uses the fact that a triangle can be split into a flat top/bottom triangle
-		void DrawTriangleFlat(Math::Vector3 v1, Math::Vector3 v2, Math::Vector3 v3);
-		void DrawTriangleFlatBottom(Math::Vector3& v1, Math::Vector3& v2, Math::Vector3& v3);
-		void DrawTriangleFlatTop(Math::Vector3& v1, Math::Vector3& v2, Math::Vector3& v3);
+		void DrawTriangleFlat(Vector3f v1, Vector3f v2, Vector3f v3);
+		void DrawTriangleFlatBottom(Vector3f& v1, Vector3f& v2, Vector3f& v3);
+		void DrawTriangleFlatTop(Vector3f& v1, Vector3f& v2, Vector3f& v3);
 
 		// DrawTriangleAABB - Uses the edge method + bounding box
-		void DrawTriangleAABB(Math::Vector3& v1, Math::Vector3& v2, Math::Vector3& v3);
+		void DrawTriangleAABB(Vector3f& v1, Vector3f& v2, Vector3f& v3);
 		int EdgeCheck(int x0, int y0, int x1, int y1, int x2, int y2);
 
 		// DATA
