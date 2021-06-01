@@ -7,7 +7,7 @@
 SoftwareRenderer::SoftwareRenderer(int width, int height):  width(width), 
                                                             height(height), 
                                                             displayManager(width, height),
-                                                            triangleRasterMethod(RasterMethod::FLAT_SPLIT) {
+                                                            triangleRasterMethod(RasterMethod::EDGE_AABB) {
 	this->frameBuffer.resize(width * height);
 }
 
