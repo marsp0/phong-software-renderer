@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include "Vector.hpp"
+
 class Model {
 	public:
 
@@ -11,9 +13,8 @@ class Model {
 		void Update(float deltaTime);
 
 		// Data
-		std::vector<float> 	vertices;
-		std::vector<int>	indices;
+		std::vector<Vector3f> 	vertices;
+		std::vector<int>		indices;
 
 	private:
-
 };

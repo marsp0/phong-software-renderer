@@ -1,7 +1,8 @@
 #include "Scene.hpp"
 
-Scene::Scene() {
-
+Scene::Scene(): models() {
+	std::unique_ptr<Model> model = std::make_unique<Model>();
+	this->models.push_back(std::move(model));
 }
 
 Scene::~Scene() {

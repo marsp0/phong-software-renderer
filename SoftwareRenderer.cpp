@@ -6,9 +6,10 @@
 
 SoftwareRenderer::SoftwareRenderer(int width, int height):  width(width), 
                                                             height(height), 
-                                                            displayManager(width, height),
                                                             triangleRasterMethod(RasterMethod::EDGE_AABB) {
 	this->frameBuffer.resize(width * height);
+    this->displayManager = std::make_unique<DisplayManager>(width, height);
+    this->scene = std::make_unique<Scene>();
 }
 
 SoftwareRenderer::~SoftwareRenderer() {
@@ -24,14 +25,17 @@ void SoftwareRenderer::Run() {
 	        	running = false;
 	        }
 	    }
-
-        Vector3f v1(100.f, 300.f, 30.f);
-        Vector3f v2(300.f, 400.f, 20.f);
-        Vector3f v3(200.f, 200.f, 20.f);
-        // Vector3f p4(200.f, 500.f, 20.f, 1.f);
-        this->DrawTriangle(v1, v2, v3);
-	    this->displayManager.SwapBuffers(this->frameBuffer);
+        for (int i = 0; i < this->scene->models.size(); i++) {
+            this->DrawModel(this->scene->models[i].get());
+        }
+	    this->displayManager->SwapBuffers(this->frameBuffer);
 	}
+}
+
+void SoftwareRenderer::DrawModel(Model* model) {
+    for (int i = 0; i < model->vertices.size(); i += 3) {
+        this->DrawTriangle(model->vertices[i], model->vertices[i+1], model->vertices[i+2]);
+    }
 }
 
 void SoftwareRenderer::DrawLine(Vector3f& v1, Vector3f& v2) {
@@ -67,7 +71,7 @@ void SoftwareRenderer::DrawLine(Vector3f& v1, Vector3f& v2) {
         if (steep) { 
             index = y + x * this->width;
         }
-        this->frameBuffer[index] = SDL_MapRGBA(this->displayManager.surface->format, 0, 255, 0, 255);
+        this->frameBuffer[index] = SDL_MapRGBA(this->displayManager->surface->format, 0, 255, 0, 255);
         error += errorStep;
         if (error > dx) { 
             y += (y1 > y0 ? 1 : -1); 
@@ -105,7 +109,7 @@ void SoftwareRenderer::DrawTriangleAABB(Vector3f& v1, Vector3f& v2, Vector3f& v3
             int w3 = this->EdgeCheck(x2, y2, x0, y0, i, j);
             if (w1 >= 0 && w2 >= 0 && w3 >= 0) {
                 int index = i + j * this->width;
-                this->frameBuffer[index] = SDL_MapRGBA(this->displayManager.surface->format, 0, 255, 0, 255);
+                this->frameBuffer[index] = SDL_MapRGBA(this->displayManager->surface->format, 0, 255, 0, 255);
             }
         }
     }

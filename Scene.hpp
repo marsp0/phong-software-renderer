@@ -7,15 +7,16 @@
 
 class Scene {
 	public:
+
+		// Methods
 		Scene();
 		~Scene();
-
 		void Update(float deltaTime);
 
-	private:
-
+		// Data
 		std::vector<std::unique_ptr<Model>> models;
 		std::vector<float> lights;
 		int camera;
 
+	private:
 };

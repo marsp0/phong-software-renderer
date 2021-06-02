@@ -3,8 +3,10 @@
 #include "DisplayManager.hpp"
 
 #include <vector>
+#include <memory>
 
 #include "Vector.hpp"
+#include "Scene.hpp"
 
 enum RasterMethod
 {
@@ -17,7 +19,7 @@ class SoftwareRenderer {
 		SoftwareRenderer(int width, int height);
 		~SoftwareRenderer();
 		void Run();
-
+		void DrawModel(Model* model);
 		void DrawLine(Vector3f& v1, Vector3f& v2);
 		void DrawTriangle(Vector3f& v1, Vector3f& v2, Vector3f& v3);
 
@@ -33,10 +35,11 @@ class SoftwareRenderer {
 		int EdgeCheck(int x0, int y0, int x1, int y1, int x2, int y2);
 
 		// DATA
-		int 					width;
-		int 					height;
-		DisplayManager 			displayManager;
-		std::vector<uint32_t> 	frameBuffer;
-		std::vector<float> 		depthBuffer;
-		RasterMethod 			triangleRasterMethod;
+		int 							width;
+		int 							height;
+		std::unique_ptr<DisplayManager> displayManager;
+		std::vector<uint32_t> 			frameBuffer;
+		std::vector<float> 				depthBuffer;
+		RasterMethod 					triangleRasterMethod;
+		std::unique_ptr<Scene>			scene;
 };
