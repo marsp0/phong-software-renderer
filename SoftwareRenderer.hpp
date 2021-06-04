@@ -24,6 +24,6 @@ class SoftwareRenderer {
 		std::unique_ptr<DisplayManager> displayManager;
 		std::unique_ptr<FrameBuffer>	frameBuffer;
 		std::unique_ptr<DepthBuffer>	depthBuffer;
-		RasterMethod 					triangleRasterMethod;
+		RasterMethod 					rasterMethod;
 		std::unique_ptr<Scene>			scene;
 };

@@ -47,15 +47,15 @@ void Rasterizer::DrawLine(std::array<Vector3f, 2> vertices, FrameBuffer* frameBu
     } 
 }
 
-void Rasterizer::DrawTriangle(std::array<Vector3f, 3> vertices, FrameBuffer* frameBuffer, RasterMethod method) {
+void Rasterizer::DrawTriangle(std::array<Vector3f, 3> vertices, Shader& shader, FrameBuffer* frameBuffer, RasterMethod method) {
     if (method == RasterMethod::EDGE_AABB) {
-        Rasterizer::DrawTriangleAABB(vertices, frameBuffer);
+        Rasterizer::DrawTriangleAABB(vertices, shader, frameBuffer);
     } else if (method == RasterMethod::FLAT_SPLIT) {
-        Rasterizer::DrawTriangleFlat(vertices, frameBuffer);
+        Rasterizer::DrawTriangleFlat(vertices, shader, frameBuffer);
     }
 }
 
-void Rasterizer::DrawTriangleAABB(std::array<Vector3f, 3> vertices, FrameBuffer* frameBuffer) {
+void Rasterizer::DrawTriangleAABB(std::array<Vector3f, 3> vertices, Shader& shader, FrameBuffer* frameBuffer) {
     // https://www.cs.drexel.edu/~david/Classes/Papers/comv175-06-pineda.pdf
     // https://fgiesen.wordpress.com/2013/02/08/triangle-rasterization-in-practice/
     int x0 = vertices[0].x;
@@ -87,7 +87,7 @@ int Rasterizer::EdgeCheck(int x0, int y0, int x1, int y1, int x2, int y2) {
     return (y1 - y0)*(x2 - x0) - (x1 - x0)*(y2 - y0);
 }
 
-void Rasterizer::DrawTriangleFlat(std::array<Vector3f, 3> vertices, FrameBuffer* frameBuffer) {
+void Rasterizer::DrawTriangleFlat(std::array<Vector3f, 3> vertices, Shader& shader, FrameBuffer* frameBuffer) {
     // http://www.sunshine2k.de/coding/java/TriangleRasterization/TriangleRasterization.html
     // sort points based on y
     if (vertices[1].y < vertices[0].y) {
@@ -100,20 +100,20 @@ void Rasterizer::DrawTriangleFlat(std::array<Vector3f, 3> vertices, FrameBuffer*
         std::swap(vertices[2], vertices[1]);
     }
     if (vertices[1].y == vertices[2].y) {
-        Rasterizer::DrawTriangleFlatBottom(vertices, frameBuffer);
+        Rasterizer::DrawTriangleFlatBottom(vertices, shader, frameBuffer);
     } else if (vertices[0].y == vertices[1].y) {
-        Rasterizer::DrawTriangleFlatTop(vertices, frameBuffer);
+        Rasterizer::DrawTriangleFlatTop(vertices, shader, frameBuffer);
     } else {
         float x4 = vertices[0].x + ((vertices[1].y - vertices[0].y)/(vertices[2].y - vertices[0].y)) * (vertices[2].x - vertices[0].x);
         Vector3f p4 = Vector3f(x4, vertices[1].y, 0.f);
         std::array<Vector3f, 3> topArray{vertices[1], p4, vertices[2]};
         std::array<Vector3f, 3> bottomArray{vertices[0], vertices[1], p4};
-        Rasterizer::DrawTriangleFlatTop(topArray, frameBuffer);
-        Rasterizer::DrawTriangleFlatBottom(bottomArray, frameBuffer);
+        Rasterizer::DrawTriangleFlatTop(topArray, shader, frameBuffer);
+        Rasterizer::DrawTriangleFlatBottom(bottomArray, shader, frameBuffer);
     }
 }
 
-void Rasterizer::DrawTriangleFlatBottom(std::array<Vector3f, 3> vertices, FrameBuffer* frameBuffer) {
+void Rasterizer::DrawTriangleFlatBottom(std::array<Vector3f, 3> vertices, Shader& shader, FrameBuffer* frameBuffer) {
     float inverseSlope2 = (vertices[2].x - vertices[0].x) / (vertices[2].y - vertices[0].y);
     float inverseSlope1 = (vertices[1].x - vertices[0].x) / (vertices[1].y - vertices[0].y);
     float x1 = vertices[0].x;
@@ -133,7 +133,7 @@ void Rasterizer::DrawTriangleFlatBottom(std::array<Vector3f, 3> vertices, FrameB
     }
 }
 
-void Rasterizer::DrawTriangleFlatTop(std::array<Vector3f, 3> vertices, FrameBuffer* frameBuffer) {
+void Rasterizer::DrawTriangleFlatTop(std::array<Vector3f, 3> vertices, Shader& shader, FrameBuffer* frameBuffer) {
     float inverseSlope1 = (vertices[0].x - vertices[2].x) / (vertices[0].y - vertices[2].y);
     float inverseSlope2 = (vertices[1].x - vertices[2].x) / (vertices[1].y - vertices[2].y);
     float x1 = vertices[2].x;
