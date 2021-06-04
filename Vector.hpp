@@ -6,6 +6,7 @@ class Vector3 {
 	public:
 		
 		Vector3(T x, T y, T z): x(x), y(y), z(z), w(1) {}
+		Vector3(const T& other): x(other.x), y(other.y), z(other.z), w(1) {}
 
 		// Overloads
 		Vector3 operator+(const T& other) const
