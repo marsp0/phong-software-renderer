@@ -1,5 +1,9 @@
 # Software Renderer
 
+### Dependencies
+
+- SDL2
+
 ## References
 
 ### General
@@ -8,6 +12,12 @@
 - [Software Renderer by Angelo1211](https://github.com/Angelo1211/SoftwareRenderer)
 - [Software Renderer by Zauonlok](https://github.com/zauonlok/renderer)
 - [Software Renderer by Ssloy](https://github.com/ssloy/tinyrenderer)
+
+### Math
+
+- [Quaternions 1](http://graphics.stanford.edu/courses/cs348a-17-winter/Papers/quaternion.pdf)
+- [Quaternions 2](https://fgiesen.wordpress.com/2019/02/09/rotating-a-single-vector-using-a-quaternion/)
+- [Quaternions 3](https://www.3dgep.com/understanding-quaternions/)
 
 ### Drawing a line
 
