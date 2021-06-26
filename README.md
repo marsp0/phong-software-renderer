@@ -2,7 +2,7 @@
 
 ### Dependencies
 
-- SDL2
+- SDL2 `apt install libsdl2-dev`
 
 ## References
 

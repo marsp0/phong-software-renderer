@@ -11,7 +11,7 @@ class DisplayManager {
 		// METHODS
 		DisplayManager(int width, int height);
 		~DisplayManager();
-		void SwapBuffers(FrameBuffer* frameBuffer);
+		void swapBuffers(FrameBuffer* frameBuffer);
 
 		// DATA
 		int width;

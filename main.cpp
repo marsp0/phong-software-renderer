@@ -9,6 +9,6 @@
 int main (int argc, char **argv)
 {
     SoftwareRenderer renderer(800, 600);
-    renderer.Run();
+    renderer.run();
     return 0;
 }

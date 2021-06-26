@@ -11,7 +11,7 @@ class Model {
 		// Methods
 		Model();
 		~Model();
-		void Update(float deltaTime);
+		void update(float deltaTime);
 
 		// Data
 		std::vector<Vector3f> 	vertices;

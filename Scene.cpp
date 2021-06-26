@@ -9,8 +9,8 @@ Scene::~Scene() {
 
 }
 
-void Scene::Update(float deltaTime) {
+void Scene::update(float deltaTime) {
 	for (int i = 0; i < this->models.size(); i++) {
-		this->models[i]->Update(deltaTime);
+		this->models[i]->update(deltaTime);
 	}
 }

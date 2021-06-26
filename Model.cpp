@@ -26,6 +26,6 @@ Model::~Model() {
 
 }
 
-void Model::Update(float deltaTime) {
+void Model::update(float deltaTime) {
 
 }
