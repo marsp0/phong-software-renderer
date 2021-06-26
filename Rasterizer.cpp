@@ -34,11 +34,11 @@ void Rasterizer::DrawLine(std::array<Vector3f, 2> vertices, FrameBuffer* frameBu
     int error = 0;
     int y = y0;
     for (int x = x0; x <= x1; x++) { 
-    	uint32_t pixel = (*frameBuffer)(x, y);
         if (steep) { 
-            pixel = (*frameBuffer)(y, x);
+            frameBuffer->Set(y, x, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, 0, 255, 0));
+        } else {
+            frameBuffer->Set(x, y, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, 0, 255, 0));
         }
-        pixel = SDL_MapRGB(Rasterizer::PIXEL_FORMAT, 0, 255, 0);
         error += errorStep;
         if (error > dx) { 
             y += (y1 > y0 ? 1 : -1); 
@@ -74,7 +74,7 @@ void Rasterizer::DrawTriangleAABB(std::array<Vector3f, 3> vertices, Shader& shad
             int w2 = Rasterizer::EdgeCheck(x1, y1, x2, y2, i, j);
             int w3 = Rasterizer::EdgeCheck(x2, y2, x0, y0, i, j);
             if (w1 >= 0 && w2 >= 0 && w3 >= 0) {
-                (*frameBuffer)(i, j) = SDL_MapRGB(Rasterizer::PIXEL_FORMAT, 0, 255, 0);
+                frameBuffer->Set(i, j, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, 0, 255, 0));
             }
         }
     }

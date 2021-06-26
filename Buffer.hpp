@@ -14,8 +14,11 @@ class Buffer {
 		}
 		~Buffer() {}
 
-		T& operator()(int x, int y)
-		{
+		void Set(int x, int y, T value) {
+			this->buffer[x + y * this->width] = value;
+		}
+
+		T Get(int x, int y) {
 			return this->buffer[x + y * this->width];
 		}
 
