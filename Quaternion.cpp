@@ -17,9 +17,9 @@ Quaternion Quaternion::operator*(float value) {
 }
 
 Quaternion Quaternion::conjugate() {
-
+	return Quaternion(this->w, -this->x, -this->y, -this->z);
 }
 
 Quaternion Quaternion::inverse() {
-	
+
 }

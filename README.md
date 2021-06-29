@@ -15,9 +15,11 @@
 
 ### Math
 
-- [Quaternions 1](http://graphics.stanford.edu/courses/cs348a-17-winter/Papers/quaternion.pdf)
-- [Quaternions 2](https://fgiesen.wordpress.com/2019/02/09/rotating-a-single-vector-using-a-quaternion/)
-- [Quaternions 3](https://www.3dgep.com/understanding-quaternions/)
+- [Quaternions 1](https://en.wikipedia.org/wiki/Quaternion)
+- [Quaternions 2](https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation#Proof_of_the_quaternion_rotation_identity)
+- [Quaternions 3](http://graphics.stanford.edu/courses/cs348a-17-winter/Papers/quaternion.pdf)
+- [Quaternions 4](https://fgiesen.wordpress.com/2019/02/09/rotating-a-single-vector-using-a-quaternion/)
+- [Quaternions 5](https://www.3dgep.com/understanding-quaternions/)
 
 ### Drawing a line
 
