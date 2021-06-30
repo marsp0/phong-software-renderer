@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Vector.hpp"
+#include "Matrix.hpp"
 
 class Quaternion {
 	public:
@@ -9,11 +10,16 @@ class Quaternion {
 		~Quaternion();
 
 		Quaternion operator*(const Quaternion& other);
-		Quaternion operator*(float value);
 
 		Quaternion conjugate();
 		Quaternion inverse();
-		
+		float magnitude();
+		float magnitudeSquared();
+		void normalize();
+		Matrix4 toMatrix();
+
+		// util
+		void print();
 
 	private:
 
