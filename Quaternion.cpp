@@ -10,6 +10,10 @@ Quaternion::Quaternion(float w, float x, float y, float z):
 	this->normalize();
 }
 
+Quaternion::Quaternion(): w(0.f), x(0.f), y(0.f), z(0.f) {
+
+}
+
 Quaternion::~Quaternion() {
 
 }
@@ -20,11 +24,21 @@ Quaternion Quaternion::operator*(const Quaternion& other) {
 	float x = (this->w * other.x) + (this->x * other.w) + (this->y * other.z) - (this->z * other.y);
 	float y = (this->w * other.y) - (this->x * other.z) + (this->y * other.w) + (this->z * other.x);
 	float z = (this->w * other.z) + (this->x * other.y) - (this->y * other.x) + (this->z * other.w);
-	return Quaternion(w, x, y, z);
+	Quaternion quaternion;
+	quaternion.w = w;
+	quaternion.x = x;
+	quaternion.y = y;
+	quaternion.z = z;
+	return quaternion;
 }
 
 Quaternion Quaternion::conjugate() {
-	return Quaternion(this->w, -this->x, -this->y, -this->z);
+	Quaternion quaternion;
+	quaternion.w = this->w;
+	quaternion.x = -1.f * this->x;
+	quaternion.y = -1.f * this->y;
+	quaternion.z = -1.f * this->z;
+	return quaternion;
 }
 
 Quaternion Quaternion::inverse() {
