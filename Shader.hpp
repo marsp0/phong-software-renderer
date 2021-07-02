@@ -9,7 +9,7 @@ class Shader {
 	public:
 		Shader();
 		~Shader();
-		void processVertex(Vector3f& vertex);
-		void processFragment(Vector3f& vertex, FrameBuffer& frameBuffer);
+		void processVertex(Vector4f& vertex);
+		void processFragment(Vector4f& vertex, FrameBuffer& frameBuffer);
 	private:
 };

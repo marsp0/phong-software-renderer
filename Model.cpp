@@ -1,9 +1,9 @@
 #include "Model.hpp"
 
 Model::Model(): vertices(), colors() {
-	Vector3f v1(100.f, 300.f, 30.f);
-    Vector3f v2(300.f, 400.f, 20.f);
-    Vector3f v3(200.f, 200.f, 20.f);
+	Vector4f v1(100.f, 300.f, 30.f, 1.f);
+    Vector4f v2(300.f, 400.f, 20.f, 1.f);
+    Vector4f v3(200.f, 200.f, 20.f, 1.f);
     this->vertices.push_back(v1);
     this->vertices.push_back(v2);
     this->vertices.push_back(v3);

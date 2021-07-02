@@ -8,12 +8,12 @@ Shader::~Shader() {
 
 }
 
-void Shader::processVertex(Vector3f& vertex) {
+void Shader::processVertex(Vector4f& vertex) {
 	// called for every vertex
 	
 }
 
-void Shader::processFragment(Vector3f& vertex, FrameBuffer& frameBuffer) {
+void Shader::processFragment(Vector4f& vertex, FrameBuffer& frameBuffer) {
 	// called for every fragment
 
 }

@@ -14,7 +14,7 @@ class Model {
 		void update(float deltaTime);
 
 		// Data
-		std::vector<Vector3f> 	vertices;
+		std::vector<Vector4f> 	vertices;
 		std::vector<uint8_t>	colors;
 
 	private:

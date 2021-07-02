@@ -38,7 +38,7 @@ void SoftwareRenderer::drawModel(Model* model) {
     Shader shader;
     // set matrix transforms here
     for (int i = 0; i < model->vertices.size(); i += 3) {
-        std::array<Vector3f, 3> packedVertices{model->vertices[i], model->vertices[i+1], model->vertices[i+2]};
+        std::array<Vector4f, 3> packedVertices{model->vertices[i], model->vertices[i+1], model->vertices[i+2]};
 
         shader.processVertex(packedVertices[0]);
         shader.processVertex(packedVertices[1]);

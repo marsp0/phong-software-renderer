@@ -4,7 +4,6 @@ CXX           	:= g++
 SRCDIR 			:= .
 OBJDIR			:= ./out
 EXECUTABLE    	:= renderer
-EXECUTABLE_GCOV := gcov
 CXXFLAGS      	:= -std=c++14
 SRCFILES	 	:= $(shell find $(SRCDIR) -name "*.cpp")
 SRCNAMES		:= $(notdir $(SRCFILES))
@@ -13,7 +12,9 @@ LDFLAGS       	:= -lX11 -lXi -lSDL2
 space 			:=
 VPATH 			:= $(subst $(space),:,$(shell find . -type d))
 
-# MAIN
+########################
+######### MAIN #########
+########################
 
 .PHONY: all
 all: out/$(EXECUTABLE)
@@ -24,8 +25,7 @@ out/$(EXECUTABLE): $(OBJFILES)
 $(OBJDIR)/%.o: %.cpp
 	@$(CXX) $(CXXFLAGS) -c -g $< -o $@ $(LDFLAGS) && echo "[OK]  $@"
 
-
-# CLEAN
+####### CLEAN #######
 .PHONY: clean
 clean:
 	@rm -f out/* && echo "[CL]  out/"
