@@ -63,7 +63,7 @@ void Quaternion::normalize() {
 }
 
 Matrix4 Quaternion::toMatrix() {
-	
+	return Matrix4();
 }
 
 void Quaternion::print() {

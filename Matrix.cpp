@@ -90,19 +90,19 @@ Vector4f Matrix4::operator*(const Vector4f& other) {
 }
 
 Matrix4 Matrix4::inverse() {
-
+	return Matrix4();
 }
 
 Matrix4 Matrix4::gaussJordanInverse() {
-
+	return Matrix4();
 }
 
 Matrix4 Matrix4::gluInverse() {
-
+	return Matrix4();
 }
 
-Matrix4 Matrix4::luInverse() {
-	
+Matrix4 Matrix4::ludInverse() {
+	return Matrix4();
 }
 
 Matrix4 Matrix4::transpose() {
@@ -117,8 +117,42 @@ Matrix4 Matrix4::transpose() {
 
 void Matrix4::print() {
 	std::cout << "-- Matrix --" << std::endl;
-	std::cout << "|" << this->matrix[0][0] << ", " << this->matrix[0][1] << ", " << this->matrix[0][2] << ", " << this->matrix[0][3] << "|" << std::endl;
-	std::cout << "|" << this->matrix[1][0] << ", " << this->matrix[1][1] << ", " << this->matrix[1][2] << ", " << this->matrix[1][3] << "|" << std::endl;
-	std::cout << "|" << this->matrix[2][0] << ", " << this->matrix[2][1] << ", " << this->matrix[2][2] << ", " << this->matrix[2][3] << "|" << std::endl;
-	std::cout << "|" << this->matrix[3][0] << ", " << this->matrix[3][1] << ", " << this->matrix[3][2] << ", " << this->matrix[3][3] << "|" << std::endl;
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			std::cout << this->matrix[i][j] << ", ";
+		}
+		std::cout << std::endl;
+	}
+}
+
+
+// Solver
+
+Matrix4 Solver::solve(Matrix4& inputMatrix) {
+	Matrix4 result;
+	std::array<std::array<float, 8>, 8> augmentedMatrix = Solver::buildAugmentedMatrix(inputMatrix);
+	int row = 0;
+	int col = 0;
+	return result;
+}
+
+std::array<std::array<float, 8>, 8> Solver::buildAugmentedMatrix(Matrix4& inputMatrix) {
+	std::array<std::array<float, 8>, 8> result;
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			result[i][j] = inputMatrix.get(i, j);
+		}
+	}
+
+	for (int i = 4; i < 8; i++) {
+		for (int j = 4; j < 8; j++) {
+			result[i][j] = 0.f;
+		}
+	}
+
+	result[0][4] = 1.f;
+	result[1][5] = 1.f;
+	result[2][6] = 1.f;
+	result[3][7] = 1.f;
+	return result;
 }

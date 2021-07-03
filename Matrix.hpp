@@ -20,7 +20,7 @@ class Matrix4 {
 		Matrix4 inverse();
 		Matrix4 gaussJordanInverse();
 		Matrix4 gluInverse();
-		Matrix4 luInverse();
+		Matrix4 ludInverse();
 		Matrix4 transpose();
 
 		// util
@@ -29,4 +29,12 @@ class Matrix4 {
 	private:
 
 		std::array<std::array<float, 4>, 4> matrix;
+};
+
+class Solver {
+	
+	public:
+
+		static Matrix4 solve(Matrix4& inputMatrix);
+		static std::array<std::array<float, 8>, 8> buildAugmentedMatrix(Matrix4& inputMatrix);
 };
