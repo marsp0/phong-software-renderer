@@ -13,8 +13,8 @@ class SoftwareRenderer {
 	public:
 		SoftwareRenderer(int width, int height);
 		~SoftwareRenderer();
-		void Run();
-		void DrawModel(Model* model);
+		void run();
+		void drawModel(Model* model);
 
 	private:
 

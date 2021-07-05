@@ -34,7 +34,7 @@ DisplayManager::~DisplayManager() {
     SDL_Quit();
 }
 
-void DisplayManager::SwapBuffers(FrameBuffer* frameBuffer) {
+void DisplayManager::swapBuffers(FrameBuffer* frameBuffer) {
     SDL_LockSurface(this->surface);
     memcpy(this->surface->pixels, frameBuffer->data(), frameBuffer->size() * sizeof(uint32_t));
     SDL_UnlockSurface(this->surface);

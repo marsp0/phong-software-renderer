@@ -11,7 +11,7 @@ class Scene {
 		// Methods
 		Scene();
 		~Scene();
-		void Update(float deltaTime);
+		void update(float deltaTime);
 
 		// Data
 		std::vector<std::unique_ptr<Model>> models;

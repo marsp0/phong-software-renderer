@@ -17,7 +17,7 @@ SoftwareRenderer::~SoftwareRenderer() {
 
 }
 
-void SoftwareRenderer::Run() {
+void SoftwareRenderer::run() {
 	bool running = true;
 	SDL_Event event;
 	while (running) {
@@ -28,22 +28,22 @@ void SoftwareRenderer::Run() {
 	        }
 	    }
         for (int i = 0; i < this->scene->models.size(); i++) {
-            this->DrawModel(this->scene->models[i].get());
+            this->drawModel(this->scene->models[i].get());
         }
-	    this->displayManager->SwapBuffers(this->frameBuffer.get());
+	    this->displayManager->swapBuffers(this->frameBuffer.get());
 	}
 }
 
-void SoftwareRenderer::DrawModel(Model* model) {
+void SoftwareRenderer::drawModel(Model* model) {
     Shader shader;
     // set matrix transforms here
     for (int i = 0; i < model->vertices.size(); i += 3) {
-        std::array<Vector3f, 3> packedVertices{model->vertices[i], model->vertices[i+1], model->vertices[i+2]};
+        std::array<Vector4f, 3> packedVertices{model->vertices[i], model->vertices[i+1], model->vertices[i+2]};
 
-        shader.ProcessVertex(packedVertices[0]);
-        shader.ProcessVertex(packedVertices[1]);
-        shader.ProcessVertex(packedVertices[2]);
+        shader.processVertex(packedVertices[0]);
+        shader.processVertex(packedVertices[1]);
+        shader.processVertex(packedVertices[2]);
 
-        Rasterizer::DrawTriangle(packedVertices, shader, this->frameBuffer.get(), this->rasterMethod);
+        Rasterizer::drawTriangle(packedVertices, shader, this->frameBuffer.get(), this->rasterMethod);
     }
 }
