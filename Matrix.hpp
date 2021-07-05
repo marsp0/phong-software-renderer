@@ -4,6 +4,7 @@
 #include "Vector.hpp"
 
 class Matrix4 {
+
 	public:
 		Matrix4();
 		Matrix4(std::array<std::array<float, 4>, 4> matrix);
@@ -36,5 +37,17 @@ class Solver {
 	public:
 
 		static Matrix4 solve(Matrix4& inputMatrix);
-		static std::array<std::array<float, 8>, 8> buildAugmentedMatrix(Matrix4& inputMatrix);
+		static std::array<std::array<float, 8>, 4> buildAugmentedMatrix(Matrix4& inputMatrix);
+		static void swap(int first, 
+						 int second, 
+						 std::array<std::array<float, 8>, 4>& augmentedMatrix);
+		static void scale(int row, 
+						  float value, 
+						  std::array<std::array<float, 8>, 4>& augmentedMatrix);
+		static void add(int first, 
+						int second, 
+						float firstScale, 
+						float secondScale, 
+						std::array<std::array<float, 8>, 4>& augmentedMatrix);
+
 };

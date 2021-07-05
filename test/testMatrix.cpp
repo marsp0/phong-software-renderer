@@ -165,6 +165,7 @@ void testMatrixVectorMultiplication() {
 }
 
 void testMatrix() {
+	TestTimer timer("testMatrix");
 	testMatrixInitPlain();
 	testMatrixAddition();
 	testMatrixSubtraction();
