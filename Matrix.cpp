@@ -112,17 +112,59 @@ Vector4f Matrix4::operator*(const Vector4f& other)
 
 Matrix4 Matrix4::inverse() 
 {
-	return Solver::solve(*this);
+	return this->gaussJordanInverse();
 }
 
 Matrix4 Matrix4::gaussJordanInverse() 
 {
-	return Matrix4();
+	return Solver::solve(*this);
 }
 
 Matrix4 Matrix4::gluInverse() 
 {
-	return Matrix4();
+	// https://stackoverflow.com/questions/1148309/inverting-a-4x4-matrix
+	float a2323 = this->matrix[2][2] * this->matrix[3][3] - this->matrix[2][3] * this->matrix[3][2];
+	float a1323 = this->matrix[2][1] * this->matrix[3][3] - this->matrix[2][3] * this->matrix[3][1];
+	float a1223 = this->matrix[2][1] * this->matrix[3][2] - this->matrix[2][2] * this->matrix[3][1];
+	float a0323 = this->matrix[2][0] * this->matrix[3][3] - this->matrix[2][3] * this->matrix[3][0];
+	float a0223 = this->matrix[2][0] * this->matrix[3][2] - this->matrix[2][2] * this->matrix[3][0];
+	float a0123 = this->matrix[2][0] * this->matrix[3][1] - this->matrix[2][1] * this->matrix[3][0];
+	float a2313 = this->matrix[1][2] * this->matrix[3][3] - this->matrix[1][3] * this->matrix[3][2];
+	float a1313 = this->matrix[1][1] * this->matrix[3][3] - this->matrix[1][3] * this->matrix[3][1];
+	float a1213 = this->matrix[1][1] * this->matrix[3][2] - this->matrix[1][2] * this->matrix[3][1];
+	float a2312 = this->matrix[1][2] * this->matrix[2][3] - this->matrix[1][3] * this->matrix[2][2];
+	float a1312 = this->matrix[1][1] * this->matrix[2][3] - this->matrix[1][3] * this->matrix[2][1];
+	float a1212 = this->matrix[1][1] * this->matrix[2][2] - this->matrix[1][2] * this->matrix[2][1];
+	float a0313 = this->matrix[1][0] * this->matrix[3][3] - this->matrix[1][3] * this->matrix[3][0];
+	float a0213 = this->matrix[1][0] * this->matrix[3][2] - this->matrix[1][2] * this->matrix[3][0];
+	float a0312 = this->matrix[1][0] * this->matrix[2][3] - this->matrix[1][3] * this->matrix[2][0];
+	float a0212 = this->matrix[1][0] * this->matrix[2][2] - this->matrix[1][2] * this->matrix[2][0];
+	float a0113 = this->matrix[1][0] * this->matrix[3][1] - this->matrix[1][1] * this->matrix[3][0];
+	float a0112 = this->matrix[1][0] * this->matrix[2][1] - this->matrix[1][1] * this->matrix[2][0];
+
+	float det = this->matrix[0][0] * ( this->matrix[1][1] * a2323 - this->matrix[1][2] * a1323 + this->matrix[1][3] * a1223 ) 
+    			- this->matrix[0][1] * ( this->matrix[1][0] * a2323 - this->matrix[1][2] * a0323 + this->matrix[1][3] * a0223 ) 
+    			+ this->matrix[0][2] * ( this->matrix[1][0] * a1323 - this->matrix[1][1] * a0323 + this->matrix[1][3] * a0123 ) 
+    			- this->matrix[0][3] * ( this->matrix[1][0] * a1223 - this->matrix[1][1] * a0223 + this->matrix[1][2] * a0123 ) ;
+	det = 1 / det;
+	std::array<std::array<float, 4>, 4> result;
+	result[0][0] = det *   ( this->matrix[1][1] * a2323 - this->matrix[1][2] * a1323 + this->matrix[1][3] * a1223 );
+	result[0][1] = det * - ( this->matrix[0][1] * a2323 - this->matrix[0][2] * a1323 + this->matrix[0][3] * a1223 );
+	result[0][2] = det *   ( this->matrix[0][1] * a2313 - this->matrix[0][2] * a1313 + this->matrix[0][3] * a1213 );
+	result[0][3] = det * - ( this->matrix[0][1] * a2312 - this->matrix[0][2] * a1312 + this->matrix[0][3] * a1212 );
+	result[1][0] = det * - ( this->matrix[1][0] * a2323 - this->matrix[1][2] * a0323 + this->matrix[1][3] * a0223 );
+	result[1][1] = det *   ( this->matrix[0][0] * a2323 - this->matrix[0][2] * a0323 + this->matrix[0][3] * a0223 );
+	result[1][2] = det * - ( this->matrix[0][0] * a2313 - this->matrix[0][2] * a0313 + this->matrix[0][3] * a0213 );
+	result[1][3] = det *   ( this->matrix[0][0] * a2312 - this->matrix[0][2] * a0312 + this->matrix[0][3] * a0212 );
+	result[2][0] = det *   ( this->matrix[1][0] * a1323 - this->matrix[1][1] * a0323 + this->matrix[1][3] * a0123 );
+	result[2][1] = det * - ( this->matrix[0][0] * a1323 - this->matrix[0][1] * a0323 + this->matrix[0][3] * a0123 );
+	result[2][2] = det *   ( this->matrix[0][0] * a1313 - this->matrix[0][1] * a0313 + this->matrix[0][3] * a0113 );
+	result[2][3] = det * - ( this->matrix[0][0] * a1312 - this->matrix[0][1] * a0312 + this->matrix[0][3] * a0112 );
+	result[3][0] = det * - ( this->matrix[1][0] * a1223 - this->matrix[1][1] * a0223 + this->matrix[1][2] * a0123 );
+	result[3][1] = det *   ( this->matrix[0][0] * a1223 - this->matrix[0][1] * a0223 + this->matrix[0][2] * a0123 );
+	result[3][2] = det * - ( this->matrix[0][0] * a1213 - this->matrix[0][1] * a0213 + this->matrix[0][2] * a0113 );
+	result[3][3] = det *   ( this->matrix[0][0] * a1212 - this->matrix[0][1] * a0212 + this->matrix[0][2] * a0112 );
+	return Matrix4(result);
 }
 
 Matrix4 Matrix4::ludInverse() 
