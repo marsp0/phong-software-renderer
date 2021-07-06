@@ -6,16 +6,16 @@
 #include "Vector.hpp"
 
 class Model {
-	public:
+    public:
 
-		// Methods
-		Model();
-		~Model();
-		void update(float deltaTime);
+        // Methods
+        Model();
+        ~Model();
+        void update(float deltaTime);
 
-		// Data
-		std::vector<Vector4f> 	vertices;
-		std::vector<uint8_t>	colors;
+        // Data
+        std::vector<Vector4f>   vertices;
+        std::vector<uint8_t>    colors;
 
-	private:
+    private:
 };

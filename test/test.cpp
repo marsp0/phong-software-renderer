@@ -4,7 +4,7 @@
 #include "testUtils.hpp"
 
 void runTestSuite() {
-	TestTimer timer("All tests");
-	testMatrix();
-	testSolver();
+    TestTimer timer("All tests");
+    testMatrix();
+    testSolver();
 }

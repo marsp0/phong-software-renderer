@@ -18,20 +18,20 @@ SoftwareRenderer::~SoftwareRenderer() {
 }
 
 void SoftwareRenderer::run() {
-	bool running = true;
-	SDL_Event event;
-	while (running) {
+    bool running = true;
+    SDL_Event event;
+    while (running) {
         // TODO: https://trello.com/c/oj9F4OHU/8-move-key-pressing-logic-out-of-the-renderer
-	    while (SDL_PollEvent(&event)) {
-	        if (event.type == SDL_QUIT || event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
-	        	running = false;
-	        }
-	    }
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT || event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
+                running = false;
+            }
+        }
         for (int i = 0; i < this->scene->models.size(); i++) {
             this->drawModel(this->scene->models[i].get());
         }
-	    this->displayManager->swapBuffers(this->frameBuffer.get());
-	}
+        this->displayManager->swapBuffers(this->frameBuffer.get());
+    }
 }
 
 void SoftwareRenderer::drawModel(Model* model) {

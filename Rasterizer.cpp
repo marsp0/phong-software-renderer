@@ -7,11 +7,11 @@ const SDL_PixelFormat* Rasterizer::PIXEL_FORMAT(SDL_AllocFormat(SDL_PIXELFORMAT_
 
 void Rasterizer::drawLine(std::array<Vector4f, 2> vertices, FrameBuffer* frameBuffer) {
     // https://www.cs.helsinki.fi/group/goa/mallinnus/lines/bresenh.html
-	int x0 = vertices[0].x;
-	int y0 = vertices[0].y;
-	int x1 = vertices[1].x;
-	int y1 = vertices[1].y;
-	bool steep = false;
+    int x0 = vertices[0].x;
+    int y0 = vertices[0].y;
+    int x1 = vertices[1].x;
+    int y1 = vertices[1].y;
+    bool steep = false;
     // swap x with y if the line has a steep slope (rise bigger than run)
     // this means that we always iterate over the "longer" axis
     // if we have abs(dx) < abs(dy) and iterate over x then we would be

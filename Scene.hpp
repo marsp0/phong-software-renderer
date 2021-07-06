@@ -6,17 +6,17 @@
 #include "Model.hpp"
 
 class Scene {
-	public:
+    public:
 
-		// Methods
-		Scene();
-		~Scene();
-		void update(float deltaTime);
+        // Methods
+        Scene();
+        ~Scene();
+        void update(float deltaTime);
 
-		// Data
-		std::vector<std::unique_ptr<Model>> models;
-		std::vector<float> lights;
-		int camera;
+        // Data
+        std::vector<std::unique_ptr<Model>> models;
+        std::vector<float> lights;
+        int camera;
 
-	private:
+    private:
 };

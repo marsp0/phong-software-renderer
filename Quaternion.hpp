@@ -4,28 +4,28 @@
 #include "Matrix.hpp"
 
 class Quaternion {
-	public:
+    public:
 
-		Quaternion(float w, float x, float y, float z);
-		Quaternion();
-		~Quaternion();
+        Quaternion(float w, float x, float y, float z);
+        Quaternion();
+        ~Quaternion();
 
-		Quaternion operator*(const Quaternion& other);
+        Quaternion operator*(const Quaternion& other);
 
-		Quaternion conjugate();
-		Quaternion inverse();
-		float magnitude();
-		float magnitudeSquared();
-		void normalize();
-		Matrix4 toMatrix();
+        Quaternion conjugate();
+        Quaternion inverse();
+        float magnitude();
+        float magnitudeSquared();
+        void normalize();
+        Matrix4 toMatrix();
 
-		// util
-		void print();
+        // util
+        void print();
 
-	private:
+    private:
 
-		float w;
-		float x;
-		float y;
-		float z;
+        float w;
+        float x;
+        float y;
+        float z;
 };
