@@ -1,7 +1,8 @@
 #pragma once
 
 template<typename T>
-class Vector4 {
+class Vector4 
+{
 
     public:
         

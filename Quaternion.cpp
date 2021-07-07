@@ -5,20 +5,24 @@
 #include <iostream>
 
 Quaternion::Quaternion(float w, float x, float y, float z): 
-    w(cos(w/2)), x(x * sin(w/2)), y(y * sin(w/2)), z(z * sin(w/2)) {
+    w(cos(w/2)), x(x * sin(w/2)), y(y * sin(w/2)), z(z * sin(w/2)) 
+{
 
     this->normalize();
 }
 
-Quaternion::Quaternion(): w(0.f), x(0.f), y(0.f), z(0.f) {
+Quaternion::Quaternion(): w(0.f), x(0.f), y(0.f), z(0.f) 
+{
 
 }
 
-Quaternion::~Quaternion() {
+Quaternion::~Quaternion() 
+{
 
 }
 
-Quaternion Quaternion::operator*(const Quaternion& other) {
+Quaternion Quaternion::operator*(const Quaternion& other) 
+{
     // https://en.wikipedia.org/wiki/Quaternion#Hamilton_product
     float w = this->w * other.w - (this->x * other.x) - (this->y * other.y) - (this->z * other.z);
     float x = (this->w * other.x) + (this->x * other.w) + (this->y * other.z) - (this->z * other.y);
@@ -32,7 +36,8 @@ Quaternion Quaternion::operator*(const Quaternion& other) {
     return quaternion;
 }
 
-Quaternion Quaternion::conjugate() {
+Quaternion Quaternion::conjugate() 
+{
     Quaternion quaternion;
     quaternion.w = this->w;
     quaternion.x = -1.f * this->x;
@@ -41,20 +46,24 @@ Quaternion Quaternion::conjugate() {
     return quaternion;
 }
 
-Quaternion Quaternion::inverse() {
+Quaternion Quaternion::inverse() 
+{
     // TODO: returning just the conjugate as the quats should be normalized
     return this->conjugate();
 }
 
-float Quaternion::magnitudeSquared() {
+float Quaternion::magnitudeSquared() 
+{
     return this->w * this->w + this->x * this->x + this->y * this->y + this->z * this->z;
 }
 
-float Quaternion::magnitude() {
+float Quaternion::magnitude() 
+{
     return sqrtf(this->magnitudeSquared());
 }
 
-void Quaternion::normalize() {
+void Quaternion::normalize() 
+{
     float magnitude = this->magnitude();
     this->w /= magnitude;
     this->x /= magnitude;
@@ -62,10 +71,12 @@ void Quaternion::normalize() {
     this->z /= magnitude;
 }
 
-Matrix4 Quaternion::toMatrix() {
+Matrix4 Quaternion::toMatrix() 
+{
     return Matrix4();
 }
 
-void Quaternion::print() {
+void Quaternion::print() 
+{
     std::cout << "Quaternion (" << this->w << ", " << this->x << ", " << this->y << ", " << this->z << ")" << std::endl;
 }

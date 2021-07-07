@@ -5,7 +5,8 @@
 #include "Vector.hpp"
 #include "Buffer.hpp"
 
-class Shader {
+class Shader 
+{
     public:
         Shader();
         ~Shader();

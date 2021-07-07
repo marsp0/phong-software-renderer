@@ -9,7 +9,8 @@
 #include "Scene.hpp"
 #include "Rasterizer.hpp"
 
-class SoftwareRenderer {
+class SoftwareRenderer 
+{
     public:
         SoftwareRenderer(int width, int height);
         ~SoftwareRenderer();

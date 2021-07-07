@@ -5,7 +5,8 @@
 
 #include "Vector.hpp"
 
-class Model {
+class Model 
+{
     public:
 
         // Methods

@@ -8,28 +8,39 @@
 #define HEIGHT 600
 #define DELAY 3000
 
-void runRenderer() {
+void runRenderer() 
+{
     SoftwareRenderer renderer(WIDTH, HEIGHT);
     renderer.run();
 }
 
-void runTests() {
+void runTests() 
+{
     runTestSuite();
 }
 
 int main (int argc, char* argv[])
 {
     std::string command;
-    if (argc < 2) {
+    if (argc < 2) 
+    {
         command = "run";
-    } else {
+    } 
+    else 
+    {
         command = argv[1];
     }
-    if (command == "run") {
+    
+    if (command == "run") 
+    {
         runRenderer();
-    } else if (command == "test") {
+    } 
+    else if (command == "test") 
+    {
         runTests();
-    } else {
+    } 
+    else 
+    {
         std::cerr << "Invalid argument. Run with 'test' or 'run'" << std::endl;
         return 1;
     }

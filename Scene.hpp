@@ -5,7 +5,8 @@
 
 #include "Model.hpp"
 
-class Scene {
+class Scene 
+{
     public:
 
         // Methods

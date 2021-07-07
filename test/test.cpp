@@ -3,7 +3,8 @@
 #include "testSolver.hpp"
 #include "testUtils.hpp"
 
-void runTestSuite() {
+void runTestSuite() 
+{
     TestTimer timer("All tests");
     testMatrix();
     testSolver();

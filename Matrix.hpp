@@ -3,7 +3,8 @@
 #include <array>
 #include "Vector.hpp"
 
-class Matrix4 {
+class Matrix4 
+{
 
     public:
         Matrix4();
@@ -32,7 +33,8 @@ class Matrix4 {
         std::array<std::array<float, 4>, 4> matrix;
 };
 
-class Solver {
+class Solver 
+{
     
     public:
 

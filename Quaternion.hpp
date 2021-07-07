@@ -3,7 +3,8 @@
 #include "Vector.hpp"
 #include "Matrix.hpp"
 
-class Quaternion {
+class Quaternion 
+{
     public:
 
         Quaternion(float w, float x, float y, float z);

@@ -13,7 +13,8 @@ enum RasterMethod
     FLAT_SPLIT
 };
 
-class Rasterizer {
+class Rasterizer 
+{
 
     public:
 

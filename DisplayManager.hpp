@@ -5,7 +5,8 @@
 
 #include "Buffer.hpp"
 
-class DisplayManager {
+class DisplayManager 
+{
     public:
         
         // METHODS
