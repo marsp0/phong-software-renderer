@@ -1,4 +1,4 @@
-name: Build + Test
+name: Build
 
 on:
   push:
@@ -7,15 +7,13 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  Build:
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
-    - name: create dir
-      run: mkdir ./out
-    - name: make
-      run: make
-    - name: test
+    - name: Build
+      run: sudo sh ./build.sh
+    - name: Run Tests
       run: ./out/renderer test
