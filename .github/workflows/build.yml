@@ -13,9 +13,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: create dir
-      run: mkdir ./out
     - name: make
-      run: make
+      run: ./build.sh
     - name: test
       run: ./out/renderer test
