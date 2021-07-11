@@ -1,4 +1,4 @@
-name: Build + Test
+name: Build
 
 on:
   push:
@@ -13,7 +13,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: make
+    - name: Run as Admin
+      run: sudo su
+    - name: Build
       run: ./build.sh
-    - name: test
+    - name: Run Tests
       run: ./out/renderer test
