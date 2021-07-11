@@ -1,6 +1,7 @@
 #include "test.hpp"
 #include "testMatrix.hpp"
 #include "testSolver.hpp"
+#include "testVector.hpp"
 #include "testUtils.hpp"
 
 void runTestSuite() 
@@ -8,4 +9,5 @@ void runTestSuite()
     TestTimer timer("All tests");
     testMatrix();
     testSolver();
+    testVector();
 }

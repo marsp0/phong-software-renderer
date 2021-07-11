@@ -32,12 +32,34 @@ void _ASSERT_FLOAT(float actual, float expected, const char* fileName, int lineN
     assert(result);
 }
 
+void _ASSERT_INT(int actual, int expected, const char* fileName, int lineNumber)
+{
+    bool result = true;
+    if (actual != expected) 
+    {
+        result = false;
+        std::cout << "File: " << fileName << std::endl;
+        std::cout << "Line: " << lineNumber << std::endl;
+        std::cout << "Actual: " << actual << std::endl;
+        std::cout << "Expected: " << expected << std::endl;
+    }
+    assert(result);
+}
+
 void _ASSERT_VECTOR4F(Vector4f actual, Vector4f expected, const char* fileName, int lineNumber) 
 {
     _ASSERT_FLOAT(actual.x, expected.x, fileName, lineNumber);
     _ASSERT_FLOAT(actual.y, expected.y, fileName, lineNumber);
     _ASSERT_FLOAT(actual.z, expected.z, fileName, lineNumber);
     _ASSERT_FLOAT(actual.w, expected.w, fileName, lineNumber);
+}
+
+void _ASSERT_VECTOR4I(Vector4i actual, Vector4i expected, const char* fileName, int lineNumber)
+{
+    _ASSERT_INT(actual.x, expected.x, fileName, lineNumber);
+    _ASSERT_INT(actual.y, expected.y, fileName, lineNumber);
+    _ASSERT_INT(actual.z, expected.z, fileName, lineNumber);
+    _ASSERT_INT(actual.w, expected.w, fileName, lineNumber);
 }
 
 void _ASSERT_MATRIX4(Matrix4 actual, Matrix4 expected, const char* fileName, int lineNumber) 
