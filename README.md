@@ -22,6 +22,16 @@
 - [Quaternions 3](http://graphics.stanford.edu/courses/cs348a-17-winter/Papers/quaternion.pdf)
 - [Quaternions 4](https://fgiesen.wordpress.com/2019/02/09/rotating-a-single-vector-using-a-quaternion/)
 - [Quaternions 5](https://www.3dgep.com/understanding-quaternions/)
+- [General Matrix Knowledge] - any linear algebra book
+- [Matrix Inversion - Gauss Jordan](https://en.wikipedia.org/wiki/Gaussian_elimination#Pseudocode)
+- [Matrix Inversion - GLU implementation](https://stackoverflow.com/questions/1148309/inverting-a-4x4-matrix)
+- Node that the below was not actually implemented as from what i found LU decomposition (crout/doolittle) does not work in all cases.
+    - [Matrix Inversion - LU decomposition 1](https://en.wikipedia.org/wiki/LU_decomposition)
+    - [Matrix Inversion - LU decomposition 2](https://www.cl.cam.ac.uk/teaching/1314/NumMethods/supporting/mcmaster-kiruba-ludecomp.pdf)
+    - [Matrix Inversion - LU decomposition 3](https://www.youtube.com/watch?v=rhNKncraJMk)
+    - [Matrix Inversion - LU decomposition 4](http://www.mymathlib.com/matrices/linearsystems/doolittle.html)
+    - [Matrix Inversion - LU decomposition calc 1](https://www.atozmath.com/MatrixEv.aspx?q=doolit&q1=1%2c2%2c3%2c4%3b5%2c6%2c7%2c8%3b9%2c1%2c3%2c3%3b4%2c5%2c6%2c6%60doolit%60&dm=D&dp=8&do=1#PrevPart) - shows different methods
+    - [Matrix Inversion - LU decomposition calc 2](https://keisan.casio.com/exec/system/15076953047019#) - i think this one uses gauss elimination variant instead of crout/doolittle
 
 ### Drawing a line
 
