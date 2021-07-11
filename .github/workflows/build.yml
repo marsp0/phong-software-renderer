@@ -7,13 +7,13 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  Build:
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
     - name: Build
-      run: sudo ./build.sh
+      run: sudo sh ./build.sh
     - name: Run Tests
       run: ./out/renderer test
