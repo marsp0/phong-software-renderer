@@ -22,6 +22,7 @@
 - [Quaternions 3](http://graphics.stanford.edu/courses/cs348a-17-winter/Papers/quaternion.pdf)
 - [Quaternions 4](https://fgiesen.wordpress.com/2019/02/09/rotating-a-single-vector-using-a-quaternion/)
 - [Quaternions 5](https://www.3dgep.com/understanding-quaternions/)
+- [Quaternions 6](http://www.neil.dantam.name/note/dantam-quaternion.pdf)
 - [General Matrix Knowledge] - any linear algebra book
 - [Matrix Inversion - Gauss Jordan](https://en.wikipedia.org/wiki/Gaussian_elimination#Pseudocode)
 - [Matrix Inversion - GLU implementation](https://stackoverflow.com/questions/1148309/inverting-a-4x4-matrix)

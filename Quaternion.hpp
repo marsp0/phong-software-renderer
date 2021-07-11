@@ -8,10 +8,10 @@ class Quaternion
     public:
 
         Quaternion(float w, float x, float y, float z);
-        Quaternion();
         ~Quaternion();
 
         Quaternion operator*(const Quaternion& other);
+        Quaternion operator*(float value);
 
         Quaternion conjugate();
         Quaternion inverse();
@@ -23,8 +23,7 @@ class Quaternion
         // util
         void print();
 
-    private:
-
+        // Data
         float w;
         float x;
         float y;
