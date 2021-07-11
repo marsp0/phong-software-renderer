@@ -13,9 +13,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Run as Admin
-      run: sudo su
     - name: Build
-      run: ./build.sh
+      run: sudo ./build.sh
     - name: Run Tests
       run: ./out/renderer test
