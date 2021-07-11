@@ -1,19 +1,25 @@
 #include "Matrix.hpp"
 #include <iostream>
 #include <math.h>
+#include <assert.h>
 
 Matrix4::Matrix4(): matrix() 
 {
-    for (int i = 0; i < 4; i++) 
-    {
-        for (int j = 0; j < 4; j++) 
-        {
-            this->matrix[i][j] = 0.f;
-        }
-    }
     this->matrix[0][0] = 1.f;
+    this->matrix[0][1] = 0.f;
+    this->matrix[0][2] = 0.f;
+    this->matrix[0][3] = 0.f;
+    this->matrix[1][0] = 0.f;
     this->matrix[1][1] = 1.f;
+    this->matrix[1][2] = 0.f;
+    this->matrix[1][3] = 0.f;
+    this->matrix[2][0] = 0.f;
+    this->matrix[2][1] = 0.f;
     this->matrix[2][2] = 1.f;
+    this->matrix[2][3] = 0.f;
+    this->matrix[3][0] = 0.f;
+    this->matrix[3][1] = 0.f;
+    this->matrix[3][2] = 0.f;
     this->matrix[3][3] = 1.f;
 }
 
@@ -25,6 +31,11 @@ Matrix4::Matrix4(std::array<std::array<float, 4>, 4> matrix): matrix(matrix)
 Matrix4::~Matrix4() 
 {
 
+}
+
+void Matrix4::set(int row, int col, float value)
+{
+    this->matrix[row][col] = value;
 }
 
 float Matrix4::get(int row, int col) 
@@ -167,11 +178,6 @@ Matrix4 Matrix4::gluInverse()
     return Matrix4(result);
 }
 
-Matrix4 Matrix4::ludInverse() 
-{
-    return Matrix4();
-}
-
 Matrix4 Matrix4::transpose() 
 {
     std::array<std::array<float, 4>, 4> result;
@@ -221,6 +227,7 @@ Matrix4 Solver::solve(Matrix4& inputMatrix)
         {
             Solver::swap(col, maxRow, augmentedMatrix);
         }
+        assert(augmentedMatrix[col][col] != 0.f);
         Solver::scale(col, 1.f/augmentedMatrix[col][col], augmentedMatrix);
         for (int i = 0; i < 4; i++)
         {

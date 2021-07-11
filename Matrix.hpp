@@ -11,6 +11,7 @@ class Matrix4
         Matrix4(std::array<std::array<float, 4>, 4> matrix);
         ~Matrix4();
 
+        void set(int row, int col, float value);
         float get(int row, int col);
 
         Matrix4 operator+(const Matrix4& other);
@@ -22,7 +23,6 @@ class Matrix4
         Matrix4 inverse();
         Matrix4 gaussJordanInverse();
         Matrix4 gluInverse();
-        Matrix4 ludInverse();
         Matrix4 transpose();
 
         // util
