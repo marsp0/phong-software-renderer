@@ -2,6 +2,7 @@
 #include "testMatrix.hpp"
 #include "testSolver.hpp"
 #include "testVector.hpp"
+#include "testQuaternion.hpp"
 #include "testUtils.hpp"
 
 void runTestSuite() 
@@ -10,4 +11,5 @@ void runTestSuite()
     testMatrix();
     testSolver();
     testVector();
+    testQuaternion();
 }

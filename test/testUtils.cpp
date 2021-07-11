@@ -1,5 +1,6 @@
 #include "testUtils.hpp"
 #include <thread>
+#include <iomanip>
 
 TestTimer::TestTimer(std::string name): name(name)
 {
@@ -12,10 +13,10 @@ TestTimer::~TestTimer()
     std::chrono::nanoseconds nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(this->end - this->start);
     std::chrono::microseconds microseconds = std::chrono::duration_cast<std::chrono::microseconds>(this->end - this->start);
     std::chrono::milliseconds milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(this->end - this->start);
-    std::cout << this->name << ": ";
-    std::cout << milliseconds.count() << "ms, ";
-    std::cout << microseconds.count() << "us, ";
-    std::cout << nanoseconds.count() << "ns" << std::endl;
+    std::cout << std::setw(7) << std::setfill(' ') << milliseconds.count() << "ms, ";
+    std::cout << std::setw(7) << std::setfill(' ') << microseconds.count() << "us, ";
+    std::cout << std::setw(7) << std::setfill(' ') << nanoseconds.count() << "ns - ";
+    std::cout << this->name << std::endl;;
 }
 
 void _ASSERT_FLOAT(float actual, float expected, const char* fileName, int lineNumber) 
@@ -60,6 +61,14 @@ void _ASSERT_VECTOR4I(Vector4i actual, Vector4i expected, const char* fileName, 
     _ASSERT_INT(actual.y, expected.y, fileName, lineNumber);
     _ASSERT_INT(actual.z, expected.z, fileName, lineNumber);
     _ASSERT_INT(actual.w, expected.w, fileName, lineNumber);
+}
+
+void _ASSERT_QUATERNION(Quaternion actual, Quaternion expected, const char* fileName, int lineNumber) 
+{
+    _ASSERT_FLOAT(actual.x, expected.x, fileName, lineNumber);
+    _ASSERT_FLOAT(actual.y, expected.y, fileName, lineNumber);
+    _ASSERT_FLOAT(actual.z, expected.z, fileName, lineNumber);
+    _ASSERT_FLOAT(actual.w, expected.w, fileName, lineNumber);
 }
 
 void _ASSERT_MATRIX4(Matrix4 actual, Matrix4 expected, const char* fileName, int lineNumber) 
