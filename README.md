@@ -1,3 +1,5 @@
+[![Build](https://github.com/marsp0/software-renderer/actions/workflows/build.yml/badge.svg)](https://github.com/marsp0/software-renderer/actions/workflows/build.yml)
+
 # Software Renderer
 
 ### Dependencies
