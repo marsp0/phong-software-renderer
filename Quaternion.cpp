@@ -85,6 +85,12 @@ void Quaternion::normalize()
 
 Matrix4 Quaternion::toMatrix() 
 {
+    // as seen here : http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/index.htm
+    // this matrix is simply the result of qpq^-1
+    // with the result layed out in a matrix form
+    // i - first row    |   i*x     i*y     i*z
+    // j - second row   |   j*x     j*y     j*z
+    // z - third row    |   k*x     k*y     k*z
     float xsq = this->x * this->x;
     float ysq = this->y * this->y;
     float zsq = this->z * this->z;

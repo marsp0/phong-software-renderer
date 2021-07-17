@@ -2,6 +2,7 @@
 
 #include "testUtils.hpp"
 #include "../Model.hpp"
+#include "../Vector.hpp"
 
 void testModelEulerRotation()
 {
@@ -33,9 +34,27 @@ void testModelQuaternionRotation()
     ASSERT_MATRIX4(actual, expected);
 }
 
+void testModelAxisAngleRotation()
+{
+    std::array<std::array<float, 4>, 4> expectedArray{{
+        {-0.85365f, -0.08226f,  0.51429f, 0.f},
+        {0.18860f, -0.96925f,  0.15801f, 0.f},
+        {0.48548f,  0.23189f,  0.84293f, 0.f},
+        {0.f , 0.f, 0.f, 1.f}
+    }};
+    Matrix4 expected(expectedArray);
+    // initialize with axis angle
+    Vector4f axis = Vector4f(6.f, 2.34f, 22.f, 1.f);
+    axis.normalize();
+    Model model(3.f, axis);
+    Matrix4 actual = model.getRotationMatrix();
+    ASSERT_MATRIX4(actual, expected);
+}
+
 void testModel()
 {
     TestTimer timer("testModel");
     testModelEulerRotation();
     testModelQuaternionRotation();
+    testModelAxisAngleRotation();
 }

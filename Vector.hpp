@@ -1,10 +1,18 @@
 #pragma once
 
+#include <math.h>
+#include <iostream>
+
 template<typename T>
 class Vector4 
 {
 
     public:
+
+        Vector4(): x(), y(), z(), w()
+        {
+
+        }
         
         Vector4(T x, T y, T z, T w): x(x), y(y), z(z), w(w) 
         {
@@ -54,6 +62,29 @@ class Vector4
                               this->z * other.x - this->x * other.z,
                               this->x * other.y - this->y * other.x,
                               1.f);
+        }
+
+        T magnitudeSquared()
+        {
+            return this->x * this->x + this->y * this->y + this->z * this->z;
+        }
+
+        float magnitude()
+        {
+            return sqrtf(this->magnitudeSquared());
+        }
+
+        void normalize()
+        {
+            float scale = this->magnitude();
+            this->x /= scale;
+            this->y /= scale;
+            this->z /= scale;
+        }
+
+        void print()
+        {
+            std::cout << "Vector(" << this->x << ", " << this->y << ", " << this->z << ")" << std::endl;
         }
 
         T x;

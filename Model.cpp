@@ -42,6 +42,12 @@ Model::Model(float quatW, float quatX, float quatY, float quatZ): vertices(), co
     this->quaternion.normalize();
 }
 
+Model::Model(float angle, Vector4f axis): vertices(), colors(), angle(angle), axis(axis),
+                                          rotationType(RotationType::AXIS_ANGLE)
+{
+    this->axis.normalize();
+}
+
 Model::~Model() 
 {
 
@@ -64,7 +70,7 @@ Matrix4 Model::getRotationMatrix()
     }
     else if (this->rotationType == RotationType::AXIS_ANGLE)
     {
-        return Matrix4();
+        return this->getAxisAngleRotationMatrix();
     }
     else
     {
@@ -120,4 +126,28 @@ Matrix4 Model::getEulerRotationMatrix()
 Matrix4 Model::getQuaternionRotationMatrix()
 {
     return this->quaternion.toMatrix();
+}
+
+Matrix4 Model::getAxisAngleRotationMatrix()
+{
+    // taken from https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula#Matrix_notation
+    float sinA = sin(this->angle);
+    float cosA = cos(this->angle);
+    Matrix4 identity;
+    Matrix4 axisMatrix;
+    axisMatrix.set(0, 0, 0.f);
+    axisMatrix.set(0, 1, -this->axis.z);
+    axisMatrix.set(0, 2, this->axis.y);
+
+    axisMatrix.set(1, 0, this->axis.z);
+    axisMatrix.set(1, 1, 0.f);
+    axisMatrix.set(1, 2, -this->axis.x);
+
+    axisMatrix.set(2, 0, -this->axis.y);
+    axisMatrix.set(2, 1, this->axis.x);
+    axisMatrix.set(2, 2, 0.f);
+
+    Matrix4 result = identity + axisMatrix*sinA + axisMatrix*axisMatrix*(1.f - cosA);
+    result.set(3, 3, 1.f);
+    return result;
 }

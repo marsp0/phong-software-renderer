@@ -23,6 +23,7 @@ class Model
         Model();
         Model(float eulerX, float eulerY, float eulerZ);
         Model(float quatW, float quatX, float quatY, float quatZ);
+        Model(float angle, Vector4f axis);
         ~Model();
         void update(float deltaTime);
         Matrix4 getRotationMatrix();
@@ -33,12 +34,12 @@ class Model
         std::vector<Vector4f>   vertices;
         std::vector<uint8_t>    colors;
         RotationType            rotationType;
-        Quaternion quaternion;
 
     private:
 
         Matrix4 getEulerRotationMatrix();
         Matrix4 getQuaternionRotationMatrix();
+        Matrix4 getAxisAngleRotationMatrix();
 
         // Euler angles data
         float eulerX;
@@ -46,5 +47,9 @@ class Model
         float eulerZ;
 
         // Quaternion data
-        
+        Quaternion quaternion;
+
+        // axis angle data
+        float       angle;
+        Vector4f    axis;
 };
