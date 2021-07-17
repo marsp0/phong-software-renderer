@@ -5,6 +5,7 @@
 
 #include "Vector.hpp"
 #include "Matrix.hpp"
+#include "Quaternion.hpp"
 
 enum class RotationType
 {
@@ -20,7 +21,8 @@ class Model
 
         // Methods
         Model();
-        Model(float x, float y, float z);
+        Model(float eulerX, float eulerY, float eulerZ);
+        Model(float quatW, float quatX, float quatY, float quatZ);
         ~Model();
         void update(float deltaTime);
         Matrix4 getRotationMatrix();
@@ -31,14 +33,18 @@ class Model
         std::vector<Vector4f>   vertices;
         std::vector<uint8_t>    colors;
         RotationType            rotationType;
+        Quaternion quaternion;
 
     private:
 
         Matrix4 getEulerRotationMatrix();
+        Matrix4 getQuaternionRotationMatrix();
 
-        // Euler angles
-        float x;
-        float y;
-        float z;
+        // Euler angles data
+        float eulerX;
+        float eulerY;
+        float eulerZ;
 
+        // Quaternion data
+        
 };

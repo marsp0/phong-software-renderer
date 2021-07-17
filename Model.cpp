@@ -25,10 +25,21 @@ Model::Model(): vertices(), colors()
     this->colors.push_back((uint8_t)0);
 }
 
-Model::Model(float x, float y, float z): vertices(), colors(), x(x), y(y), z(z),
-                                         rotationType(RotationType::EULER)
+Model::Model(float eulerX, float eulerY, float eulerZ): vertices(), 
+                                                        colors(), 
+                                                        eulerX(eulerX), 
+                                                        eulerY(eulerY), 
+                                                        eulerZ(eulerZ),
+                                                        rotationType(RotationType::EULER)
 {
 
+}
+
+Model::Model(float quatW, float quatX, float quatY, float quatZ): vertices(), colors(), 
+                                                                  quaternion(makeQuat(quatW, quatX, quatY, quatZ)),
+                                                                  rotationType(RotationType::QUATERNION)
+{
+    this->quaternion.normalize();
 }
 
 Model::~Model() 
@@ -49,7 +60,7 @@ Matrix4 Model::getRotationMatrix()
     }
     else if (this->rotationType == RotationType::QUATERNION)
     {
-        return Matrix4();
+        return this->getQuaternionRotationMatrix();
     }
     else if (this->rotationType == RotationType::AXIS_ANGLE)
     {
@@ -81,12 +92,12 @@ Matrix4 Model::getEulerRotationMatrix()
     //      0       0       1
     // matrix below represents X * Y * Z
 
-    float sinX = sin(this->x);
-    float cosX = cos(this->x);
-    float sinY = sin(this->y);
-    float cosY = cos(this->y);
-    float sinZ = sin(this->z);
-    float cosZ = cos(this->z);
+    float sinX = sin(this->eulerX);
+    float cosX = cos(this->eulerX);
+    float sinY = sin(this->eulerY);
+    float cosY = cos(this->eulerY);
+    float sinZ = sin(this->eulerZ);
+    float cosZ = cos(this->eulerZ);
     Matrix4 result;
     result.set(0, 0, cosY*cosZ);
     result.set(0, 1, -cosY*sinZ);
@@ -104,4 +115,9 @@ Matrix4 Model::getEulerRotationMatrix()
     result.set(2, 3, 0.f);
 
     return result;
+}
+
+Matrix4 Model::getQuaternionRotationMatrix()
+{
+    return this->quaternion.toMatrix();
 }

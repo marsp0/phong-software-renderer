@@ -59,3 +59,4 @@
 - [Rotation Calculator](https://www.andre-gaschler.com/rotationconverter/)
 - [Rotations 1](https://www.cs.utexas.edu/~theshark/courses/cs354/lectures/cs354-14.pdf)
 - [Rotations 2](https://en.wikipedia.org/wiki/Rotation_matrix)
+- Quaternions - see the Math secion
