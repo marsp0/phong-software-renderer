@@ -2,17 +2,20 @@
 
 #include <vector>
 #include <stdint.h>
+#include <memory>
 
 #include "Vector.hpp"
 #include "Matrix.hpp"
 #include "Quaternion.hpp"
+#include "QuaternionRotation.hpp"
+#include "EulerRotation.hpp"
+#include "AxisAngleRotation.hpp"
 
 enum class RotationType
 {
     EULER = 0,
     QUATERNION,
-    AXIS_ANGLE,
-    MATRIX
+    AXIS_ANGLE
 };
 
 class Model 
@@ -27,6 +30,7 @@ class Model
         ~Model();
         void update(float deltaTime);
         Matrix4 getRotationMatrix();
+        void switchRotation(RotationType newType);
 
         // Data
         // TODO: Do we need public members for these ?
@@ -37,19 +41,7 @@ class Model
 
     private:
 
-        Matrix4 getEulerRotationMatrix();
-        Matrix4 getQuaternionRotationMatrix();
-        Matrix4 getAxisAngleRotationMatrix();
-
-        // Euler angles data
-        float eulerX;
-        float eulerY;
-        float eulerZ;
-
-        // Quaternion data
-        Quaternion quaternion;
-
-        // axis angle data
-        float       angle;
-        Vector4f    axis;
+        std::unique_ptr<EulerRotation> eulerRotation;
+        std::unique_ptr<AxisAngleRotation> axisAngleRotation;
+        std::unique_ptr<QuaternionRotation> quaternionRotation;
 };

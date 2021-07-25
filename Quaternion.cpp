@@ -10,7 +10,9 @@ Quaternion makeQuat(float angle,float x, float y, float z)
 {
     float cosAngle = cos(angle/2.f);
     float sinAngle = sin(angle/2.f);
-    return Quaternion(cosAngle, sinAngle*x, sinAngle*y, sinAngle*z);
+    Quaternion result(cosAngle, sinAngle * x, sinAngle * y, sinAngle * z);
+    result.normalize();
+    return result;
 }
 
 Quaternion::Quaternion(): w(0.f), x(0.f), y(0.f), z(0.f)

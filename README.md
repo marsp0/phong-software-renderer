@@ -59,6 +59,9 @@
 - [Rotation Calculator](https://www.andre-gaschler.com/rotationconverter/)
 - [Rotations 1](https://www.cs.utexas.edu/~theshark/courses/cs354/lectures/cs354-14.pdf)
 - [Rotations 2](https://en.wikipedia.org/wiki/Rotation_matrix)
+- [Rotations 3](https://ntrs.nasa.gov/api/citations/19770024290/downloads/19770024290.pdf)
 - Quaternions - see the Math secion
 - [Axis-Angle 1](https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation)
 - [Axis-Angle 2](https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula)
+- [Conversions between representations - Three.js source](https://github.com/mrdoob/three.js/)
+- [Conversion between representations](https://en.wikipedia.org/wiki/Rotation_formalisms_in_three_dimensions)

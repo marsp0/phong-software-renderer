@@ -1,6 +1,7 @@
 #include "Model.hpp"
 
 #include <math.h>
+#include <assert.h>
 
 Model::Model(): vertices(), colors() 
 {
@@ -25,27 +26,25 @@ Model::Model(): vertices(), colors()
     this->colors.push_back((uint8_t)0);
 }
 
-Model::Model(float eulerX, float eulerY, float eulerZ): vertices(), 
-                                                        colors(), 
-                                                        eulerX(eulerX), 
-                                                        eulerY(eulerY), 
-                                                        eulerZ(eulerZ),
-                                                        rotationType(RotationType::EULER)
+Model::Model(float x, float y, float z): vertices(), colors(), rotationType(RotationType::EULER)
 {
-
+    this->eulerRotation = std::make_unique<EulerRotation>(x, y, z);
+    this->axisAngleRotation = std::make_unique<AxisAngleRotation>(0.f, Vector4f());
+    this->quaternionRotation = std::make_unique<QuaternionRotation>(0.f, 0.f, 0.f, 0.f);
 }
 
-Model::Model(float quatW, float quatX, float quatY, float quatZ): vertices(), colors(), 
-                                                                  quaternion(makeQuat(quatW, quatX, quatY, quatZ)),
-                                                                  rotationType(RotationType::QUATERNION)
+Model::Model(float w, float x, float y, float z): vertices(), colors(), rotationType(RotationType::QUATERNION)
 {
-    this->quaternion.normalize();
+    this->eulerRotation = std::make_unique<EulerRotation>(0.f, 0.f, 0.f);
+    this->axisAngleRotation = std::make_unique<AxisAngleRotation>(0.f, Vector4f());
+    this->quaternionRotation = std::make_unique<QuaternionRotation>(w, x, y, z);
 }
 
-Model::Model(float angle, Vector4f axis): vertices(), colors(), angle(angle), axis(axis),
-                                          rotationType(RotationType::AXIS_ANGLE)
+Model::Model(float angle, Vector4f axis): vertices(), colors(), rotationType(RotationType::AXIS_ANGLE)
 {
-    this->axis.normalize();
+    this->eulerRotation = std::make_unique<EulerRotation>(0.f, 0.f, 0.f);
+    this->axisAngleRotation = std::make_unique<AxisAngleRotation>(angle, axis);
+    this->quaternionRotation = std::make_unique<QuaternionRotation>(0.f, 0.f, 0.f, 0.f);
 }
 
 Model::~Model() 
@@ -62,92 +61,54 @@ Matrix4 Model::getRotationMatrix()
 {
     if (this->rotationType == RotationType::EULER)
     {
-        return this->getEulerRotationMatrix();
+        return this->eulerRotation->getRotationMatrix();
     }
     else if (this->rotationType == RotationType::QUATERNION)
     {
-        return this->getQuaternionRotationMatrix();
-    }
-    else if (this->rotationType == RotationType::AXIS_ANGLE)
-    {
-        return this->getAxisAngleRotationMatrix();
+        return this->quaternionRotation->getRotationMatrix();
     }
     else
     {
-        return Matrix4();
+        return this->axisAngleRotation->getRotationMatrix();
     }
 }
 
-Matrix4 Model::getEulerRotationMatrix()
+void Model::switchRotation(RotationType newType)
 {
-    // Rotate in order Z -> Y -> X
-    // 
-    // Matrix to rotate around X
-    //      1       0       0
-    //      0     cosA    -sinA
-    //      0     sinA     cosA
-    // 
-    // Matrix to rotate around Y
-    //    cosB      0      sinB
-    //      0       1       0
-    //   -sinB      0      cosB
-    // 
-    // Matrix to rotate around Z
-    //    cosG    -sinG     0
-    //    sinG     cosG     0
-    //      0       0       1
-    // matrix below represents X * Y * Z
+    assert(this->rotationType != newType);
 
-    float sinX = sin(this->eulerX);
-    float cosX = cos(this->eulerX);
-    float sinY = sin(this->eulerY);
-    float cosY = cos(this->eulerY);
-    float sinZ = sin(this->eulerZ);
-    float cosZ = cos(this->eulerZ);
-    Matrix4 result;
-    result.set(0, 0, cosY*cosZ);
-    result.set(0, 1, -cosY*sinZ);
-    result.set(0, 2, sinY);
-    result.set(0, 3, 0.f);
-
-    result.set(1, 0, cosX*sinZ + cosZ*sinX*sinY);
-    result.set(1, 1, cosX*cosZ - sinX*sinY*sinZ);
-    result.set(1, 2, -cosY*sinX);
-    result.set(1, 3, 0.f);
-
-    result.set(2, 0, sinX*sinZ - cosX*cosZ*sinY);
-    result.set(2, 1, cosZ*sinX + cosX*sinY*sinZ);
-    result.set(2, 2, cosX*cosY);
-    result.set(2, 3, 0.f);
-
-    return result;
-}
-
-Matrix4 Model::getQuaternionRotationMatrix()
-{
-    return this->quaternion.toMatrix();
-}
-
-Matrix4 Model::getAxisAngleRotationMatrix()
-{
-    // taken from https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula#Matrix_notation
-    float sinA = sin(this->angle);
-    float cosA = cos(this->angle);
-    Matrix4 identity;
-    Matrix4 axisMatrix;
-    axisMatrix.set(0, 0, 0.f);
-    axisMatrix.set(0, 1, -this->axis.z);
-    axisMatrix.set(0, 2, this->axis.y);
-
-    axisMatrix.set(1, 0, this->axis.z);
-    axisMatrix.set(1, 1, 0.f);
-    axisMatrix.set(1, 2, -this->axis.x);
-
-    axisMatrix.set(2, 0, -this->axis.y);
-    axisMatrix.set(2, 1, this->axis.x);
-    axisMatrix.set(2, 2, 0.f);
-
-    Matrix4 result = identity + axisMatrix*sinA + axisMatrix*axisMatrix*(1.f - cosA);
-    result.set(3, 3, 1.f);
-    return result;
+    if (this->rotationType == RotationType::EULER)
+    {
+        if (newType == RotationType::QUATERNION)
+        {
+            this->quaternionRotation->updateFromEuler(this->eulerRotation.get());
+        }
+        else // axis angle
+        {
+            this->axisAngleRotation->updateFromEuler(this->eulerRotation.get());
+        }
+    }
+    else if (this->rotationType == RotationType::QUATERNION)
+    {
+        if (newType == RotationType::EULER)
+        {
+            this->eulerRotation->updateFromQuaternion(this->quaternionRotation.get());
+        }
+        else // axis angle
+        {
+            this->axisAngleRotation->updateFromQuaternion(this->quaternionRotation.get());
+        }
+    }
+    else
+    {
+        if (newType == RotationType::EULER)
+        {
+            this->eulerRotation->updateFromAxisAngle(this->axisAngleRotation.get());
+        }
+        else // quaternion
+        {
+            this->quaternionRotation->updateFromAxisAngle(this->axisAngleRotation.get());
+        }
+    }
+    this->rotationType = newType;
 }

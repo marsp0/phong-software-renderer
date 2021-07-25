@@ -5,6 +5,7 @@
 #include "testVector.hpp"
 #include "testQuaternion.hpp"
 #include "testModel.hpp"
+#include "testRotation.hpp"
 
 void runTestSuite() 
 {
@@ -13,5 +14,6 @@ void runTestSuite()
     testSolver();
     testVector();
     testQuaternion();
-    testModel();
+    // testModel();
+    testRotation();
 }
