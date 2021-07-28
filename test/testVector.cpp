@@ -1,6 +1,8 @@
 #include "testVector.hpp"
 #include "testUtils.hpp"
 
+#include <math.h>
+
 void testVector4fAddition()
 {
     Vector4f v1(1.f, 2.f, 3.f, 1.f);
@@ -50,6 +52,29 @@ void testVector4fCrossProduct()
     Vector4f v2(2.f, 3.5f, 14.2f, 1.f);
     Vector4f expected(17.9f, -8.2f, -0.5f, 1.f);
     Vector4f actual = v1.cross(v2);
+    ASSERT_VECTOR4F(actual, expected);
+}
+
+void testVector4fMagnitudeSquared()
+{
+    float expected = 2 * 2 + 3 * 3 + 4 * 4;
+    Vector4f v1(2.f, 3.f, 4.f, 1);
+    ASSERT_FLOAT(v1.magnitudeSquared(), expected);
+}
+
+void testVector4fMagnitude()
+{
+    float expected = sqrt(2 * 2 + 3 * 3 + 4 * 4);
+    Vector4f v1(2.f, 3.f, 4.f, 1);
+    ASSERT_FLOAT(v1.magnitude(), expected);
+}
+
+void testVector4fNormalize()
+{
+    float scale = sqrt(2 * 2 + 3 * 3 + 4 * 4);
+    Vector4f actual(2.f, 3.f, 4.f, 1);
+    actual.normalize();
+    Vector4f expected(2.f/scale, 3.f/scale, 4.f/scale, 1.f);
     ASSERT_VECTOR4F(actual, expected);
 }
 
@@ -107,6 +132,20 @@ void testVector4iCrossProduct()
     ASSERT_VECTOR4I(actual, expected);
 }
 
+void testVector4iMagnitudeSquared()
+{
+    int expected = 2 * 2 + 3 * 3 + 4 * 4;
+    Vector4i v1(2, 3, 4, 1);
+    ASSERT_INT(v1.magnitudeSquared(), expected);
+}
+
+void testVector4iMagnitude()
+{
+    float expected = sqrt(2 * 2 + 3 * 3 + 4 * 4);
+    Vector4i v1(2, 3, 4, 1);
+    ASSERT_INT(v1.magnitude(), expected);
+}
+
 void testVector()
 {
     TestTimer timer("testVector");
@@ -116,6 +155,9 @@ void testVector()
     testVector4fScale();
     testVector4fDotProduct();
     testVector4fCrossProduct();
+    testVector4fMagnitudeSquared();
+    testVector4fMagnitude();
+    testVector4fNormalize();
     // int
     testVector4iAddition();
     testVector4iSubtraction();
@@ -123,4 +165,6 @@ void testVector()
     testVector4iScale();
     testVector4iDotProduct();
     testVector4iCrossProduct();
+    testVector4iMagnitudeSquared();
+    testVector4iMagnitude();
 }

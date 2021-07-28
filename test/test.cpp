@@ -1,9 +1,11 @@
 #include "test.hpp"
+#include "testUtils.hpp"
 #include "testMatrix.hpp"
 #include "testSolver.hpp"
 #include "testVector.hpp"
 #include "testQuaternion.hpp"
-#include "testUtils.hpp"
+#include "testModel.hpp"
+#include "testRotation.hpp"
 
 void runTestSuite() 
 {
@@ -12,4 +14,6 @@ void runTestSuite()
     testSolver();
     testVector();
     testQuaternion();
+    // testModel();
+    testRotation();
 }
