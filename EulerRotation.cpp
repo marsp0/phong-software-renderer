@@ -1,5 +1,7 @@
 #include "EulerRotation.hpp"
 
+#include <algorithm>
+
 #include "QuaternionRotation.hpp"
 #include "AxisAngleRotation.hpp"
 
@@ -60,10 +62,50 @@ Matrix4 EulerRotation::getRotationMatrix()
 
 void EulerRotation::updateFromQuaternion(QuaternionRotation* rotation)
 {
-    
+    Matrix4 matrix = rotation->getRotationMatrix();
+    this->updateFromRotationMatrix(matrix);
 }
 
 void EulerRotation::updateFromAxisAngle(AxisAngleRotation* rotation)
 {
+    Matrix4 matrix = rotation->getRotationMatrix();
+    this->updateFromRotationMatrix(matrix);
+}
 
+void EulerRotation::updateFromRotationMatrix(Matrix4& matrix)
+{
+    // taken from https://github.com/gaschler/rotationconverter
+    // which is the source for this calculator
+    // http://www.andre-gaschler.com/rotationconverter/
+    float g = matrix.get(0, 2);
+    float l = matrix.get(1, 2);
+    float e = matrix.get(2, 2);
+    float f = matrix.get(0, 1);
+    float a = matrix.get(0, 0);
+    float n = matrix.get(2, 1);
+    float k = matrix.get(1, 1);
+    this->y = asin(this->clamp(g, -1.f, 1.f));
+    if (fabs(g < 0.9999f))
+    {
+        this->x = atan2(-l, e);
+        this->z = atan2(-f, a);
+    }
+    else
+    {
+        this->x = atan2(n, k);
+        this->z = 0.f;
+    }
+}
+
+float EulerRotation::clamp(float val, float min, float max)
+{
+    if (val < min)
+    {
+        return min;
+    }
+    else if (val > max)
+    {
+        return max;
+    }
+    return val;
 }

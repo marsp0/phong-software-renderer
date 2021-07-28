@@ -6,7 +6,7 @@
 
 #include "Vector.hpp"
 
-Quaternion makeQuat(float angle,float x, float y, float z)
+Quaternion makeQuat(float angle, float x, float y, float z)
 {
     float cosAngle = cos(angle/2.f);
     float sinAngle = sin(angle/2.f);
