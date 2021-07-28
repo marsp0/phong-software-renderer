@@ -1,5 +1,6 @@
 # install dependencies
 apt install libsdl2-dev
+apt-get update
 apt-cache search libsdl2-dev
 
 # create dir for object files
