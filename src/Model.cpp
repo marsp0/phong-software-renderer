@@ -13,16 +13,16 @@ Model::Model(): vertices(), colors(), position(0.f, 0.f, 0.f, 1.f)
     this->vertices.push_back(v3);
 
     // v1
+    this->colors.push_back((uint8_t)123);
     this->colors.push_back((uint8_t)0);
     this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)0);
     // v2
-    this->colors.push_back((uint8_t)0);
     this->colors.push_back((uint8_t)255);
+    this->colors.push_back((uint8_t)0);
     this->colors.push_back((uint8_t)0);
     // v3
-    this->colors.push_back((uint8_t)0);
     this->colors.push_back((uint8_t)255);
+    this->colors.push_back((uint8_t)0);
     this->colors.push_back((uint8_t)0);
 }
 

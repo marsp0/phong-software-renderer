@@ -33,11 +33,23 @@ void SoftwareRenderer::run()
                 running = false;
             }
         }
-        for (int i = 0; i < this->scene->models.size(); i++) 
-        {
-            this->drawModel(this->scene->models[i].get());
-        }
+        // update scene
+        this->scene->update(0.01666f);
+
+        // draw models
+        this->draw();
+
+        // swap buffer
         this->displayManager->swapBuffers(this->frameBuffer.get());
+    }
+}
+
+void SoftwareRenderer::draw()
+{
+    const std::vector<std::unique_ptr<Model>>& models = this->scene->getModels();
+    for (int i = 0; i < models.size(); i++)
+    {
+        this->drawModel(models[i].get());
     }
 }
 
@@ -47,12 +59,27 @@ void SoftwareRenderer::drawModel(Model* model)
     // set matrix transforms here
     for (int i = 0; i < model->vertices.size(); i += 3) 
     {
-        std::array<Vector4f, 3> packedVertices{model->vertices[i], model->vertices[i+1], model->vertices[i+2]};
+        std::array<Vector4f, 3> vertices{
+            model->vertices[i], 
+            model->vertices[i+1], 
+            model->vertices[i+2]
+        };
+        std::array<uint8_t, 9> colors{
+            model->colors[i * 3],
+            model->colors[i * 3 + 1],
+            model->colors[i * 3 + 2],
+            model->colors[i * 3 + 3],
+            model->colors[i * 3 + 4],
+            model->colors[i * 3 + 5],
+            model->colors[i * 3 + 6],
+            model->colors[i * 3 + 7],
+            model->colors[i * 3 + 8],
+        };
 
-        shader.processVertex(packedVertices[0]);
-        shader.processVertex(packedVertices[1]);
-        shader.processVertex(packedVertices[2]);
+        shader.processVertex(vertices[0]);
+        shader.processVertex(vertices[1]);
+        shader.processVertex(vertices[2]);
 
-        Rasterizer::drawTriangle(packedVertices, shader, this->frameBuffer.get(), this->rasterMethod);
+        Rasterizer::drawTriangle(vertices, colors,  shader, this->frameBuffer.get(), this->rasterMethod);
     }
 }
