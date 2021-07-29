@@ -67,10 +67,7 @@ Matrix4 Model::getRotationMatrix()
     {
         return this->quaternionRotation->getRotationMatrix();
     }
-    else
-    {
-        return this->axisAngleRotation->getRotationMatrix();
-    }
+    return this->axisAngleRotation->getRotationMatrix();
 }
 
 void Model::switchRotation(RotationType newType)

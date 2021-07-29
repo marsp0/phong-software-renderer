@@ -14,6 +14,6 @@ void runTestSuite()
     testSolver();
     testVector();
     testQuaternion();
-    // testModel();
+    testModel();
     testRotation();
 }
