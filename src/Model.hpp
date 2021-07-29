@@ -24,11 +24,12 @@ class Model
 
         // Methods
         Model();
-        Model(float eulerX, float eulerY, float eulerZ);
-        Model(float quatW, float quatX, float quatY, float quatZ);
-        Model(float angle, Vector4f axis);
+        Model(float eulerX, float eulerY, float eulerZ, Vector4f position);
+        Model(float quatW, float quatX, float quatY, float quatZ, Vector4f position);
+        Model(float angle, Vector4f axis, Vector4f position);
         ~Model();
         void update(float deltaTime);
+        Matrix4 getWorldMatrix();
         Matrix4 getRotationMatrix();
         void switchRotation(RotationType newType);
 
@@ -41,7 +42,11 @@ class Model
 
     private:
 
+        // rotation
         std::unique_ptr<EulerRotation> eulerRotation;
         std::unique_ptr<AxisAngleRotation> axisAngleRotation;
         std::unique_ptr<QuaternionRotation> quaternionRotation;
+
+        // position
+        Vector4f position;
 };
