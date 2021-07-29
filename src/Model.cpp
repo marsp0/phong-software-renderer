@@ -3,7 +3,7 @@
 #include <math.h>
 #include <assert.h>
 
-Model::Model(): vertices(), colors() 
+Model::Model(): vertices(), colors(), position(0.f, 0.f, 0.f, 1.f)
 {
     Vector4f v1(100.f, 300.f, 30.f, 1.f);
     Vector4f v2(300.f, 400.f, 20.f, 1.f);
@@ -26,21 +26,30 @@ Model::Model(): vertices(), colors()
     this->colors.push_back((uint8_t)0);
 }
 
-Model::Model(float x, float y, float z): vertices(), colors(), rotationType(RotationType::EULER)
+Model::Model(float x, float y, float z, Vector4f position): vertices(), 
+                                                            colors(), 
+                                                            rotationType(RotationType::EULER),
+                                                            position(position)
 {
     this->eulerRotation = std::make_unique<EulerRotation>(x, y, z);
     this->axisAngleRotation = std::make_unique<AxisAngleRotation>(0.f, Vector4f());
     this->quaternionRotation = std::make_unique<QuaternionRotation>(0.f, 0.f, 0.f, 0.f);
 }
 
-Model::Model(float w, float x, float y, float z): vertices(), colors(), rotationType(RotationType::QUATERNION)
+Model::Model(float w, float x, float y, float z, Vector4f position): vertices(), 
+                                                                     colors(), 
+                                                                     rotationType(RotationType::QUATERNION),
+                                                                     position(position)
 {
     this->eulerRotation = std::make_unique<EulerRotation>(0.f, 0.f, 0.f);
     this->axisAngleRotation = std::make_unique<AxisAngleRotation>(0.f, Vector4f());
     this->quaternionRotation = std::make_unique<QuaternionRotation>(w, x, y, z);
 }
 
-Model::Model(float angle, Vector4f axis): vertices(), colors(), rotationType(RotationType::AXIS_ANGLE)
+Model::Model(float angle, Vector4f axis, Vector4f position): vertices(), 
+                                                             colors(), 
+                                                             rotationType(RotationType::AXIS_ANGLE),
+                                                             position(position)
 {
     this->eulerRotation = std::make_unique<EulerRotation>(0.f, 0.f, 0.f);
     this->axisAngleRotation = std::make_unique<AxisAngleRotation>(angle, axis);
@@ -108,4 +117,15 @@ void Model::switchRotation(RotationType newType)
         }
     }
     this->rotationType = newType;
+}
+
+Matrix4 Model::getWorldMatrix()
+{
+    Matrix4 translation;
+    translation.set(0, 3, this->position.x);
+    translation.set(1, 3, this->position.y);
+    translation.set(2, 3, this->position.z);
+
+    Matrix4 rotation = this->getRotationMatrix();
+    return translation * rotation;
 }

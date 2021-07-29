@@ -9,4 +9,5 @@ void testModelSwitchFromAxisAngleToEuler();
 void testModelSwitchFromAxisAngleToQuaternion();
 void testModelSwitchFromQuaternionToEuler();
 void testModelSwitchFromQuaternionToAxisAngle();
+void testModelGetWorldTransform();
 void testModel();
