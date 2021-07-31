@@ -6,7 +6,7 @@
 const SDL_PixelFormat* Rasterizer::PIXEL_FORMAT(SDL_AllocFormat(SDL_PIXELFORMAT_RGB888));
 
 void Rasterizer::drawLine(std::array<Vector4f, 2> vertices, 
-                          std::array<uint8_t, 9> colors,
+                          std::array<uint8_t, 6> colors,
                           Shader& shader, 
                           FrameBuffer* frameBuffer) 
 {
@@ -86,7 +86,7 @@ void Rasterizer::drawTriangleAABB(std::array<Vector4f, 3> vertices,
     int x1 = vertices[1].x;
     int y1 = vertices[1].y;
     int x2 = vertices[2].x;
-    int y2 = vertices[0].y;
+    int y2 = vertices[2].y;
     int minx = std::min({x0, x1, x2});
     int maxx = std::max({x0, x1, x2});
     int miny = std::min({y0, y1, y2});
@@ -171,7 +171,8 @@ void Rasterizer::drawTriangleFlatBottom(std::array<Vector4f, 3> vertices,
         second.x = x2;
         second.y = y;
         std::array<Vector4f, 2> vertices{first, second};
-        Rasterizer::drawLine(vertices, colors, shader, frameBuffer);
+        std::array<uint8_t, 6> lineColors{ colors[0], colors[1], colors[2], colors[3], colors[4], colors[5]};
+        Rasterizer::drawLine(vertices, lineColors, shader, frameBuffer);
         x1 += inverseSlope1;
         x2 += inverseSlope2;
     }
@@ -195,7 +196,8 @@ void Rasterizer::drawTriangleFlatTop(std::array<Vector4f, 3> vertices,
         second.x = x2;
         second.y = y;
         std::array<Vector4f, 2> vertices{first, second};
-        Rasterizer::drawLine(vertices, colors, shader, frameBuffer);
+        std::array<uint8_t, 6> lineColors{ colors[0], colors[1], colors[2], colors[3], colors[4], colors[5]};
+        Rasterizer::drawLine(vertices, lineColors, shader, frameBuffer);
         x1 -= inverseSlope1;
         x2 -= inverseSlope2;
     }

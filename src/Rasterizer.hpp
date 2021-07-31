@@ -19,7 +19,7 @@ class Rasterizer
     public:
 
         static void drawLine(std::array<Vector4f, 2> vertices, 
-                             std::array<uint8_t, 9> colors,
+                             std::array<uint8_t, 6> colors,
                              Shader& shader, 
                              FrameBuffer* frameBuffer);
         // TODO: https://trello.com/c/Qu1r6CSK/9-see-if-there-is-a-perf-gain-if-we-use-ref-to-stdarray-vs-copy-of-stdarray-in-the-rasterizer
@@ -28,6 +28,8 @@ class Rasterizer
                                  Shader& shader, 
                                  FrameBuffer* frameBuffer, 
                                  RasterMethod method);
+
+        static const SDL_PixelFormat* PIXEL_FORMAT;
 
     private:
         
@@ -54,6 +56,4 @@ class Rasterizer
                                      FrameBuffer* frameBuffer);
 
         static int edgeCheck(int x0, int y0, int x1, int y1, int x2, int y2);
-
-        static const SDL_PixelFormat* PIXEL_FORMAT;
 };
