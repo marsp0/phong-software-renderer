@@ -47,6 +47,20 @@ void _ASSERT_INT(int actual, int expected, const char* fileName, int lineNumber)
     assert(result);
 }
 
+void _ASSERT_UINT32(uint32_t actual, uint32_t expected, const char* fileName, int lineNumber)
+{
+    bool result = true;
+    if (actual != expected) 
+    {
+        result = false;
+        std::cout << "File: " << fileName << std::endl;
+        std::cout << "Line: " << lineNumber << std::endl;
+        std::cout << "Actual: " << actual << std::endl;
+        std::cout << "Expected: " << expected << std::endl;
+    }
+    assert(result);
+}
+
 void _ASSERT_VECTOR4F(Vector4f actual, Vector4f expected, const char* fileName, int lineNumber) 
 {
     _ASSERT_FLOAT(actual.x, expected.x, fileName, lineNumber);
@@ -91,6 +105,19 @@ void _ASSERT_AUGMENTED_MATRIX(std::array<std::array<float, 8>, 4> actual,
         for (int j = 0; j < 8; j++) 
         {
             _ASSERT_FLOAT(actual[i][j], expected[i][j], fileName, lineNumber);
+        }
+    }
+}
+
+void _ASSERT_FRAMEBUFFER(FrameBuffer* actual, FrameBuffer* expected, const char* fileName, int lineNumber)
+{
+    assert(actual->width == expected->width);
+    assert(actual->height == expected->height);
+    for (int i = 0; i < expected->width; i++ ) 
+    {
+        for (int j = 0; j < expected->height; j++) 
+        {
+            _ASSERT_UINT32(actual->get(i, j), expected->get(i, j), fileName, lineNumber);
         }
     }
 }

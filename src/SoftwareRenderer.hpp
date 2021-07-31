@@ -15,6 +15,7 @@ class SoftwareRenderer
         SoftwareRenderer(int width, int height);
         ~SoftwareRenderer();
         void run();
+        void draw();
         void drawModel(Model* model);
 
     private:

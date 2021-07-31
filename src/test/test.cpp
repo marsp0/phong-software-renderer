@@ -6,6 +6,7 @@
 #include "testQuaternion.hpp"
 #include "testModel.hpp"
 #include "testRotation.hpp"
+#include "testRasterizer.hpp"
 
 void runTestSuite() 
 {
@@ -16,4 +17,5 @@ void runTestSuite()
     testQuaternion();
     testModel();
     testRotation();
+    testRasterizer();
 }

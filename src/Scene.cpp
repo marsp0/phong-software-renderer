@@ -18,3 +18,8 @@ void Scene::update(float deltaTime)
         this->models[i]->update(deltaTime);
     }
 }
+
+const std::vector<std::unique_ptr<Model>>& Scene::getModels()
+{
+    return this->models;
+}

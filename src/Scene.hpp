@@ -13,11 +13,11 @@ class Scene
         Scene();
         ~Scene();
         void update(float deltaTime);
+        const std::vector<std::unique_ptr<Model>>& getModels();
+
+    private:
 
         // Data
         std::vector<std::unique_ptr<Model>> models;
         std::vector<float> lights;
-        int camera;
-
-    private:
 };

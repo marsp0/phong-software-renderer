@@ -5,7 +5,10 @@
 
 const SDL_PixelFormat* Rasterizer::PIXEL_FORMAT(SDL_AllocFormat(SDL_PIXELFORMAT_RGB888));
 
-void Rasterizer::drawLine(std::array<Vector4f, 2> vertices, FrameBuffer* frameBuffer) 
+void Rasterizer::drawLine(std::array<Vector4f, 2> vertices, 
+                          std::array<uint8_t, 6> colors,
+                          Shader& shader, 
+                          FrameBuffer* frameBuffer) 
 {
     // https://www.cs.helsinki.fi/group/goa/mallinnus/lines/bresenh.html
     int x0 = vertices[0].x;
@@ -40,11 +43,11 @@ void Rasterizer::drawLine(std::array<Vector4f, 2> vertices, FrameBuffer* frameBu
     { 
         if (steep) 
         { 
-            frameBuffer->set(y, x, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, 0, 255, 0));
+            frameBuffer->set(y, x, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, colors[0], colors[1], colors[2]));
         } 
         else 
         {
-            frameBuffer->set(x, y, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, 0, 255, 0));
+            frameBuffer->set(x, y, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, colors[0], colors[1], colors[2]));
         }
         error += errorStep;
         if (error > dx) 
@@ -55,19 +58,26 @@ void Rasterizer::drawLine(std::array<Vector4f, 2> vertices, FrameBuffer* frameBu
     } 
 }
 
-void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices, Shader& shader, FrameBuffer* frameBuffer, RasterMethod method)
+void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices, 
+                              std::array<uint8_t, 9> colors, 
+                              Shader& shader, 
+                              FrameBuffer* frameBuffer, 
+                              RasterMethod method)
 {
     if (method == RasterMethod::EDGE_AABB) 
     {
-        Rasterizer::drawTriangleAABB(vertices, shader, frameBuffer);
+        Rasterizer::drawTriangleAABB(vertices, colors, shader, frameBuffer);
     } 
     else if (method == RasterMethod::FLAT_SPLIT) 
     {
-        Rasterizer::drawTriangleFlat(vertices, shader, frameBuffer);
+        Rasterizer::drawTriangleFlat(vertices, colors, shader, frameBuffer);
     }
 }
 
-void Rasterizer::drawTriangleAABB(std::array<Vector4f, 3> vertices, Shader& shader, FrameBuffer* frameBuffer) 
+void Rasterizer::drawTriangleAABB(std::array<Vector4f, 3> vertices, 
+                                  std::array<uint8_t, 9> colors, 
+                                  Shader& shader, 
+                                  FrameBuffer* frameBuffer) 
 {
     // https://www.cs.drexel.edu/~david/Classes/Papers/comv175-06-pineda.pdf
     // https://fgiesen.wordpress.com/2013/02/08/triangle-rasterization-in-practice/
@@ -76,7 +86,7 @@ void Rasterizer::drawTriangleAABB(std::array<Vector4f, 3> vertices, Shader& shad
     int x1 = vertices[1].x;
     int y1 = vertices[1].y;
     int x2 = vertices[2].x;
-    int y2 = vertices[0].y;
+    int y2 = vertices[2].y;
     int minx = std::min({x0, x1, x2});
     int maxx = std::max({x0, x1, x2});
     int miny = std::min({y0, y1, y2});
@@ -90,7 +100,7 @@ void Rasterizer::drawTriangleAABB(std::array<Vector4f, 3> vertices, Shader& shad
             int w3 = Rasterizer::edgeCheck(x2, y2, x0, y0, i, j);
             if (w1 >= 0 && w2 >= 0 && w3 >= 0) 
             {
-                frameBuffer->set(i, j, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, 0, 255, 0));
+                frameBuffer->set(i, j, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, colors[0], colors[1], colors[2]));
             }
         }
     }
@@ -104,7 +114,10 @@ int Rasterizer::edgeCheck(int x0, int y0, int x1, int y1, int x2, int y2)
     return (y1 - y0)*(x2 - x0) - (x1 - x0)*(y2 - y0);
 }
 
-void Rasterizer::drawTriangleFlat(std::array<Vector4f, 3> vertices, Shader& shader, FrameBuffer* frameBuffer) 
+void Rasterizer::drawTriangleFlat(std::array<Vector4f, 3> vertices, 
+                                  std::array<uint8_t, 9> colors, 
+                                  Shader& shader, 
+                                  FrameBuffer* frameBuffer) 
 {
     // http://www.sunshine2k.de/coding/java/TriangleRasterization/TriangleRasterization.html
     // sort points based on y
@@ -122,11 +135,11 @@ void Rasterizer::drawTriangleFlat(std::array<Vector4f, 3> vertices, Shader& shad
     }
     if (vertices[1].y == vertices[2].y) 
     {
-        Rasterizer::drawTriangleFlatBottom(vertices, shader, frameBuffer);
+        Rasterizer::drawTriangleFlatBottom(vertices, colors, shader, frameBuffer);
     } 
     else if (vertices[0].y == vertices[1].y) 
     {
-        Rasterizer::drawTriangleFlatTop(vertices, shader, frameBuffer);
+        Rasterizer::drawTriangleFlatTop(vertices, colors, shader, frameBuffer);
     } 
     else 
     {
@@ -134,12 +147,15 @@ void Rasterizer::drawTriangleFlat(std::array<Vector4f, 3> vertices, Shader& shad
         Vector4f p4 = Vector4f(x4, vertices[1].y, 0.f, 1.f);
         std::array<Vector4f, 3> topArray{vertices[1], p4, vertices[2]};
         std::array<Vector4f, 3> bottomArray{vertices[0], vertices[1], p4};
-        Rasterizer::drawTriangleFlatTop(topArray, shader, frameBuffer);
-        Rasterizer::drawTriangleFlatBottom(bottomArray, shader, frameBuffer);
+        Rasterizer::drawTriangleFlatTop(topArray, colors, shader, frameBuffer);
+        Rasterizer::drawTriangleFlatBottom(bottomArray, colors, shader, frameBuffer);
     }
 }
 
-void Rasterizer::drawTriangleFlatBottom(std::array<Vector4f, 3> vertices, Shader& shader, FrameBuffer* frameBuffer) 
+void Rasterizer::drawTriangleFlatBottom(std::array<Vector4f, 3> vertices, 
+                                        std::array<uint8_t, 9> colors,
+                                        Shader& shader, 
+                                        FrameBuffer* frameBuffer) 
 {
     float inverseSlope2 = (vertices[2].x - vertices[0].x) / (vertices[2].y - vertices[0].y);
     float inverseSlope1 = (vertices[1].x - vertices[0].x) / (vertices[1].y - vertices[0].y);
@@ -155,13 +171,17 @@ void Rasterizer::drawTriangleFlatBottom(std::array<Vector4f, 3> vertices, Shader
         second.x = x2;
         second.y = y;
         std::array<Vector4f, 2> vertices{first, second};
-        Rasterizer::drawLine(vertices, frameBuffer);
+        std::array<uint8_t, 6> lineColors{ colors[0], colors[1], colors[2], colors[3], colors[4], colors[5]};
+        Rasterizer::drawLine(vertices, lineColors, shader, frameBuffer);
         x1 += inverseSlope1;
         x2 += inverseSlope2;
     }
 }
 
-void Rasterizer::drawTriangleFlatTop(std::array<Vector4f, 3> vertices, Shader& shader, FrameBuffer* frameBuffer) 
+void Rasterizer::drawTriangleFlatTop(std::array<Vector4f, 3> vertices, 
+                                     std::array<uint8_t, 9> colors, 
+                                     Shader& shader, 
+                                     FrameBuffer* frameBuffer) 
 {
     float inverseSlope1 = (vertices[0].x - vertices[2].x) / (vertices[0].y - vertices[2].y);
     float inverseSlope2 = (vertices[1].x - vertices[2].x) / (vertices[1].y - vertices[2].y);
@@ -176,7 +196,8 @@ void Rasterizer::drawTriangleFlatTop(std::array<Vector4f, 3> vertices, Shader& s
         second.x = x2;
         second.y = y;
         std::array<Vector4f, 2> vertices{first, second};
-        Rasterizer::drawLine(vertices, frameBuffer);
+        std::array<uint8_t, 6> lineColors{ colors[0], colors[1], colors[2], colors[3], colors[4], colors[5]};
+        Rasterizer::drawLine(vertices, lineColors, shader, frameBuffer);
         x1 -= inverseSlope1;
         x2 -= inverseSlope2;
     }
