@@ -31,7 +31,7 @@ class Model
         void update(float deltaTime);
         Matrix4 getWorldMatrix();
         Matrix4 getRotationMatrix();
-        void switchRotation(RotationType newType);
+        void setRotationType(RotationType newType);
 
         // Data
         // TODO: Do we need public members for these ?

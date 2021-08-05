@@ -18,6 +18,7 @@
 ### Math
 
 - General Matrix Knowledge - any linear algebra book
+- [Change of Basis vs Linear Transformation](http://boris-belousov.net/2016/05/31/change-of-basis/)
 - [Quaternions 1](https://en.wikipedia.org/wiki/Quaternion)
 - [Quaternions 2](https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation#Proof_of_the_quaternion_rotation_identity)
 - [Quaternions 3](http://graphics.stanford.edu/courses/cs348a-17-winter/Papers/quaternion.pdf)
@@ -51,7 +52,6 @@
 
 ### Orientation
 
-- Euler Angles (Proper Euler and Tait–Bryan)
 - [Euler Angles 1](https://en.wikipedia.org/wiki/Euler_angles)
 - [Euler Angles 2](https://adipandas.github.io/posts/2020/02/euler-rotation/)
 - [Euler Angles 3](https://www.geometrictools.com/Documentation/EulerAngles.pdf)
@@ -65,3 +65,11 @@
 - [Axis-Angle 2](https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula)
 - [Conversions between representations - Three.js source](https://github.com/mrdoob/three.js/)
 - [Conversion between representations](https://en.wikipedia.org/wiki/Rotation_formalisms_in_three_dimensions)
+
+### Camera
+
+- [Scratch a pixel - Volumne 1](https://www.scratchapixel.com/index.php?redirect)
+- [Lookat derivation (Camera space -> World space)](https://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/lookat-function)
+- [Lookat derivation (World space -> Camera space)](http://www.songho.ca/opengl/gl_camera.html)
+- [Perspective projection derivation](https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/building-basic-perspective-projection-matrix)
+- [Perspective projection derivation (OpenGL)](https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/opengl-perspective-projection-matrix)

@@ -25,7 +25,7 @@ void SoftwareRenderer::run()
     SDL_Event event;
     while (running) 
     {
-        // TODO: https://trello.com/c/oj9F4OHU/8-move-key-pressing-logic-out-of-the-renderer
+        // TODO: Move this into the state handleInput() method
         while (SDL_PollEvent(&event)) 
         {
             if (event.type == SDL_QUIT || event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) 
