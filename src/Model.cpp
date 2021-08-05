@@ -97,7 +97,7 @@ Matrix4 Model::getRotationMatrix()
     return this->axisAngleRotation->getRotationMatrix();
 }
 
-void Model::switchRotation(RotationType newType)
+void Model::setRotationType(RotationType newType)
 {
     assert(this->rotationType != newType);
 
