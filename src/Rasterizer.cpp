@@ -64,15 +64,6 @@ void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices,
                               FrameBuffer* frameBuffer, 
                               RasterMethod method)
 {
-    // transform NDC to Raster space
-    // x - (-1, 1) -> (0, 2) -> (0, 1) -> (0, width)
-    // y - (-1, 1) -> (0, 2) -> (0, 1) -> (0, height)
-    for (int i = 0; i < 3; i++)
-    {
-        vertices[i].x = (vertices[i].x + 1) * 0.5f * frameBuffer->width;
-        vertices[i].y = (vertices[i].y + 1) * 0.5f * frameBuffer->height;
-    }
-
     if (method == RasterMethod::EDGE_AABB) 
     {
         Rasterizer::drawTriangleAABB(vertices, colors, shader, frameBuffer);

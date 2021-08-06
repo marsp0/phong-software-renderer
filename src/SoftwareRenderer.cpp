@@ -85,6 +85,15 @@ void SoftwareRenderer::drawModel(Model* model)
         vertices[1] = vertices[1] / vertices[1].w;
         vertices[2] = vertices[2] / vertices[2].w;
 
+        // transform NDC to Raster space
+        // x - (-1, 1) -> (0, 2) -> (0, 1) -> (0, width)
+        // y - (-1, 1) -> (0, 2) -> (0, 1) -> (0, height)
+        for (int i = 0; i < 3; i++)
+        {
+            vertices[i].x = (vertices[i].x + 1) * 0.5f * frameBuffer->width;
+            vertices[i].y = (vertices[i].y + 1) * 0.5f * frameBuffer->height;
+        }
+
         // fragment shader + rasterization
         Rasterizer::drawTriangle(vertices, colors,  shader.get(), this->frameBuffer.get(), this->rasterMethod);
     }
