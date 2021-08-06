@@ -10,7 +10,7 @@
 
 void runRenderer() 
 {
-    SoftwareRenderer renderer(WIDTH, HEIGHT);
+    SoftwareRenderer renderer(WIDTH, HEIGHT, ShaderType::BASIC);
     renderer.run();
 }
 

@@ -13,13 +13,15 @@ void testDrawLineStraight()
     int height = 100;
     std::unique_ptr<FrameBuffer> actual = std::make_unique<FrameBuffer>(width, height);
     std::unique_ptr<FrameBuffer> expected = std::make_unique<FrameBuffer>(width, height);
-    Shader shader;
+    Model model(2.456f, 3.23f, 5.55f, Vector4f(20.f, 20.f, 20.f, 1.f));
+    Camera camera(Vector4f(), 1.f, 1.f, 1.f, 1.f);
+    std::unique_ptr<BasicShader> shader = std::make_unique<BasicShader>(&model, &camera);
     std::array<Vector4f, 2> vertices{
         Vector4f(25.f, 50.f, 20.f, 1.f),
         Vector4f(75.f, 50.f, 20.f, 1.f),
     };
     std::array<uint8_t, 6> colors{(uint8_t)123, (uint8_t)0, (uint8_t)255, (uint8_t)123, (uint8_t)0, (uint8_t)255};
-    Rasterizer::drawLine(vertices, colors, shader, actual.get());
+    Rasterizer::drawLine(vertices, colors, shader.get(), actual.get());
     for (int i = 0; i < width; i++)
     {
         for (int j = 0; j < height; j++)
@@ -39,13 +41,15 @@ void testDrawLineStraight2()
     int height = 100;
     std::unique_ptr<FrameBuffer> actual = std::make_unique<FrameBuffer>(width, height);
     std::unique_ptr<FrameBuffer> expected = std::make_unique<FrameBuffer>(width, height);
-    Shader shader;
+    Model model(2.456f, 3.23f, 5.55f, Vector4f(20.f, 20.f, 20.f, 1.f));
+    Camera camera(Vector4f(), 1.f, 1.f, 1.f, 1.f);
+    std::unique_ptr<BasicShader> shader = std::make_unique<BasicShader>(&model, &camera);
     std::array<Vector4f, 2> vertices{
         Vector4f(75.f, 50.f, 20.f, 1.f),
         Vector4f(25.f, 50.f, 20.f, 1.f),
     };
     std::array<uint8_t, 6> colors{(uint8_t)123, (uint8_t)0, (uint8_t)255, (uint8_t)123, (uint8_t)0, (uint8_t)255};
-    Rasterizer::drawLine(vertices, colors, shader, actual.get());
+    Rasterizer::drawLine(vertices, colors, shader.get(), actual.get());
     for (int i = 0; i < width; i++)
     {
         for (int j = 0; j < height; j++)
@@ -65,13 +69,15 @@ void testDrawLinePositiveSlope()
     int height = 10;
     std::unique_ptr<FrameBuffer> actual = std::make_unique<FrameBuffer>(width, height);
     std::unique_ptr<FrameBuffer> expected = std::make_unique<FrameBuffer>(width, height);
-    Shader shader;
+    Model model(2.456f, 3.23f, 5.55f, Vector4f(20.f, 20.f, 20.f, 1.f));
+    Camera camera(Vector4f(), 1.f, 1.f, 1.f, 1.f);
+    std::unique_ptr<BasicShader> shader = std::make_unique<BasicShader>(&model, &camera);
     std::array<Vector4f, 2> vertices{
         Vector4f(1.f, 8.f, 20.f, 1.f),
         Vector4f(5.f, 3.f, 20.f, 1.f),
     };
     std::array<uint8_t, 6> colors{(uint8_t)123, (uint8_t)0, (uint8_t)255, (uint8_t)123, (uint8_t)0, (uint8_t)255};
-    Rasterizer::drawLine(vertices, colors, shader, actual.get());
+    Rasterizer::drawLine(vertices, colors, shader.get(), actual.get());
     expected->set(1, 8, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, colors[0], colors[1], colors[2]));
     expected->set(2, 7, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, colors[0], colors[1], colors[2]));
     expected->set(3, 6, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, colors[0], colors[1], colors[2]));
@@ -87,13 +93,15 @@ void testDrawLineNegativeSlope()
     int height = 10;
     std::unique_ptr<FrameBuffer> actual = std::make_unique<FrameBuffer>(width, height);
     std::unique_ptr<FrameBuffer> expected = std::make_unique<FrameBuffer>(width, height);
-    Shader shader;
+    Model model(2.456f, 3.23f, 5.55f, Vector4f(20.f, 20.f, 20.f, 1.f));
+    Camera camera(Vector4f(), 1.f, 1.f, 1.f, 1.f);
+    std::unique_ptr<BasicShader> shader = std::make_unique<BasicShader>(&model, &camera);
     std::array<Vector4f, 2> vertices{
         Vector4f(5.f, 8.f, 20.f, 1.f),
         Vector4f(1.f, 3.f, 20.f, 1.f),
     };
     std::array<uint8_t, 6> colors{(uint8_t)123, (uint8_t)0, (uint8_t)255, (uint8_t)123, (uint8_t)0, (uint8_t)255};
-    Rasterizer::drawLine(vertices, colors, shader, actual.get());
+    Rasterizer::drawLine(vertices, colors, shader.get(), actual.get());
     expected->set(1, 3, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, colors[0], colors[1], colors[2]));
     expected->set(2, 4, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, colors[0], colors[1], colors[2]));
     expected->set(3, 5, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, colors[0], colors[1], colors[2]));
@@ -109,13 +117,15 @@ void testDrawLineSteep()
     int height = 10;
     std::unique_ptr<FrameBuffer> actual = std::make_unique<FrameBuffer>(width, height);
     std::unique_ptr<FrameBuffer> expected = std::make_unique<FrameBuffer>(width, height);
-    Shader shader;
+    Model model(2.456f, 3.23f, 5.55f, Vector4f(20.f, 20.f, 20.f, 1.f));
+    Camera camera(Vector4f(), 1.f, 1.f, 1.f, 1.f);
+    std::unique_ptr<BasicShader> shader = std::make_unique<BasicShader>(&model, &camera);
     std::array<Vector4f, 2> vertices{
         Vector4f(1.f, 1.f, 20.f, 1.f),
         Vector4f(3.f, 8.f, 20.f, 1.f),
     };
     std::array<uint8_t, 6> colors{(uint8_t)123, (uint8_t)0, (uint8_t)255, (uint8_t)123, (uint8_t)0, (uint8_t)255};
-    Rasterizer::drawLine(vertices, colors, shader, actual.get());
+    Rasterizer::drawLine(vertices, colors, shader.get(), actual.get());
     expected->set(1, 1, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, colors[0], colors[1], colors[2]));
     expected->set(1, 2, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, colors[0], colors[1], colors[2]));
     expected->set(2, 3, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, colors[0], colors[1], colors[2]));
@@ -133,7 +143,9 @@ void testDrawTriangleAABB()
     int height = 10;
     std::unique_ptr<FrameBuffer> actual = std::make_unique<FrameBuffer>(width, height);
     std::unique_ptr<FrameBuffer> expected = std::make_unique<FrameBuffer>(width, height);
-    Shader shader;
+    Model model(2.456f, 3.23f, 5.55f, Vector4f(20.f, 20.f, 20.f, 1.f));
+    Camera camera(Vector4f(), 1.f, 1.f, 1.f, 1.f);
+    std::unique_ptr<BasicShader> shader = std::make_unique<BasicShader>(&model, &camera);
     std::array<Vector4f, 3> vertices{
         Vector4f(1.f, 4.f, 20.f, 1.f),
         Vector4f(6.f, 7.f, 20.f, 1.f),
@@ -144,7 +156,7 @@ void testDrawTriangleAABB()
         (uint8_t)123, (uint8_t)0, (uint8_t)255, 
         (uint8_t)123, (uint8_t)0, (uint8_t)255
     };
-    Rasterizer::drawTriangle(vertices, colors, shader, actual.get(), RasterMethod::EDGE_AABB);
+    Rasterizer::drawTriangle(vertices, colors, shader.get(), actual.get(), RasterMethod::EDGE_AABB);
     expected->set(1, 4, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, colors[0], colors[1], colors[2]));
     expected->set(2, 4, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, colors[0], colors[1], colors[2]));
     expected->set(3, 3, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, colors[0], colors[1], colors[2]));
@@ -174,7 +186,9 @@ void testDrawTriangleFlat()
     int height = 10;
     std::unique_ptr<FrameBuffer> actual = std::make_unique<FrameBuffer>(width, height);
     std::unique_ptr<FrameBuffer> expected = std::make_unique<FrameBuffer>(width, height);
-    Shader shader;
+    Model model(2.456f, 3.23f, 5.55f, Vector4f(20.f, 20.f, 20.f, 1.f));
+    Camera camera(Vector4f(), 1.f, 1.f, 1.f, 1.f);
+    std::unique_ptr<BasicShader> shader = std::make_unique<BasicShader>(&model, &camera);
     std::array<Vector4f, 3> vertices{
         Vector4f(1.f, 4.f, 20.f, 1.f),
         Vector4f(6.f, 7.f, 20.f, 1.f),
@@ -185,7 +199,7 @@ void testDrawTriangleFlat()
         (uint8_t)123, (uint8_t)0, (uint8_t)255, 
         (uint8_t)123, (uint8_t)0, (uint8_t)255
     };
-    Rasterizer::drawTriangle(vertices, colors, shader, actual.get(), RasterMethod::FLAT_SPLIT);
+    Rasterizer::drawTriangle(vertices, colors, shader.get(), actual.get(), RasterMethod::FLAT_SPLIT);
     expected->set(1, 4, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, colors[0], colors[1], colors[2]));
     expected->set(2, 4, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, colors[0], colors[1], colors[2]));
     expected->set(2, 5, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, colors[0], colors[1], colors[2]));

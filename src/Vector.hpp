@@ -51,6 +51,11 @@ class Vector4
             return Vector4<T>(this->x * value, this->y * value, this->z * value, 1.f);
         }
 
+        Vector4 operator/(T value) const 
+        {
+            return Vector4<T>(this->x / value, this->y / value, this->z / value, 1.f);
+        }
+
         float dot(const Vector4<T>& other) const
         {
             return this->x * other.x + this->y * other.y + this->z * other.z;

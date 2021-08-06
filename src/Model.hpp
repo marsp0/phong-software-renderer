@@ -23,7 +23,6 @@ class Model
     public:
 
         // Methods
-        Model();
         Model(float eulerX, float eulerY, float eulerZ, Vector4f position);
         Model(float quatW, float quatX, float quatY, float quatZ, Vector4f position);
         Model(float angle, Vector4f axis, Vector4f position);
@@ -32,6 +31,8 @@ class Model
         Matrix4 getWorldMatrix();
         Matrix4 getRotationMatrix();
         void setRotationType(RotationType newType);
+
+        void updateVerticessAndColors();
 
         // Data
         // TODO: Do we need public members for these ?

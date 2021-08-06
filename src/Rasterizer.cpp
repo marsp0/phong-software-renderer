@@ -7,7 +7,7 @@ const SDL_PixelFormat* Rasterizer::PIXEL_FORMAT(SDL_AllocFormat(SDL_PIXELFORMAT_
 
 void Rasterizer::drawLine(std::array<Vector4f, 2> vertices, 
                           std::array<uint8_t, 6> colors,
-                          Shader& shader, 
+                          Shader* shader, 
                           FrameBuffer* frameBuffer) 
 {
     // https://www.cs.helsinki.fi/group/goa/mallinnus/lines/bresenh.html
@@ -60,7 +60,7 @@ void Rasterizer::drawLine(std::array<Vector4f, 2> vertices,
 
 void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices, 
                               std::array<uint8_t, 9> colors, 
-                              Shader& shader, 
+                              Shader* shader, 
                               FrameBuffer* frameBuffer, 
                               RasterMethod method)
 {
@@ -76,7 +76,7 @@ void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices,
 
 void Rasterizer::drawTriangleAABB(std::array<Vector4f, 3> vertices, 
                                   std::array<uint8_t, 9> colors, 
-                                  Shader& shader, 
+                                  Shader* shader, 
                                   FrameBuffer* frameBuffer) 
 {
     // https://www.cs.drexel.edu/~david/Classes/Papers/comv175-06-pineda.pdf
@@ -111,12 +111,12 @@ int Rasterizer::edgeCheck(int x0, int y0, int x1, int y1, int x2, int y2)
 {
     // Article 1 - https://fgiesen.wordpress.com/2013/02/06/the-barycentric-conspirac/
     // Article 2 - https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/rasterization-stage
-    return (y1 - y0)*(x2 - x0) - (x1 - x0)*(y2 - y0);
+    return (y1 - y0) * (x2 - x0) - (x1 - x0) * (y2 - y0);
 }
 
 void Rasterizer::drawTriangleFlat(std::array<Vector4f, 3> vertices, 
                                   std::array<uint8_t, 9> colors, 
-                                  Shader& shader, 
+                                  Shader* shader, 
                                   FrameBuffer* frameBuffer) 
 {
     // http://www.sunshine2k.de/coding/java/TriangleRasterization/TriangleRasterization.html
@@ -154,7 +154,7 @@ void Rasterizer::drawTriangleFlat(std::array<Vector4f, 3> vertices,
 
 void Rasterizer::drawTriangleFlatBottom(std::array<Vector4f, 3> vertices, 
                                         std::array<uint8_t, 9> colors,
-                                        Shader& shader, 
+                                        Shader* shader, 
                                         FrameBuffer* frameBuffer) 
 {
     float inverseSlope2 = (vertices[2].x - vertices[0].x) / (vertices[2].y - vertices[0].y);
@@ -180,7 +180,7 @@ void Rasterizer::drawTriangleFlatBottom(std::array<Vector4f, 3> vertices,
 
 void Rasterizer::drawTriangleFlatTop(std::array<Vector4f, 3> vertices, 
                                      std::array<uint8_t, 9> colors, 
-                                     Shader& shader, 
+                                     Shader* shader, 
                                      FrameBuffer* frameBuffer) 
 {
     float inverseSlope1 = (vertices[0].x - vertices[2].x) / (vertices[0].y - vertices[2].y);

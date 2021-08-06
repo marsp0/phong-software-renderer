@@ -6,12 +6,13 @@
 #include "Buffer.hpp"
 #include "Shader.hpp"
 
-SoftwareRenderer::SoftwareRenderer(int width, int height): rasterMethod(RasterMethod::EDGE_AABB) 
+SoftwareRenderer::SoftwareRenderer(int width, int height, ShaderType shaderType): rasterMethod(RasterMethod::EDGE_AABB), shaderType(shaderType)
 {
     this->displayManager = std::make_unique<DisplayManager>(width, height);
-    this->scene = std::make_unique<Scene>();
+    this->scene = std::make_unique<Scene>(width, height);
     this->frameBuffer = std::make_unique<FrameBuffer>(width, height);
     this->depthBuffer = std::make_unique<DepthBuffer>(width, height);
+    
 }
 
 SoftwareRenderer::~SoftwareRenderer() 
@@ -33,6 +34,7 @@ void SoftwareRenderer::run()
                 running = false;
             }
         }
+
         // update scene
         this->scene->update(0.01666f);
 
@@ -41,6 +43,7 @@ void SoftwareRenderer::run()
 
         // swap buffer
         this->displayManager->swapBuffers(this->frameBuffer.get());
+        // running = false;
     }
 }
 
@@ -55,15 +58,11 @@ void SoftwareRenderer::draw()
 
 void SoftwareRenderer::drawModel(Model* model) 
 {
-    Shader shader;
-    // set matrix transforms here
+    Camera* camera = this->scene->getCamera();
+    std::unique_ptr<Shader> shader = this->getShader(model, camera);
     for (int i = 0; i < model->vertices.size(); i += 3) 
     {
-        std::array<Vector4f, 3> vertices{
-            model->vertices[i], 
-            model->vertices[i+1], 
-            model->vertices[i+2]
-        };
+        std::array<Vector4f, 3> vertices;
         std::array<uint8_t, 9> colors{
             model->colors[i * 3],
             model->colors[i * 3 + 1],
@@ -76,10 +75,31 @@ void SoftwareRenderer::drawModel(Model* model)
             model->colors[i * 3 + 8],
         };
 
-        shader.processVertex(vertices[0]);
-        shader.processVertex(vertices[1]);
-        shader.processVertex(vertices[2]);
+        // vertex shader
+        vertices[0] = shader->processVertex(model->vertices[i]);
+        vertices[1] = shader->processVertex(model->vertices[i + 1]);
+        vertices[2] = shader->processVertex(model->vertices[i + 2]);
 
-        Rasterizer::drawTriangle(vertices, colors,  shader, this->frameBuffer.get(), this->rasterMethod);
+        // perspective divide
+        vertices[0] = vertices[0] / vertices[0].w;
+        vertices[1] = vertices[1] / vertices[1].w;
+        vertices[2] = vertices[2] / vertices[2].w;
+
+        // transform NDC to Raster space
+        // x - (-1, 1) -> (0, 2) -> (0, 1) -> (0, width)
+        // y - (-1, 1) -> (0, 2) -> (0, 1) -> (0, height)
+        for (int i = 0; i < 3; i++)
+        {
+            vertices[i].x = (vertices[i].x + 1) * 0.5f * frameBuffer->width;
+            vertices[i].y = (vertices[i].y + 1) * 0.5f * frameBuffer->height;
+        }
+
+        // fragment shader + rasterization
+        Rasterizer::drawTriangle(vertices, colors,  shader.get(), this->frameBuffer.get(), this->rasterMethod);
     }
+}
+
+std::unique_ptr<Shader> SoftwareRenderer::getShader(Model* model, Camera* camera)
+{
+    return std::move(std::make_unique<BasicShader>(model, camera));
 }

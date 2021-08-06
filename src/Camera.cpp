@@ -6,11 +6,13 @@
 Camera::Camera(Vector4f position, float fovX, 
                float aspectRatio, float near, 
                float far): position(position),
-                           forward(), right(), up(),
-                           worldUp(0.f, 1.f, 0.f, 0.f),
+                           forward(1.f, 0.f, 0.f, 1.f), 
+                           right(0.f, 0.f, 1.f, 1.f), 
+                           up(0.f, 1.f, 0.f, 1.f),
+                           worldUp(0.f, 1.f, 0.f, 1.f),
                            frustum(fovX, aspectRatio, near, far)
 {
-    
+    this->update(Vector4f(0.f, 0.f, 0.f, 0.f));   
 }
 
 Camera::~Camera()
