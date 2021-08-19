@@ -14,6 +14,7 @@
 - [Software Renderer by Angelo1211](https://github.com/Angelo1211/SoftwareRenderer)
 - [Software Renderer by Zauonlok](https://github.com/zauonlok/renderer)
 - [Software Renderer by Ssloy](https://github.com/ssloy/tinyrenderer)
+- [Learn OpenGL](https://learnopengl.com/)
 
 ### Math
 
@@ -73,3 +74,5 @@
 - [Lookat derivation (World space -> Camera space)](http://www.songho.ca/opengl/gl_camera.html)
 - [Perspective projection derivation](https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/building-basic-perspective-projection-matrix)
 - [Perspective projection derivation (OpenGL)](https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/opengl-perspective-projection-matrix)
+- [Free camera](https://learnopengl.com/Getting-started/Camera)
+- [Euler to direction vector (explains the LearnOpenGL article formula)](https://math.stackexchange.com/questions/1791209/euler-angle-to-direction-vector-which-is-right)

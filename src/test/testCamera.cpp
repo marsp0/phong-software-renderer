@@ -5,16 +5,17 @@
 
 void testCameraViewMatrix()
 {
+    std::array<bool,4> controller{false, false, false, false};
     // columns correspond to right, up, forward, position
     std::array<std::array<float, 4>, 4> expectedArray{{
-        {-0.7071f, 0, 0.7071f, -0},
-        {-0.4082f, 0.8164f, -0.4082f, -0},
-        {-0.5773f, -0.5773f, -0.5773f, 1.7320f},
+        {0, 0, -1, 1},
+        {-0.841471, 0.540302, 0, 0.301169},
+        {-0.540302, -0.841471, -0, 1.38177},
         {0, 0, 0, 1}
     }};
     Matrix4 expected(expectedArray);
+    CameraInput input;
     Camera camera(Vector4f(1.f, 1.f, 1.f, 1.f), 3.14f, 1.33f, 10.f, 100.f);
-    camera.update(Vector4f(2.f, 2.f, 2.f, 1.f));
     Matrix4 actual = camera.getViewMatrix();
     ASSERT_MATRIX4(actual, expected);
 }
@@ -36,8 +37,7 @@ void testCameraPerspectiveProjection()
         {0, 0, -1.f, 0},
     }};
     Matrix4 expected(expectedArray);
-    Camera camera(Vector4f(1.f, 1.f, 1.f, 1.f), 
-                  fovX, aspectRatio, near, far);
+    Camera camera(Vector4f(1.f, 1.f, 1.f, 1.f), fovX, aspectRatio, near, far);
     Matrix4 actual = camera.getProjectionMatrix();
     ASSERT_MATRIX4(actual, expected);
 }
