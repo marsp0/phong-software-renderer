@@ -23,6 +23,7 @@ class SoftwareRenderer
         void run();
         void draw();
         void drawModel(Model* model);
+        void clear();
 
         std::unique_ptr<Shader> getShader(Model* model, Camera* camera);
 

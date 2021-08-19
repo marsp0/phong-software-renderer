@@ -1,6 +1,5 @@
 #include "SoftwareRenderer.hpp"
 
-#include <SDL2/SDL.h>
 #include <iostream>
 
 #include "Buffer.hpp"
@@ -23,17 +22,10 @@ SoftwareRenderer::~SoftwareRenderer()
 void SoftwareRenderer::run() 
 {
     bool running = true;
-    SDL_Event event;
     while (running) 
     {
-        // TODO: Move this into the state handleInput() method
-        while (SDL_PollEvent(&event)) 
-        {
-            if (event.type == SDL_QUIT || event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) 
-            {
-                running = false;
-            }
-        }
+        // handle input
+        running = this->scene->handleInput();
 
         // update scene
         this->scene->update(0.01666f);
@@ -43,7 +35,9 @@ void SoftwareRenderer::run()
 
         // swap buffer
         this->displayManager->swapBuffers(this->frameBuffer.get());
-        // running = false;
+
+        // clean up
+        this->clear();
     }
 }
 
@@ -54,6 +48,13 @@ void SoftwareRenderer::draw()
     {
         this->drawModel(models[i].get());
     }
+}
+
+void SoftwareRenderer::clear()
+{
+    this->scene->clearInput();
+    this->frameBuffer->clear();
+    this->depthBuffer->clear();
 }
 
 void SoftwareRenderer::drawModel(Model* model) 

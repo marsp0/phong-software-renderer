@@ -13,6 +13,8 @@ class Scene
         // Methods
         Scene(int width, int height);
         ~Scene();
+        bool handleInput();
+        void clearInput();
         void update(float deltaTime);
         const std::vector<std::unique_ptr<Model>>& getModels();
         Camera* getCamera();
@@ -22,5 +24,6 @@ class Scene
         // Data
         std::vector<float>                  lights;
         std::unique_ptr<Camera>             camera;
+        CameraInput                         input;
         std::vector<std::unique_ptr<Model>> models;
 };

@@ -30,6 +30,8 @@ DisplayManager::DisplayManager(int width, int height): width(width), height(heig
         std::cerr << "SDL: failed to get window surface " << SDL_GetError() << std::endl;
         std::terminate();
     }
+
+    SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 
 DisplayManager::~DisplayManager() 

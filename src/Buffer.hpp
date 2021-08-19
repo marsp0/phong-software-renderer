@@ -12,22 +12,37 @@ class Buffer {
         {
             this->buffer.resize(this->width * this->height);
         }
-        ~Buffer() {}
+        ~Buffer() 
+        {
 
-        void set(int x, int y, T value) {
+        }
+
+        void set(int x, int y, T value) 
+        {
             this->buffer[x + y * this->width] = value;
         }
 
-        T get(int x, int y) {
+        T get(int x, int y) 
+        {
             return this->buffer[x + y * this->width];
         }
 
-        int size() {
+        int size() 
+        {
             return this->width * this->height;
         }
 
-        T* data() {
+        T* data() 
+        {
             return this->buffer.data();
+        }
+
+        void clear()
+        {
+            for (int i = 0; i < this->width * this->height; i++)
+            {
+                this->buffer[i] = 0;
+            }
         }
 
         // Data
