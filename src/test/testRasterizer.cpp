@@ -149,6 +149,10 @@ void testDrawTriangleAABB()
     std::unique_ptr<FrameBuffer> actual = std::make_unique<FrameBuffer>(width, height);
     std::unique_ptr<FrameBuffer> expected = std::make_unique<FrameBuffer>(width, height);
     std::unique_ptr<DepthBuffer> depthBuffer = std::make_unique<DepthBuffer>(width, height);
+    // depth buffer check relies on the fact that we do perspective divide in the renderer
+    // that calls the drawTriangle method. To avoid problems the depth value passed below must be higher than
+    // the biggest z coordinate
+    depthBuffer->clear(30.f);
     Model model(2.456f, 3.23f, 5.55f, Vector4f(20.f, 20.f, 20.f, 1.f));
     Camera camera(Vector4f(), 1.f, 1.f, 1.f, 1.f);
     std::unique_ptr<BasicShader> shader = std::make_unique<BasicShader>(&model, &camera);
