@@ -4,7 +4,7 @@ BasicShader::BasicShader(Model* model, Camera* camera): world(model->getWorldMat
                                                         view(camera->getViewMatrix()),
                                                         projection(camera->getProjectionMatrix())
 {
-    this->modelViewProj = this->projection * this->view * this->world;
+    this->modelViewProjection = this->projection * this->view * this->world;
 }
 
 BasicShader::~BasicShader() 
@@ -14,8 +14,7 @@ BasicShader::~BasicShader()
 
 Vector4f BasicShader::processVertex(Vector4f& vertex)
 {
-    Vector4f result = this->modelViewProj * vertex;
-    return result;
+    return this->modelViewProjection * vertex;
 }
 
 void BasicShader::processFragment() 

@@ -94,6 +94,10 @@ void Rasterizer::drawTriangleAABB(std::array<Vector4f, 3> vertices,
     int maxx = std::max({x0, x1, x2});
     int miny = std::min({y0, y1, y2});
     int maxy = std::max({y0, y1, y2});
+    float z0 = vertices[0].z;
+    float z1 = vertices[1].z;
+    float z2 = vertices[2].z;
+    float area = 1.f / Rasterizer::edgeCheck(x0, y0, x1, y1, x2, y2);
     for (int i = minx; i <= maxx; i++) 
     {
         for (int j = miny; j <= maxy; j++) 
@@ -103,7 +107,17 @@ void Rasterizer::drawTriangleAABB(std::array<Vector4f, 3> vertices,
             int w3 = Rasterizer::edgeCheck(x2, y2, x0, y0, i, j);
             if (w1 >= 0 && w2 >= 0 && w3 >= 0) 
             {
-                frameBuffer->set(i, j, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, colors[0], colors[1], colors[2]));
+                // Note: this is using the z instead of 1/z to interpolate the depth.
+                // Not sure why it works. I suspect that 
+                // 1. its because we have z values that are < 1 after the perspective divide
+                // 2. all z values were uniformly scaled
+                // I think that if we have a z value > 1 here it would break
+                float z = w1 * area * z0 + w2 * area * z1 + w3 * area * z2;
+                if (depthBuffer->get(i, j) > z)
+                {
+                    depthBuffer->set(i, j, z);
+                    frameBuffer->set(i, j, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, colors[0], colors[1], colors[2]));
+                }
             }
         }
     }

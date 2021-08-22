@@ -15,6 +15,7 @@
 - [Software Renderer by Zauonlok](https://github.com/zauonlok/renderer)
 - [Software Renderer by Ssloy](https://github.com/ssloy/tinyrenderer)
 - [Learn OpenGL](https://learnopengl.com/)
+- [OpenGL 4.4 - Spec](https://www.khronos.org/registry/OpenGL/specs/gl/glspec44.core.pdf)
 
 ### Books
 
@@ -81,3 +82,9 @@
 - [Perspective projection derivation (OpenGL)](https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/opengl-perspective-projection-matrix)
 - [Free camera](https://learnopengl.com/Getting-started/Camera)
 - [Euler to direction vector (explains the LearnOpenGL article formula)](https://math.stackexchange.com/questions/1791209/euler-angle-to-direction-vector-which-is-right)
+
+### Z-Buffer
+
+- [Scratchapixel article](https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/perspective-correct-interpolation-vertex-attributes)
+- [Perspective correct interpolation](https://stackoverflow.com/questions/24441631/how-exactly-does-opengl-do-perspectively-correct-linear-interpolation)
+- OpenGL Spec linked in the general references also has the perspective correct formula

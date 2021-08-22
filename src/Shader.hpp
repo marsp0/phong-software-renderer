@@ -26,7 +26,7 @@ class BasicShader: public Shader
     
     private:
 
-        Matrix4 modelViewProj;
+        Matrix4 modelViewProjection;
         Matrix4 world;
         Matrix4 view;
         Matrix4 projection;

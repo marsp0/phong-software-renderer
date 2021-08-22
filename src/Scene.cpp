@@ -4,7 +4,7 @@
 
 Scene::Scene(int width, int height): models()
 {
-    std::unique_ptr<Model> model = std::make_unique<Model>(0.f, 0.f, 0.f, Vector4f(10.f, 0.f, 10.f, 1.f));
+    std::unique_ptr<Model> model = std::make_unique<Model>(0.f, 0.f, 0.f, Vector4f(0.f, 0.f, 0.f, 1.f));
     this->models.push_back(std::move(model));
     this->camera = std::make_unique<Camera>(Vector4f(-7.16f, -31.f, 29.f, 1.f), 1.5707f, 
                                             (float)width/(float)height, 10.f, 100.f);
