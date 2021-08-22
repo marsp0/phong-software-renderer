@@ -15,10 +15,16 @@
 - [Software Renderer by Zauonlok](https://github.com/zauonlok/renderer)
 - [Software Renderer by Ssloy](https://github.com/ssloy/tinyrenderer)
 - [Learn OpenGL](https://learnopengl.com/)
+- [OpenGL 4.4 - Spec](https://www.khronos.org/registry/OpenGL/specs/gl/glspec44.core.pdf)
+
+### Books
+
+- [Mathematics for 3D Game Programming and Computer Graphics, Third Edition](https://www.amazon.com/Mathematics-Programming-Computer-Graphics-Third/dp/1435458869)
+- [Fundamentals of Computer Graphics](https://www.amazon.com/Fundamentals-Computer-Graphics-Peter-Shirley/dp/1568814690)
+- [Free Linear Algebra Book](https://joshua.smcvt.edu/linearalgebra/book.pdf)
 
 ### Math
 
-- General Matrix Knowledge - any linear algebra book
 - [Change of Basis vs Linear Transformation](http://boris-belousov.net/2016/05/31/change-of-basis/)
 - [Quaternions 1](https://en.wikipedia.org/wiki/Quaternion)
 - [Quaternions 2](https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation#Proof_of_the_quaternion_rotation_identity)
@@ -76,3 +82,9 @@
 - [Perspective projection derivation (OpenGL)](https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/opengl-perspective-projection-matrix)
 - [Free camera](https://learnopengl.com/Getting-started/Camera)
 - [Euler to direction vector (explains the LearnOpenGL article formula)](https://math.stackexchange.com/questions/1791209/euler-angle-to-direction-vector-which-is-right)
+
+### Z-Buffer
+
+- [Scratchapixel article](https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/perspective-correct-interpolation-vertex-attributes)
+- [Perspective correct interpolation](https://stackoverflow.com/questions/24441631/how-exactly-does-opengl-do-perspectively-correct-linear-interpolation)
+- OpenGL Spec linked in the general references also has the perspective correct formula

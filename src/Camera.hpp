@@ -4,20 +4,7 @@
 #include "Vector.hpp"
 #include "Frustum.hpp"
 #include "EulerRotation.hpp"
-
-class CameraInput
-{
-    public:
-
-        void clear();
-        
-        bool forward;
-        bool left;
-        bool backward;
-        bool right;
-        int32_t relativeX;
-        int32_t relativeY;
-};
+#include "FrameInput.hpp"
 
 class Camera
 {
@@ -26,7 +13,7 @@ class Camera
         Camera(Vector4f position, float fovX, float aspectRatio, float near, float far);
         ~Camera();
 
-        void update(CameraInput& input);
+        void update(FrameInput& input);
         Matrix4 getViewMatrix();
         Matrix4 getProjectionMatrix();
 

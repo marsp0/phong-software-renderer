@@ -5,7 +5,10 @@
 #include "Buffer.hpp"
 #include "Shader.hpp"
 
-SoftwareRenderer::SoftwareRenderer(int width, int height, ShaderType shaderType): rasterMethod(RasterMethod::EDGE_AABB), shaderType(shaderType)
+SoftwareRenderer::SoftwareRenderer(int width, int height, 
+                                   ShaderType shaderType): rasterMethod(RasterMethod::EDGE_AABB), 
+                                                           shaderType(shaderType),
+                                                           input()
 {
     this->displayManager = std::make_unique<DisplayManager>(width, height);
     this->scene = std::make_unique<Scene>(width, height);
@@ -25,10 +28,10 @@ void SoftwareRenderer::run()
     while (running) 
     {
         // handle input
-        running = this->scene->handleInput();
+        running = this->scene->handleInput(this->input);
 
-        // update scene
-        this->scene->update(0.01666f);
+        // update
+        this->update();
 
         // draw models
         this->draw();
@@ -38,6 +41,15 @@ void SoftwareRenderer::run()
 
         // clean up
         this->clear();
+    }
+}
+
+void SoftwareRenderer::update()
+{
+    this->scene->update(0.01666f, this->input);
+    if (this->input.switchRasterMethod)
+    {
+        this->rasterMethod = (RasterMethod)!this->rasterMethod;
     }
 }
 
@@ -52,9 +64,10 @@ void SoftwareRenderer::draw()
 
 void SoftwareRenderer::clear()
 {
-    this->scene->clearInput();
+    this->input.clear();
     this->frameBuffer->clear();
-    this->depthBuffer->clear();
+    // TODO: this should take the far plane as arg
+    this->depthBuffer->clear(150.f);
 }
 
 void SoftwareRenderer::drawModel(Model* model) 
@@ -96,7 +109,12 @@ void SoftwareRenderer::drawModel(Model* model)
         }
 
         // fragment shader + rasterization
-        Rasterizer::drawTriangle(vertices, colors,  shader.get(), this->frameBuffer.get(), this->rasterMethod);
+        Rasterizer::drawTriangle(vertices, 
+                                 colors,  
+                                 shader.get(), 
+                                 this->frameBuffer.get(), 
+                                 this->depthBuffer.get(), 
+                                 this->rasterMethod);
     }
 }
 
