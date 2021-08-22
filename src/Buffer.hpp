@@ -37,11 +37,11 @@ class Buffer {
             return this->buffer.data();
         }
 
-        void clear()
+        void clear(T value = (T)0)
         {
             for (int i = 0; i < this->width * this->height; i++)
             {
-                this->buffer[i] = 0;
+                this->buffer[i] = value;
             }
         }
 

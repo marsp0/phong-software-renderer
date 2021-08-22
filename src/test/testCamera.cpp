@@ -14,7 +14,6 @@ void testCameraViewMatrix()
         {0, 0, 0, 1}
     }};
     Matrix4 expected(expectedArray);
-    CameraInput input;
     Camera camera(Vector4f(1.f, 1.f, 1.f, 1.f), 3.14f, 1.33f, 10.f, 100.f);
     Matrix4 actual = camera.getViewMatrix();
     ASSERT_MATRIX4(actual, expected);

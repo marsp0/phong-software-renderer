@@ -2,7 +2,7 @@
 
 #include <SDL2/SDL.h>
 
-Scene::Scene(int width, int height): models(), input()
+Scene::Scene(int width, int height): models()
 {
     std::unique_ptr<Model> model = std::make_unique<Model>(0.f, 0.f, 0.f, Vector4f(10.f, 0.f, 10.f, 1.f));
     this->models.push_back(std::move(model));
@@ -15,7 +15,7 @@ Scene::~Scene()
 
 }
 
-bool Scene::handleInput()
+bool Scene::handleInput(FrameInput& input)
 {
     SDL_Event event;
     while (SDL_PollEvent(&event)) 
@@ -24,38 +24,42 @@ bool Scene::handleInput()
         {
             return false;
         }
+        if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_E)
+        {
+            input.switchRasterMethod = true;
+        }
         if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_W)
         {
-            this->input.forward = true;
+            input.forward = true;
         }
         if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_A)
         {
-            this->input.left = true;
+            input.left = true;
         }
         if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_S)
         {
-            this->input.backward = true;
+            input.backward = true;
         }
         if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_D)
         {
-            this->input.right = true;
+            input.right = true;
         }
         if (event.type == SDL_MOUSEMOTION)
         {
-            this->input.relativeX = event.motion.xrel;
-            this->input.relativeY = event.motion.yrel;
+            input.relativeX = event.motion.xrel;
+            input.relativeY = event.motion.yrel;
         }
     }
     return true;
 }
 
-void Scene::update(float deltaTime) 
+void Scene::update(float deltaTime, FrameInput& input) 
 {
     for (int i = 0; i < this->models.size(); i++) 
     {
         this->models[i]->update(deltaTime);
     }
-    this->camera->update(this->input);
+    this->camera->update(input);
 }
 
 const std::vector<std::unique_ptr<Model>>& Scene::getModels()
@@ -66,9 +70,4 @@ const std::vector<std::unique_ptr<Model>>& Scene::getModels()
 Camera* Scene::getCamera()
 {
     return this->camera.get();
-}
-
-void Scene::clearInput()
-{
-    this->input.clear();
 }

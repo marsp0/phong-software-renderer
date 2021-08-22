@@ -8,7 +8,8 @@ const SDL_PixelFormat* Rasterizer::PIXEL_FORMAT(SDL_AllocFormat(SDL_PIXELFORMAT_
 void Rasterizer::drawLine(std::array<Vector4f, 2> vertices, 
                           std::array<uint8_t, 6> colors,
                           Shader* shader, 
-                          FrameBuffer* frameBuffer) 
+                          FrameBuffer* frameBuffer,
+                          DepthBuffer* depthBuffer) 
 {
     // https://www.cs.helsinki.fi/group/goa/mallinnus/lines/bresenh.html
     int x0 = vertices[0].x;
@@ -61,23 +62,25 @@ void Rasterizer::drawLine(std::array<Vector4f, 2> vertices,
 void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices, 
                               std::array<uint8_t, 9> colors, 
                               Shader* shader, 
-                              FrameBuffer* frameBuffer, 
+                              FrameBuffer* frameBuffer,
+                              DepthBuffer* depthBuffer,
                               RasterMethod method)
 {
     if (method == RasterMethod::EDGE_AABB) 
     {
-        Rasterizer::drawTriangleAABB(vertices, colors, shader, frameBuffer);
+        Rasterizer::drawTriangleAABB(vertices, colors, shader, frameBuffer, depthBuffer);
     } 
     else if (method == RasterMethod::FLAT_SPLIT) 
     {
-        Rasterizer::drawTriangleFlat(vertices, colors, shader, frameBuffer);
+        Rasterizer::drawTriangleFlat(vertices, colors, shader, frameBuffer, depthBuffer);
     }
 }
 
 void Rasterizer::drawTriangleAABB(std::array<Vector4f, 3> vertices, 
                                   std::array<uint8_t, 9> colors, 
                                   Shader* shader, 
-                                  FrameBuffer* frameBuffer) 
+                                  FrameBuffer* frameBuffer,
+                                  DepthBuffer* depthBuffer) 
 {
     // https://www.cs.drexel.edu/~david/Classes/Papers/comv175-06-pineda.pdf
     // https://fgiesen.wordpress.com/2013/02/08/triangle-rasterization-in-practice/
@@ -117,7 +120,8 @@ int Rasterizer::edgeCheck(int x0, int y0, int x1, int y1, int x2, int y2)
 void Rasterizer::drawTriangleFlat(std::array<Vector4f, 3> vertices, 
                                   std::array<uint8_t, 9> colors, 
                                   Shader* shader, 
-                                  FrameBuffer* frameBuffer) 
+                                  FrameBuffer* frameBuffer,
+                                  DepthBuffer* depthBuffer) 
 {
     // http://www.sunshine2k.de/coding/java/TriangleRasterization/TriangleRasterization.html
     // sort points based on y
@@ -135,11 +139,11 @@ void Rasterizer::drawTriangleFlat(std::array<Vector4f, 3> vertices,
     }
     if (vertices[1].y == vertices[2].y) 
     {
-        Rasterizer::drawTriangleFlatBottom(vertices, colors, shader, frameBuffer);
+        Rasterizer::drawTriangleFlatBottom(vertices, colors, shader, frameBuffer, depthBuffer);
     } 
     else if (vertices[0].y == vertices[1].y) 
     {
-        Rasterizer::drawTriangleFlatTop(vertices, colors, shader, frameBuffer);
+        Rasterizer::drawTriangleFlatTop(vertices, colors, shader, frameBuffer, depthBuffer);
     } 
     else 
     {
@@ -147,15 +151,16 @@ void Rasterizer::drawTriangleFlat(std::array<Vector4f, 3> vertices,
         Vector4f p4 = Vector4f(x4, vertices[1].y, 0.f, 1.f);
         std::array<Vector4f, 3> topArray{vertices[1], p4, vertices[2]};
         std::array<Vector4f, 3> bottomArray{vertices[0], vertices[1], p4};
-        Rasterizer::drawTriangleFlatTop(topArray, colors, shader, frameBuffer);
-        Rasterizer::drawTriangleFlatBottom(bottomArray, colors, shader, frameBuffer);
+        Rasterizer::drawTriangleFlatTop(topArray, colors, shader, frameBuffer, depthBuffer);
+        Rasterizer::drawTriangleFlatBottom(bottomArray, colors, shader, frameBuffer, depthBuffer);
     }
 }
 
 void Rasterizer::drawTriangleFlatBottom(std::array<Vector4f, 3> vertices, 
                                         std::array<uint8_t, 9> colors,
                                         Shader* shader, 
-                                        FrameBuffer* frameBuffer) 
+                                        FrameBuffer* frameBuffer,
+                                        DepthBuffer* depthBuffer) 
 {
     float inverseSlope2 = (vertices[2].x - vertices[0].x) / (vertices[2].y - vertices[0].y);
     float inverseSlope1 = (vertices[1].x - vertices[0].x) / (vertices[1].y - vertices[0].y);
@@ -172,7 +177,7 @@ void Rasterizer::drawTriangleFlatBottom(std::array<Vector4f, 3> vertices,
         second.y = y;
         std::array<Vector4f, 2> vertices{first, second};
         std::array<uint8_t, 6> lineColors{ colors[0], colors[1], colors[2], colors[3], colors[4], colors[5]};
-        Rasterizer::drawLine(vertices, lineColors, shader, frameBuffer);
+        Rasterizer::drawLine(vertices, lineColors, shader, frameBuffer, depthBuffer);
         x1 += inverseSlope1;
         x2 += inverseSlope2;
     }
@@ -181,7 +186,8 @@ void Rasterizer::drawTriangleFlatBottom(std::array<Vector4f, 3> vertices,
 void Rasterizer::drawTriangleFlatTop(std::array<Vector4f, 3> vertices, 
                                      std::array<uint8_t, 9> colors, 
                                      Shader* shader, 
-                                     FrameBuffer* frameBuffer) 
+                                     FrameBuffer* frameBuffer,
+                                     DepthBuffer* depthBuffer) 
 {
     float inverseSlope1 = (vertices[0].x - vertices[2].x) / (vertices[0].y - vertices[2].y);
     float inverseSlope2 = (vertices[1].x - vertices[2].x) / (vertices[1].y - vertices[2].y);
@@ -197,7 +203,7 @@ void Rasterizer::drawTriangleFlatTop(std::array<Vector4f, 3> vertices,
         second.y = y;
         std::array<Vector4f, 2> vertices{first, second};
         std::array<uint8_t, 6> lineColors{ colors[0], colors[1], colors[2], colors[3], colors[4], colors[5]};
-        Rasterizer::drawLine(vertices, lineColors, shader, frameBuffer);
+        Rasterizer::drawLine(vertices, lineColors, shader, frameBuffer, depthBuffer);
         x1 -= inverseSlope1;
         x2 -= inverseSlope2;
     }

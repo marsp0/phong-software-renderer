@@ -21,6 +21,7 @@ class SoftwareRenderer
         SoftwareRenderer(int width, int height, ShaderType shaderType);
         ~SoftwareRenderer();
         void run();
+        void update();
         void draw();
         void drawModel(Model* model);
         void clear();
@@ -36,4 +37,5 @@ class SoftwareRenderer
         RasterMethod                    rasterMethod;
         std::unique_ptr<Scene>          scene;
         ShaderType                      shaderType;
+        FrameInput                      input;
 };

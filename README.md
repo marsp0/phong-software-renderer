@@ -16,9 +16,14 @@
 - [Software Renderer by Ssloy](https://github.com/ssloy/tinyrenderer)
 - [Learn OpenGL](https://learnopengl.com/)
 
+### Books
+
+- [Mathematics for 3D Game Programming and Computer Graphics, Third Edition](https://www.amazon.com/Mathematics-Programming-Computer-Graphics-Third/dp/1435458869)
+- [Fundamentals of Computer Graphics](https://www.amazon.com/Fundamentals-Computer-Graphics-Peter-Shirley/dp/1568814690)
+- [Free Linear Algebra Book](https://joshua.smcvt.edu/linearalgebra/book.pdf)
+
 ### Math
 
-- General Matrix Knowledge - any linear algebra book
 - [Change of Basis vs Linear Transformation](http://boris-belousov.net/2016/05/31/change-of-basis/)
 - [Quaternions 1](https://en.wikipedia.org/wiki/Quaternion)
 - [Quaternions 2](https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation#Proof_of_the_quaternion_rotation_identity)

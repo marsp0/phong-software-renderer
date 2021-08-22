@@ -18,7 +18,7 @@ Camera::~Camera()
 
 }
 
-void Camera::update(CameraInput& input)
+void Camera::update(FrameInput& input)
 {
     float speed = 0.5f;
     if (input.forward)
@@ -107,17 +107,4 @@ Matrix4 Camera::getProjectionMatrix()
     result.set(3, 2, -1.f);
     result.set(3, 3, 0.f);
     return result;
-}
-
-
-// Camera Input
-
-void CameraInput::clear()
-{
-    this->forward = false;
-    this->left = false;
-    this->backward = false;
-    this->right = false;
-    this->relativeX = (int32_t)0;
-    this->relativeY = (int32_t)0;
 }
