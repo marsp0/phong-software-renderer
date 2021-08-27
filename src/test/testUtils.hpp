@@ -41,7 +41,7 @@ void _ASSERT_MATRIX4(Matrix4 actual, Matrix4 expected, const char* fileName, int
 void _ASSERT_AUGMENTED_MATRIX(std::array<std::array<float, 8>, 4> actual,
                               std::array<std::array<float, 8>, 4> expected,
                               const char* fileName, int lineNumber);
-void _ASSERT_FRAMEBUFFER(FrameBuffer* actual, FrameBuffer* expected, const char* fileName, int lineNumber);
+void _ASSERT_FRAMEBUFFER(FrameBuffer* actual, FrameBuffer* expected, uint8_t error, const char* fileName, int lineNumber);
 
 #define ASSERT_FLOAT(actual, expected) _ASSERT_FLOAT(actual, expected, __FILE__, __LINE__);
 #define ASSERT_INT(actual, expected) _ASSERT_INT(actual, expected, __FILE__, __LINE__);
@@ -51,4 +51,4 @@ void _ASSERT_FRAMEBUFFER(FrameBuffer* actual, FrameBuffer* expected, const char*
 #define ASSERT_QUATERNION(actual, expected) _ASSERT_QUATERNION(actual, expected, __FILE__, __LINE__);
 #define ASSERT_MATRIX4(actual, expected) _ASSERT_MATRIX4(actual, expected, __FILE__, __LINE__);
 #define ASSERT_AUGMENTED_MATRIX(actual, expected) _ASSERT_AUGMENTED_MATRIX(actual, expected, __FILE__, __LINE__);
-#define ASSERT_FRAMEBUFFER(actual, expected) _ASSERT_FRAMEBUFFER(actual, expected, __FILE__, __LINE__);
+#define ASSERT_FRAMEBUFFER(actual, expected) _ASSERT_FRAMEBUFFER(actual, expected, 1, __FILE__, __LINE__);
