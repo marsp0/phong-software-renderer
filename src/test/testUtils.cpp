@@ -1,6 +1,7 @@
 #include "testUtils.hpp"
 #include <thread>
 #include <iomanip>
+#include <math.h>
 
 TestTimer::TestTimer(std::string name): name(name)
 {
@@ -109,7 +110,7 @@ void _ASSERT_AUGMENTED_MATRIX(std::array<std::array<float, 8>, 4> actual,
     }
 }
 
-void _ASSERT_FRAMEBUFFER(FrameBuffer* actual, FrameBuffer* expected, const char* fileName, int lineNumber)
+void _ASSERT_FRAMEBUFFER(FrameBuffer* actual, FrameBuffer* expected, uint8_t error, const char* fileName, int lineNumber)
 {
     assert(actual->width == expected->width);
     assert(actual->height == expected->height);
@@ -117,7 +118,10 @@ void _ASSERT_FRAMEBUFFER(FrameBuffer* actual, FrameBuffer* expected, const char*
     {
         for (int j = 0; j < expected->height; j++) 
         {
-            _ASSERT_UINT32(actual->get(i, j), expected->get(i, j), fileName, lineNumber);
+            if (abs((int32_t)actual->get(i, j) - (int32_t)expected->get(i, j)) > error )
+            {
+                _ASSERT_UINT32(actual->get(i, j), expected->get(i, j), fileName, lineNumber);
+            }
         }
     }
 }
