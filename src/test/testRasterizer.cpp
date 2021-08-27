@@ -162,9 +162,9 @@ void testDrawTriangleAABB()
         Vector4f(7.f, 1.f, 20.f, 1.f),
     };
     std::array<uint8_t, 9> colors{
-        (uint8_t)123, (uint8_t)0, (uint8_t)255, 
-        (uint8_t)123, (uint8_t)0, (uint8_t)255, 
-        (uint8_t)123, (uint8_t)0, (uint8_t)255
+        (uint8_t)0, (uint8_t)0, (uint8_t)254, 
+        (uint8_t)0, (uint8_t)0, (uint8_t)254, 
+        (uint8_t)0, (uint8_t)0, (uint8_t)254
     };
     Rasterizer::drawTriangle(vertices, colors, shader.get(), actual.get(), depthBuffer.get(), RasterMethod::EDGE_AABB);
     expected->set(1, 4, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, colors[0], colors[1], colors[2]));

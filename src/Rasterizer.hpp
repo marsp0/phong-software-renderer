@@ -61,5 +61,5 @@ class Rasterizer
                                      FrameBuffer* frameBuffer,
                                      DepthBuffer* depthBuffer);
 
-        static int edgeCheck(int x0, int y0, int x1, int y1, int x2, int y2);
+        static float edgeCheck(int x0, int y0, int x1, int y1, int x2, int y2);
 };

@@ -208,155 +208,148 @@ void Model::updateVerticessAndColors()
     this->vertices.push_back(v55);
     this->vertices.push_back(v56);
 
-    
-
     // v11
-    this->colors.push_back((uint8_t)0);
-    this->colors.push_back((uint8_t)0);
     this->colors.push_back((uint8_t)255);
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)0);
     // v12
     this->colors.push_back((uint8_t)0);
-    this->colors.push_back((uint8_t)0);
     this->colors.push_back((uint8_t)255);
+    this->colors.push_back((uint8_t)0);
     // v13
     this->colors.push_back((uint8_t)0);
     this->colors.push_back((uint8_t)0);
     this->colors.push_back((uint8_t)255);
-    // v14
-    this->colors.push_back((uint8_t)0);
-    this->colors.push_back((uint8_t)0);
-    this->colors.push_back((uint8_t)255);
-    // v15
-    this->colors.push_back((uint8_t)0);
-    this->colors.push_back((uint8_t)0);
-    this->colors.push_back((uint8_t)255);
-    // v16
-    this->colors.push_back((uint8_t)0);
-    this->colors.push_back((uint8_t)0);
-    this->colors.push_back((uint8_t)255);
-
-    // v21
-    this->colors.push_back((uint8_t)0);
-    this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)0);
-    // v22
-    this->colors.push_back((uint8_t)0);
-    this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)0);
-    // v23
-    this->colors.push_back((uint8_t)0);
-    this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)0);
-    // v24
-    this->colors.push_back((uint8_t)0);
-    this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)0);
-    // v25
-    this->colors.push_back((uint8_t)0);
-    this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)0);
-    // v26
-    this->colors.push_back((uint8_t)0);
-    this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)0);
-
-    // v31
+    // v11
     this->colors.push_back((uint8_t)255);
     this->colors.push_back((uint8_t)0);
     this->colors.push_back((uint8_t)0);
-    // v32
+    // v12
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)255);
+    this->colors.push_back((uint8_t)0);
+    // v13
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)255);
+    // v11
     this->colors.push_back((uint8_t)255);
     this->colors.push_back((uint8_t)0);
     this->colors.push_back((uint8_t)0);
-    // v33
+    // v12
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)255);
+    this->colors.push_back((uint8_t)0);
+    // v13
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)255);
+    // v11
     this->colors.push_back((uint8_t)255);
     this->colors.push_back((uint8_t)0);
     this->colors.push_back((uint8_t)0);
-    // v34
+    // v12
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)255);
+    this->colors.push_back((uint8_t)0);
+    // v13
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)255);
+    // v11
     this->colors.push_back((uint8_t)255);
     this->colors.push_back((uint8_t)0);
     this->colors.push_back((uint8_t)0);
-    // v35
+    // v12
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)255);
+    this->colors.push_back((uint8_t)0);
+    // v13
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)255);
+    // v11
     this->colors.push_back((uint8_t)255);
     this->colors.push_back((uint8_t)0);
     this->colors.push_back((uint8_t)0);
-    // v36
+    // v12
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)255);
+    this->colors.push_back((uint8_t)0);
+    // v13
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)255);
+    // v11
     this->colors.push_back((uint8_t)255);
     this->colors.push_back((uint8_t)0);
     this->colors.push_back((uint8_t)0);
-
-    // v41
-    this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)123);
-    this->colors.push_back((uint8_t)0);
-    // v42
-    this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)123);
-    this->colors.push_back((uint8_t)0);
-    // v43
-    this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)123);
-    this->colors.push_back((uint8_t)0);
-    // v44
-    this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)123);
-    this->colors.push_back((uint8_t)0);
-    // v45
-    this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)123);
-    this->colors.push_back((uint8_t)0);
-    // v46
-    this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)123);
-    this->colors.push_back((uint8_t)0);
-
-    // v51
-    this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)0);
-    this->colors.push_back((uint8_t)123);
-    // v52
-    this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)0);
-    this->colors.push_back((uint8_t)123);
-    // v53
-    this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)0);
-    this->colors.push_back((uint8_t)123);
-    // v54
-    this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)0);
-    this->colors.push_back((uint8_t)123);
-    // v55
-    this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)0);
-    this->colors.push_back((uint8_t)123);
-    // v56
-    this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)0);
-    this->colors.push_back((uint8_t)123);
-
-    // v61
+    // v12
     this->colors.push_back((uint8_t)0);
     this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)123);
-    // v62
+    this->colors.push_back((uint8_t)0);
+    // v13
+    this->colors.push_back((uint8_t)0);
     this->colors.push_back((uint8_t)0);
     this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)123);
-    // v63
+    // v11
+    this->colors.push_back((uint8_t)255);
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)0);
+    // v12
     this->colors.push_back((uint8_t)0);
     this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)123);
-    // v64
+    this->colors.push_back((uint8_t)0);
+    // v13
+    this->colors.push_back((uint8_t)0);
     this->colors.push_back((uint8_t)0);
     this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)123);
-    // v65
+    // v11
+    this->colors.push_back((uint8_t)255);
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)0);
+    // v12
     this->colors.push_back((uint8_t)0);
     this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)123);
-    // v66
+    this->colors.push_back((uint8_t)0);
+    // v13
+    this->colors.push_back((uint8_t)0);
     this->colors.push_back((uint8_t)0);
     this->colors.push_back((uint8_t)255);
-    this->colors.push_back((uint8_t)123);
+    // v11
+    this->colors.push_back((uint8_t)255);
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)0);
+    // v12
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)255);
+    this->colors.push_back((uint8_t)0);
+    // v13
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)255);
+    // v11
+    this->colors.push_back((uint8_t)255);
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)0);
+    // v12
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)255);
+    this->colors.push_back((uint8_t)0);
+    // v13
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)255);
+    // v11
+    this->colors.push_back((uint8_t)255);
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)0);
+    // v12
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)255);
+    this->colors.push_back((uint8_t)0);
+    // v13
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)0);
+    this->colors.push_back((uint8_t)255);
 }
