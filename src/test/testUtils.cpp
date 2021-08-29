@@ -125,3 +125,22 @@ void _ASSERT_FRAMEBUFFER(FrameBuffer* actual, FrameBuffer* expected, uint8_t err
         }
     }
 }
+
+void _ASSERT_VECTOR4F_ARRAY(std::vector<Vector4f> actual, std::vector<Vector4f> expected, 
+                            const char* fileName, int lineNumber)
+{
+    _ASSERT_INT(actual.size(), expected.size(), fileName, lineNumber);
+    for (int i = 0; i < actual.size(); i++)
+    {
+        _ASSERT_VECTOR4F(actual[i], expected[i], fileName, lineNumber);
+    }
+}
+
+void _ASSERT_INT_ARRAY(std::vector<int> actual, std::vector<int> expected, const char* fileName, int lineNumber)
+{
+    _ASSERT_INT(actual.size(), expected.size(), fileName, lineNumber);
+    for (int i = 0; i < actual.size(); i++)
+    {
+        _ASSERT_INT(actual[i], expected[i], fileName, lineNumber);
+    }
+}

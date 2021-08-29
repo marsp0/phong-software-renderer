@@ -88,3 +88,7 @@
 - [Scratchapixel article](https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/perspective-correct-interpolation-vertex-attributes)
 - [Perspective correct interpolation](https://stackoverflow.com/questions/24441631/how-exactly-does-opengl-do-perspectively-correct-linear-interpolation)
 - OpenGL Spec linked in the general references also has the perspective correct formula
+
+### OBJ Parser
+
+- [Spec](http://paulbourke.net/dataformats/obj/)

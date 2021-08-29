@@ -26,19 +26,21 @@ class Model
         Model(float eulerX, float eulerY, float eulerZ, Vector4f position);
         Model(float quatW, float quatX, float quatY, float quatZ, Vector4f position);
         Model(float angle, Vector4f axis, Vector4f position);
+        Model(std::vector<Vector4f> vertices, std::vector<Vector4f> normals,
+              std::vector<Vector4f> textureCoords, std::vector<int> vertexIndices,
+              std::vector<int> normalIndices, std::vector<int> textureIndices);
         ~Model();
         void update(float deltaTime);
         Matrix4 getWorldMatrix();
         Matrix4 getRotationMatrix();
         void setRotationType(RotationType newType);
-
-        void updateVerticessAndColors();
-
-        // Data
-        // TODO: Do we need public members for these ?
-        // can we do a simple getter to return const ?
-        std::vector<Vector4f>   vertices;
-        std::vector<uint8_t>    colors;
+        const std::vector<Vector4f>& getVertices();
+        const std::vector<Vector4f>& getNormals();
+        const std::vector<Vector4f>& getTextureCoords();
+        const std::vector<int>& getVertexIndices();
+        const std::vector<int>& getNormalIndices();
+        const std::vector<int>& getTextureIndices();
+        
         RotationType            rotationType;
 
     private:
@@ -50,4 +52,11 @@ class Model
 
         // position
         Vector4f position;
+
+        std::vector<Vector4f>   vertices;
+        std::vector<Vector4f>   normals;
+        std::vector<Vector4f>   textureCoords;
+        std::vector<int>        vertexIndices;
+        std::vector<int>        normalIndices;
+        std::vector<int>        textureIndices;
 };

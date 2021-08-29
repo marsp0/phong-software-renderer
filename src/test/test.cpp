@@ -8,6 +8,7 @@
 #include "testRotation.hpp"
 #include "testRasterizer.hpp"
 #include "testCamera.hpp"
+#include "testParser.hpp"
 
 void runTestSuite() 
 {
@@ -20,4 +21,5 @@ void runTestSuite()
     testRotation();
     testRasterizer();
     testCamera();
+    testParser();
 }
