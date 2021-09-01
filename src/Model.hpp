@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <memory>
 
+#include "Buffer.hpp"
 #include "Vector.hpp"
 #include "Matrix.hpp"
 #include "Quaternion.hpp"
@@ -28,7 +29,8 @@ class Model
         Model(float angle, Vector4f axis, Vector4f position);
         Model(std::vector<Vector4f> vertices, std::vector<Vector4f> normals,
               std::vector<Vector4f> textureCoords, std::vector<int> vertexIndices,
-              std::vector<int> normalIndices, std::vector<int> textureIndices);
+              std::vector<int> normalIndices, std::vector<int> textureIndices,
+              std::unique_ptr<TextureBuffer> textureBuffer);
         ~Model();
         void update(float deltaTime);
         Matrix4 getWorldMatrix();
@@ -40,23 +42,23 @@ class Model
         const std::vector<int>& getVertexIndices();
         const std::vector<int>& getNormalIndices();
         const std::vector<int>& getTextureIndices();
-        
-        RotationType            rotationType;
+        RotationType rotationType;
 
     private:
 
         // rotation
-        std::unique_ptr<EulerRotation> eulerRotation;
-        std::unique_ptr<AxisAngleRotation> axisAngleRotation;
+        std::unique_ptr<EulerRotation>      eulerRotation;
+        std::unique_ptr<AxisAngleRotation>  axisAngleRotation;
         std::unique_ptr<QuaternionRotation> quaternionRotation;
 
         // position
         Vector4f position;
 
-        std::vector<Vector4f>   vertices;
-        std::vector<Vector4f>   normals;
-        std::vector<Vector4f>   textureCoords;
-        std::vector<int>        vertexIndices;
-        std::vector<int>        normalIndices;
-        std::vector<int>        textureIndices;
+        std::vector<Vector4f>           vertices;
+        std::vector<Vector4f>           normals;
+        std::vector<Vector4f>           textureCoords;
+        std::vector<int>                vertexIndices;
+        std::vector<int>                normalIndices;
+        std::vector<int>                textureIndices;
+        std::unique_ptr<TextureBuffer>  textureBuffer;
 };

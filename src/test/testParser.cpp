@@ -83,8 +83,35 @@ void testParseScene()
     ASSERT_INT_ARRAY(normalIndices, expectedNormalIndices);
 }
 
+void testParseTexture()
+{
+    TextureInfo actual = Parser::parseTexture("./src/test/threebythree.tga", "testName");
+    int actualWidth = std::get<0>(actual);
+    int actualHeight = std::get<1>(actual);
+    int bytesPerPixel = std::get<2>(actual);
+    std::vector<unsigned short> actualData = std::get<3>(actual);;
+    ASSERT_INT(actualWidth, 3);
+    ASSERT_INT(actualHeight, 3);
+    ASSERT_INT(bytesPerPixel, 4);
+    
+    // assert image (actual texture) data
+    std::vector<unsigned short> expectedImageDataInts{
+        0, 0, 255, 255,
+        0, 0, 255, 255,
+        0, 0, 255, 255,
+        0, 255, 0, 255,
+        0, 255, 0, 255,
+        0, 255, 0, 255,
+        255, 0, 0, 255,
+        255, 0, 0, 255,
+        255, 0, 0, 255,
+    };
+    ASSERT_USHORT_ARRAY(actualData, expectedImageDataInts);
+}
+
 void testParser()
 {
     TestTimer timer("testParser");
     testParseScene();
+    testParseTexture();
 }

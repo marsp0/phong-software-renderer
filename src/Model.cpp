@@ -8,10 +8,11 @@ Model::Model(std::vector<Vector4f> vertices,
              std::vector<Vector4f> textureCoords,
              std::vector<int> vertexIndices,
              std::vector<int> normalIndices,
-             std::vector<int> textureIndices): vertices(vertices), normals(normals), textureCoords(textureCoords),
-                                               vertexIndices(vertexIndices), normalIndices(normalIndices),
-                                               textureIndices(textureIndices), rotationType(RotationType::QUATERNION),
-                                               position()
+             std::vector<int> textureIndices,
+             std::unique_ptr<TextureBuffer> textureBuffer): vertices(vertices), normals(normals), textureCoords(textureCoords),
+                                                            vertexIndices(vertexIndices), normalIndices(normalIndices),
+                                                            textureIndices(textureIndices), rotationType(RotationType::QUATERNION),
+                                                            position(), textureBuffer(std::move(textureBuffer))
 {
     this->eulerRotation = std::make_unique<EulerRotation>(0.f, 0.f, 0.f);
     this->axisAngleRotation = std::make_unique<AxisAngleRotation>(0.f, Vector4f());
@@ -21,7 +22,7 @@ Model::Model(std::vector<Vector4f> vertices,
 Model::Model(float x, float y, float z, Vector4f position): vertices(), normals(), textureCoords(), vertexIndices(),
                                                             normalIndices(), textureIndices(),
                                                             rotationType(RotationType::EULER),
-                                                            position(position)
+                                                            position(position), textureBuffer()
 {
     this->eulerRotation = std::make_unique<EulerRotation>(x, y, z);
     this->axisAngleRotation = std::make_unique<AxisAngleRotation>(0.f, Vector4f());
@@ -31,7 +32,7 @@ Model::Model(float x, float y, float z, Vector4f position): vertices(), normals(
 Model::Model(float w, float x, float y, float z, Vector4f position): vertices(), normals(), textureCoords(), vertexIndices(),
                                                                      normalIndices(), textureIndices(),
                                                                      rotationType(RotationType::QUATERNION),
-                                                                     position(position)
+                                                                     position(position), textureBuffer()
 {
     this->eulerRotation = std::make_unique<EulerRotation>(0.f, 0.f, 0.f);
     this->axisAngleRotation = std::make_unique<AxisAngleRotation>(0.f, Vector4f());
@@ -41,7 +42,7 @@ Model::Model(float w, float x, float y, float z, Vector4f position): vertices(),
 Model::Model(float angle, Vector4f axis, Vector4f position): vertices(), normals(), textureCoords(), vertexIndices(),
                                                              normalIndices(), textureIndices(),
                                                              rotationType(RotationType::AXIS_ANGLE),
-                                                             position(position)
+                                                             position(position), textureBuffer()
 {
     this->eulerRotation = std::make_unique<EulerRotation>(0.f, 0.f, 0.f);
     this->axisAngleRotation = std::make_unique<AxisAngleRotation>(angle, axis);

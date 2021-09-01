@@ -89,6 +89,14 @@
 - [Perspective correct interpolation](https://stackoverflow.com/questions/24441631/how-exactly-does-opengl-do-perspectively-correct-linear-interpolation)
 - OpenGL Spec linked in the general references also has the perspective correct formula
 
-### OBJ Parser
+### OBJ + TGA Parser
 
-- [Spec](http://paulbourke.net/dataformats/obj/)
+- [OBJ Spec](http://paulbourke.net/dataformats/obj/)
+- [MTL Spec](http://www.paulbourke.net/dataformats/mtl/)
+- [TGA Spec](http://paulbourke.net/dataformats/tga/)
+- [TGA Spec 2](https://misc.ryanjuckett.com/downloads/TGA_FileFormat.pdf)
+- [Endianness](https://en.wikipedia.org/wiki/Endianness)
+- [Convert bytes -> int](https://gist.github.com/rolfwr/e3e4223b887476bd9bbdab1ec29f30b4)
+- [Convert char -> unsigned char](https://stackoverflow.com/a/5042335)
+- [Convert char -> unsigned char 2](https://stackoverflow.com/a/43273907)
+- [reinterpret_cast](https://en.cppreference.com/w/cpp/language/reinterpret_cast)
