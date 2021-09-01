@@ -45,7 +45,7 @@ void testQuaternionMagnitudeSquared()
     Quaternion q1{13.f, 15.f, 17.f, 19.f};
     float expected = 13.f * 13.f + 15.f * 15.f + 17.f * 17.f + 19.f * 19.f;
     float actual = q1.magnitudeSquared();
-    ASSERT_FLOAT(actual, expected);
+    ASSERT_VALUE(float, actual, expected);
 }
 
 void testQuaternionMagnitude()
@@ -53,7 +53,7 @@ void testQuaternionMagnitude()
     Quaternion q1{13.f, 15.f, 17.f, 19.f};
     float expected = sqrtf(13.f * 13.f + 15.f * 15.f + 17.f * 17.f + 19.f * 19.f);
     float actual = q1.magnitude();
-    ASSERT_FLOAT(actual, expected);
+    ASSERT_VALUE(float, actual, expected);
 }
 
 void testQuaternionNormalize()

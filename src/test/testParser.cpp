@@ -11,7 +11,7 @@
 void testParseScene()
 {
     std::vector<std::unique_ptr<Model>> models = Parser::parseScene("./src/test/testParser.obj");
-    ASSERT_INT(models.size(), 1);
+    ASSERT_VALUE(int, models.size(), 1);
     Model* model = models[0].get();
     const std::vector<Vector4f>& vertices = model->getVertices();
     const std::vector<Vector4f>& normals = model->getNormals();
@@ -78,9 +78,9 @@ void testParseScene()
     ASSERT_VECTOR4F_ARRAY(vertices, expectedVertices);
     ASSERT_VECTOR4F_ARRAY(normals, expectedNormals);
     ASSERT_VECTOR4F_ARRAY(textureCoords, expectedTextureCoords);
-    ASSERT_INT_ARRAY(vertexIndices, expectedVertexIndices);
-    ASSERT_INT_ARRAY(textureIndices, expectedTextureIndices);
-    ASSERT_INT_ARRAY(normalIndices, expectedNormalIndices);
+    ASSERT_VALUE_ARRAY(int, vertexIndices, expectedVertexIndices);
+    ASSERT_VALUE_ARRAY(int, textureIndices, expectedTextureIndices);
+    ASSERT_VALUE_ARRAY(int, normalIndices, expectedNormalIndices);
 }
 
 void testParseTexture()
@@ -90,9 +90,9 @@ void testParseTexture()
     int actualHeight = std::get<1>(actual);
     int bytesPerPixel = std::get<2>(actual);
     std::vector<unsigned short> actualData = std::get<3>(actual);;
-    ASSERT_INT(actualWidth, 3);
-    ASSERT_INT(actualHeight, 3);
-    ASSERT_INT(bytesPerPixel, 4);
+    ASSERT_VALUE(int, actualWidth, 3);
+    ASSERT_VALUE(int, actualHeight, 3);
+    ASSERT_VALUE(int, bytesPerPixel, 4);
     
     // assert image (actual texture) data
     std::vector<unsigned short> expectedImageDataInts{
@@ -106,7 +106,7 @@ void testParseTexture()
         255, 0, 0, 255,
         255, 0, 0, 255,
     };
-    ASSERT_USHORT_ARRAY(actualData, expectedImageDataInts);
+    ASSERT_VALUE_ARRAY(unsigned short, actualData, expectedImageDataInts);
 }
 
 void testParser()

@@ -43,7 +43,7 @@ void testVector4fDotProduct()
     Vector4f v2(2.f, 3.5f, 14.2f, 1.f);
     float expected = 2.f + 7.f + 42.6f;
     float actual = v1.dot(v2);
-    ASSERT_FLOAT(actual, expected);
+    ASSERT_VALUE(float, actual, expected);
 }
 
 void testVector4fCrossProduct()
@@ -59,14 +59,14 @@ void testVector4fMagnitudeSquared()
 {
     float expected = 2 * 2 + 3 * 3 + 4 * 4;
     Vector4f v1(2.f, 3.f, 4.f, 1);
-    ASSERT_FLOAT(v1.magnitudeSquared(), expected);
+    ASSERT_VALUE(float, v1.magnitudeSquared(), expected);
 }
 
 void testVector4fMagnitude()
 {
     float expected = sqrt(2 * 2 + 3 * 3 + 4 * 4);
     Vector4f v1(2.f, 3.f, 4.f, 1);
-    ASSERT_FLOAT(v1.magnitude(), expected);
+    ASSERT_VALUE(float, v1.magnitude(), expected);
 }
 
 void testVector4fNormalize()
@@ -120,7 +120,7 @@ void testVector4iDotProduct()
     Vector4i v2(2, 3, 14, 1);
     float expected = 2 + 6 + 42;
     float actual = v1.dot(v2);
-    ASSERT_INT(actual, expected);
+    ASSERT_VALUE(int, actual, expected);
 }
 
 void testVector4iCrossProduct()
@@ -136,14 +136,14 @@ void testVector4iMagnitudeSquared()
 {
     int expected = 2 * 2 + 3 * 3 + 4 * 4;
     Vector4i v1(2, 3, 4, 1);
-    ASSERT_INT(v1.magnitudeSquared(), expected);
+    ASSERT_VALUE(int, v1.magnitudeSquared(), expected);
 }
 
 void testVector4iMagnitude()
 {
     float expected = sqrt(2 * 2 + 3 * 3 + 4 * 4);
     Vector4i v1(2, 3, 4, 1);
-    ASSERT_INT(v1.magnitude(), expected);
+    ASSERT_VALUE(int, v1.magnitude(), expected);
 }
 
 void testVector()
