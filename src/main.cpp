@@ -1,6 +1,6 @@
-#include <SDL2/SDL.h>
 #include <iostream>
 #include "SoftwareRenderer.hpp"
+#include "Parser.hpp"
 #include "./test/test.hpp"
 
 /* Sets constants */
@@ -10,7 +10,7 @@
 
 void runRenderer() 
 {
-    SoftwareRenderer renderer(WIDTH, HEIGHT, ShaderType::BASIC);
+    SoftwareRenderer renderer(WIDTH, HEIGHT, ShaderType::BASIC, "/home/martin/Downloads/untitled.obj");
     renderer.run();
 }
 

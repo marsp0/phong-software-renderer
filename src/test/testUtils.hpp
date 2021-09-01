@@ -33,8 +33,13 @@ void printBuffers(Buffer<T>* actual, Buffer<T>* expected)
 
 void _ASSERT_FLOAT(float actual, float expected, const char* fileName, int lineNumber);
 void _ASSERT_INT(int actual, int expected, const char* fileName, int lineNumber);
+void _ASSERT_INT_ARRAY(std::vector<int> actual, std::vector<int> expected, const char* fileName, int lineNumber);
+void _ASSERT_USHORT(unsigned short actual, unsigned short expected, const char* fileName, int lineNumber);
+void _ASSERT_USHORT_ARRAY(std::vector<unsigned short> actual, std::vector<unsigned short> expected, const char* fileName, int lineNumber);
 void _ASSERT_UINT32(uint32_t actual, uint32_t expected, const char* fileName, int lineNumber);
 void _ASSERT_VECTOR4F(Vector4f actual, Vector4f expected, const char* fileName, int lineNumber);
+void _ASSERT_VECTOR4F_ARRAY(std::vector<Vector4f> actual, std::vector<Vector4f> expected, 
+                            const char* fileName, int lineNumber);
 void _ASSERT_VECTOR4I(Vector4i actual, Vector4i expected, const char* fileName, int lineNumber);
 void _ASSERT_QUATERNION(Quaternion actual, Quaternion expected, const char* fileName, int lineNumber);
 void _ASSERT_MATRIX4(Matrix4 actual, Matrix4 expected, const char* fileName, int lineNumber);
@@ -45,8 +50,12 @@ void _ASSERT_FRAMEBUFFER(FrameBuffer* actual, FrameBuffer* expected, uint8_t err
 
 #define ASSERT_FLOAT(actual, expected) _ASSERT_FLOAT(actual, expected, __FILE__, __LINE__);
 #define ASSERT_INT(actual, expected) _ASSERT_INT(actual, expected, __FILE__, __LINE__);
+#define ASSERT_INT_ARRAY(actual, expected) _ASSERT_INT_ARRAY(actual, expected, __FILE__, __LINE__);
+#define ASSERT_USHORT(actual, expected) _ASSERT_USHORT(actual, expected, __FILE__, __LINE__);
+#define ASSERT_USHORT_ARRAY(actual, expected) _ASSERT_USHORT_ARRAY(actual, expected, __FILE__, __LINE__);
 #define ASSERT_UINT32(actual, expected) _ASSERT_UINT32(actual, expected, __FILE__, __LINE__);
 #define ASSERT_VECTOR4F(actual, expected) _ASSERT_VECTOR4F(actual, expected, __FILE__, __LINE__);
+#define ASSERT_VECTOR4F_ARRAY(actual, expected) _ASSERT_VECTOR4F_ARRAY(actual, expected, __FILE__, __LINE__);
 #define ASSERT_VECTOR4I(actual, expected) _ASSERT_VECTOR4I(actual, expected, __FILE__, __LINE__);
 #define ASSERT_QUATERNION(actual, expected) _ASSERT_QUATERNION(actual, expected, __FILE__, __LINE__);
 #define ASSERT_MATRIX4(actual, expected) _ASSERT_MATRIX4(actual, expected, __FILE__, __LINE__);

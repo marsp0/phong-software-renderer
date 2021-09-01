@@ -54,5 +54,6 @@ class Buffer {
 
 };
 
-typedef Buffer<uint32_t>    FrameBuffer;
-typedef Buffer<float>       DepthBuffer;
+typedef Buffer<uint32_t>        FrameBuffer;
+typedef Buffer<float>           DepthBuffer;
+typedef Buffer<unsigned short>  TextureBuffer;

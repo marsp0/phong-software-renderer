@@ -10,7 +10,7 @@
 class Shader
 {
     public:
-        virtual Vector4f processVertex(Vector4f& vertex) = 0;
+        virtual Vector4f processVertex(const Vector4f& vertex) = 0;
         virtual void processFragment() = 0;
     private:
 };
@@ -21,7 +21,7 @@ class BasicShader: public Shader
     
         BasicShader(Model* model, Camera* camera);
         ~BasicShader();
-        Vector4f processVertex(Vector4f& vertex);
+        Vector4f processVertex(const Vector4f& vertex);
         void processFragment();
     
     private:

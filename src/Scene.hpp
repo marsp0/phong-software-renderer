@@ -12,7 +12,7 @@ class Scene
     public:
 
         // Methods
-        Scene(int width, int height);
+        Scene(int width, int height, const char* fileName);
         ~Scene();
         bool handleInput(FrameInput& input);
         void update(float deltaTime, FrameInput& input);

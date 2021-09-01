@@ -12,7 +12,7 @@ BasicShader::~BasicShader()
 
 }
 
-Vector4f BasicShader::processVertex(Vector4f& vertex)
+Vector4f BasicShader::processVertex(const Vector4f& vertex)
 {
     return this->modelViewProjection * vertex;
 }

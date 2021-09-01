@@ -62,6 +62,20 @@ void _ASSERT_UINT32(uint32_t actual, uint32_t expected, const char* fileName, in
     assert(result);
 }
 
+void _ASSERT_USHORT(unsigned short actual, unsigned short expected, const char* fileName, int lineNumber)
+{
+    bool result = true;
+    if (actual != expected) 
+    {
+        result = false;
+        std::cout << "File: " << fileName << std::endl;
+        std::cout << "Line: " << lineNumber << std::endl;
+        std::cout << "Actual: " << actual << std::endl;
+        std::cout << "Expected: " << expected << std::endl;
+    }
+    assert(result);
+}
+
 void _ASSERT_VECTOR4F(Vector4f actual, Vector4f expected, const char* fileName, int lineNumber) 
 {
     _ASSERT_FLOAT(actual.x, expected.x, fileName, lineNumber);
@@ -123,5 +137,36 @@ void _ASSERT_FRAMEBUFFER(FrameBuffer* actual, FrameBuffer* expected, uint8_t err
                 _ASSERT_UINT32(actual->get(i, j), expected->get(i, j), fileName, lineNumber);
             }
         }
+    }
+}
+
+void _ASSERT_VECTOR4F_ARRAY(std::vector<Vector4f> actual, std::vector<Vector4f> expected, 
+                            const char* fileName, int lineNumber)
+{
+    _ASSERT_INT(actual.size(), expected.size(), fileName, lineNumber);
+    for (int i = 0; i < actual.size(); i++)
+    {
+        _ASSERT_VECTOR4F(actual[i], expected[i], fileName, lineNumber);
+    }
+}
+
+void _ASSERT_INT_ARRAY(std::vector<int> actual, std::vector<int> expected, const char* fileName, int lineNumber)
+{
+    // TODO: pass additional information to the base asserts
+    // in this case we want to comunicate that its the size check
+    // that is failing. Otherwise it seems that its an array element
+    _ASSERT_INT(actual.size(), expected.size(), fileName, lineNumber);
+    for (int i = 0; i < actual.size(); i++)
+    {
+        _ASSERT_INT(actual[i], expected[i], fileName, lineNumber);
+    }
+}
+
+void _ASSERT_USHORT_ARRAY(std::vector<unsigned short> actual, std::vector<unsigned short> expected, const char* fileName, int lineNumber)
+{
+    _ASSERT_INT(actual.size(), expected.size(), fileName, lineNumber);
+    for (int i = 0; i < actual.size(); i++)
+    {
+        _ASSERT_USHORT(actual[i], expected[i], fileName, lineNumber);
     }
 }

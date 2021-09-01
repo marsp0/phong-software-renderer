@@ -18,7 +18,7 @@ enum class ShaderType
 class SoftwareRenderer 
 {
     public:
-        SoftwareRenderer(int width, int height, ShaderType shaderType);
+        SoftwareRenderer(int width, int height, ShaderType shaderType, const char* fileName);
         ~SoftwareRenderer();
         void run();
         void update();
