@@ -75,9 +75,9 @@ void testParseScene()
         3, 3, 3,  4, 4, 4,  5, 5, 5
     };
 
-    ASSERT_VECTOR4F_ARRAY(vertices, expectedVertices);
-    ASSERT_VECTOR4F_ARRAY(normals, expectedNormals);
-    ASSERT_VECTOR4F_ARRAY(textureCoords, expectedTextureCoords);
+    ASSERT_VALUE_ARRAY(Vector4f, vertices, expectedVertices);
+    ASSERT_VALUE_ARRAY(Vector4f, normals, expectedNormals);
+    ASSERT_VALUE_ARRAY(Vector4f, textureCoords, expectedTextureCoords);
     ASSERT_VALUE_ARRAY(int, vertexIndices, expectedVertexIndices);
     ASSERT_VALUE_ARRAY(int, textureIndices, expectedTextureIndices);
     ASSERT_VALUE_ARRAY(int, normalIndices, expectedNormalIndices);

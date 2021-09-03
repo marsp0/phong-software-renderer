@@ -56,6 +56,19 @@ class Vector4
             return Vector4<T>(this->x / value, this->y / value, this->z / value, this->w);
         }
 
+        bool operator==(const Vector4<T>& other) const 
+        {
+            return this->x == other.x && this->y == other.y && this->z == other.z && this->w == other.w;
+        }
+
+        bool operator!=(const Vector4<T>& other) const 
+        {
+            return !(this->operator==(other));
+        }
+
+        template<typename U>
+        friend std::ostream& operator<<(std::ostream& outputStream, const Vector4<U>& other);
+
         float dot(const Vector4<T>& other) const
         {
             return this->x * other.x + this->y * other.y + this->z * other.z;
@@ -97,6 +110,13 @@ class Vector4
         T z;
         T w;
 };
+
+template<typename T>
+std::ostream& operator<<(std::ostream& outputStream, const Vector4<T>& other)
+{
+    outputStream << "Vector4(" << other.x << ", " << other.y << ", " << other.z << ", " << other.w << ")";
+    return outputStream;
+}
 
 typedef Vector4<float> Vector4f;
 typedef Vector4<int> Vector4i;

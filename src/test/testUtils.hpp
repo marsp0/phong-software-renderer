@@ -3,6 +3,7 @@
 #include <math.h>
 #include <iostream>
 #include <chrono>
+#include <type_traits>
 
 #include "../Vector.hpp"
 #include "../Matrix.hpp"
@@ -35,9 +36,23 @@ template<typename T>
 void _ASSERT_VALUE(T actual, T expected, std::string message, const char* fileName, int lineNumber)
 {
     bool result = true;
-    if (fabs(actual - expected) > 0.0005f) 
+    if constexpr (std::is_same_v<T, float> || std::is_same_v<T, double>)
     {
-        result = false;
+        if (fabs(actual - expected) > 0.0005f)
+        {
+            result = false;
+        }
+    }
+    else
+    {
+        if (actual != expected)
+        {
+            result = false;
+        }
+    }
+
+    if (!result)
+    {
         if (message != "")
         {
             std::cout << "Message: " << message << std::endl;
@@ -59,12 +74,6 @@ void _ASSERT_VALUE_ARRAY(std::vector<T> actual, std::vector<T> expected, const c
         _ASSERT_VALUE<T>(actual[i], expected[i], "", fileName, lineNumber);
     }
 }
-
-void _ASSERT_VECTOR4F(Vector4f actual, Vector4f expected, const char* fileName, int lineNumber);
-void _ASSERT_VECTOR4F_ARRAY(std::vector<Vector4f> actual, std::vector<Vector4f> expected, const char* fileName, int lineNumber);
-void _ASSERT_VECTOR4I(Vector4i actual, Vector4i expected, const char* fileName, int lineNumber);
-void _ASSERT_QUATERNION(Quaternion actual, Quaternion expected, const char* fileName, int lineNumber);
-void _ASSERT_MATRIX4(Matrix4 actual, Matrix4 expected, const char* fileName, int lineNumber);
 void _ASSERT_AUGMENTED_MATRIX(std::array<std::array<float, 8>, 4> actual, std::array<std::array<float, 8>, 4> expected, const char* fileName, int lineNumber);
 void _ASSERT_FRAMEBUFFER(FrameBuffer* actual, FrameBuffer* expected, uint8_t error, const char* fileName, int lineNumber);
 
@@ -72,10 +81,5 @@ void _ASSERT_FRAMEBUFFER(FrameBuffer* actual, FrameBuffer* expected, uint8_t err
 #define ASSERT_VALUE(type, actual, expected) _ASSERT_VALUE<type>(actual, expected, "", __FILE__, __LINE__);
 #define ASSERT_VALUE_ARRAY(type, actual, expected) _ASSERT_VALUE_ARRAY<type>(actual, expected, __FILE__, __LINE__);
 #define ASSERT_VALUE_WMSG(type, actual, expected, message) _ASSERT_VALUE<type>(actual, expected, message, __FILE__, __LINE__);
-#define ASSERT_VECTOR4F(actual, expected) _ASSERT_VECTOR4F(actual, expected, __FILE__, __LINE__);
-#define ASSERT_VECTOR4F_ARRAY(actual, expected) _ASSERT_VECTOR4F_ARRAY(actual, expected, __FILE__, __LINE__);
-#define ASSERT_VECTOR4I(actual, expected) _ASSERT_VECTOR4I(actual, expected, __FILE__, __LINE__);
-#define ASSERT_QUATERNION(actual, expected) _ASSERT_QUATERNION(actual, expected, __FILE__, __LINE__);
-#define ASSERT_MATRIX4(actual, expected) _ASSERT_MATRIX4(actual, expected, __FILE__, __LINE__);
 #define ASSERT_AUGMENTED_MATRIX(actual, expected) _ASSERT_AUGMENTED_MATRIX(actual, expected, __FILE__, __LINE__);
 #define ASSERT_FRAMEBUFFER(actual, expected) _ASSERT_FRAMEBUFFER(actual, expected, 1, __FILE__, __LINE__);

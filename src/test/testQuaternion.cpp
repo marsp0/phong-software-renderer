@@ -11,7 +11,7 @@ void testQuaternionMultiplication()
     Quaternion q2{2.f, 6.5f, 2.3f, 7.4f};
     Quaternion expected{-251.2f, 196.6f, 76.4f, 58.2f};
     Quaternion actual = q1 * q2;
-    ASSERT_QUATERNION(actual, expected);
+    ASSERT_VALUE(Quaternion, actual, expected);
 }
 
 void testQuaternionMultiplication2()
@@ -21,7 +21,7 @@ void testQuaternionMultiplication2()
     Quaternion q2{0.f, 6.5f, 2.3f, 7.4f};
     Quaternion expected{-277.2f, 166.6f, 42.4f, 20.2f};
     Quaternion actual = q1 * q2;
-    ASSERT_QUATERNION(actual, expected);
+    ASSERT_VALUE(Quaternion, actual, expected);
 }
 
 void testQuaternionConjugate()
@@ -29,7 +29,7 @@ void testQuaternionConjugate()
     Quaternion q1{13.f, 15.f, 17.f, 19.f};
     Quaternion expected{13.f, -15.f, -17.f, -19.f};
     Quaternion actual = q1.conjugate();
-    ASSERT_QUATERNION(actual, expected);
+    ASSERT_VALUE(Quaternion, actual, expected);
 }
 
 void testQuaternionInverse()
@@ -37,7 +37,7 @@ void testQuaternionInverse()
     Quaternion q1{13.f, 15.f, 17.f, 19.f};
     Quaternion expected{0.012f, -0.014f, -0.016f, -0.018f};
     Quaternion actual = q1.inverse();
-    ASSERT_QUATERNION(actual, expected);
+    ASSERT_VALUE(Quaternion, actual, expected);
 }
 
 void testQuaternionMagnitudeSquared()
@@ -62,7 +62,7 @@ void testQuaternionNormalize()
     Quaternion q1{13.f, 15.f, 17.f, 19.f};
     Quaternion q2{13.f/magnitude, 15.f/magnitude, 17.f/magnitude, 19.f/magnitude};
     q1.normalize();
-    ASSERT_QUATERNION(q1, q2);
+    ASSERT_VALUE(Quaternion, q1, q2);
 }
 
 void testQuaternionToMatrix()
@@ -77,7 +77,7 @@ void testQuaternionToMatrix()
     Quaternion q1{13.f, 15.f, 17.f, 19.f};
     q1.normalize();
     Matrix4 actual = q1.toMatrix();
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testQuaternion()

@@ -74,7 +74,7 @@ void testSolverSolve()
     Matrix4 actual(actualArray);
     Matrix4 expected(expectedArray);
     actual = Solver::solve(actual);
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testSolverSolve2() 
@@ -94,7 +94,7 @@ void testSolverSolve2()
     Matrix4 actual(actualArray);
     Matrix4 expected(expectedArray);
     actual = Solver::solve(actual);
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testSolverSolve3() 
@@ -114,7 +114,7 @@ void testSolverSolve3()
     Matrix4 actual(actualArray);
     Matrix4 expected(expectedArray);
     actual = Solver::solve(actual);
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testSolver() 

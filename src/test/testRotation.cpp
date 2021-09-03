@@ -19,7 +19,7 @@ void testAxisAngleRotation()
     Matrix4 expected(rawMat);
     AxisAngleRotation rotation(3.80020f, Vector4f(0.16825f, -0.31551f, -0.93388f, 1.f));
     Matrix4 actual = rotation.getRotationMatrix();
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testAxisAngleUpdateFromEuler()
@@ -36,7 +36,7 @@ void testAxisAngleUpdateFromEuler()
     }};
     Matrix4 expected(rawMat);
     Matrix4 actual = axisAngle.getRotationMatrix();
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testAxisAngleUpdateFromQuaternion()
@@ -53,7 +53,7 @@ void testAxisAngleUpdateFromQuaternion()
     }};
     Matrix4 expected(rawMat);
     Matrix4 actual = axisAngle.getRotationMatrix();
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testAxisAngleUpdateFromQuaternionWhenSinCloseToZero()
@@ -70,7 +70,7 @@ void testAxisAngleUpdateFromQuaternionWhenSinCloseToZero()
     }};
     Matrix4 expected(rawMat);
     Matrix4 actual = axisAngle.getRotationMatrix();
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 ////////////////////////////
@@ -88,7 +88,7 @@ void testQuaternionRotation()
     Matrix4 expected(rawMat);
     QuaternionRotation rotation(3.80018f, 0.15921f / 0.9462f, -0.29856f / 0.9462f, -0.88370f / 0.9462f);
     Matrix4 actual = rotation.getRotationMatrix();
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testQuaternionUpdateFromEuler()
@@ -104,7 +104,7 @@ void testQuaternionUpdateFromEuler()
     QuaternionRotation quaternion(0.f, 0.f, 0.f, 0.f);
     quaternion.updateFromEuler(&euler);
     Matrix4 actual = quaternion.getRotationMatrix();
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testQuaternionUpdateFromAxisAngle()
@@ -120,7 +120,7 @@ void testQuaternionUpdateFromAxisAngle()
     QuaternionRotation quaternion(0.f, 0.f, 0.f, 0.f);
     quaternion.updateFromAxisAngle(&axisAngle);
     Matrix4 actual = quaternion.getRotationMatrix();
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 ////////////////////////////
@@ -138,7 +138,7 @@ void testEulerRotation()
     Matrix4 expected(rawMat);
     EulerRotation rotation(2.456f, 3.23f, 5.55f);
     Matrix4 actual = rotation.getRotationMatrix();
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testEulerUpdateFromAxisAngle()
@@ -154,7 +154,7 @@ void testEulerUpdateFromAxisAngle()
     EulerRotation euler(0.f, 0.f, 0.f);
     euler.updateFromAxisAngle(&axisAngle);
     Matrix4 actual = euler.getRotationMatrix();
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testEulerUpdateFromQuaternion()
@@ -170,7 +170,7 @@ void testEulerUpdateFromQuaternion()
     EulerRotation euler(0.f, 0.f, 0.f);
     euler.updateFromQuaternion(&quaternion);
     Matrix4 actual = euler.getRotationMatrix();
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testRotation()

@@ -12,13 +12,16 @@ class Matrix4
         ~Matrix4();
 
         void set(int row, int col, float value);
-        float get(int row, int col);
+        float get(int row, int col) const;
 
-        Matrix4 operator+(const Matrix4& other);
-        Matrix4 operator-(const Matrix4& other);
-        Matrix4 operator*(const Matrix4& other);
-        Vector4f operator*(const Vector4f& other);
-        Matrix4 operator*(float value);
+        Matrix4 operator+(const Matrix4& other) const;
+        Matrix4 operator-(const Matrix4& other) const;
+        Matrix4 operator*(const Matrix4& other) const;
+        Vector4f operator*(const Vector4f& other) const;
+        Matrix4 operator*(float value) const;
+        bool operator==(const Matrix4& other) const;
+        bool operator!=(const Matrix4& other) const;
+        friend std::ostream& operator<<(std::ostream& outputStream, const Matrix4& other);
 
         Matrix4 inverse();
         Matrix4 gaussJordanInverse();
@@ -32,6 +35,8 @@ class Matrix4
 
         std::array<std::array<float, 4>, 4> matrix;
 };
+
+std::ostream& operator<<(std::ostream& outputStream, const Matrix4& other);
 
 class Solver 
 {

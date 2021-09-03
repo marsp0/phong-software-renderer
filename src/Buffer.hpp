@@ -22,12 +22,12 @@ class Buffer {
             this->buffer[x + y * this->width] = value;
         }
 
-        T get(int x, int y) 
+        T get(int x, int y) const
         {
             return this->buffer[x + y * this->width];
         }
 
-        int size() 
+        int size() const
         {
             return this->width * this->height;
         }
