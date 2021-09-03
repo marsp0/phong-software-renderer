@@ -19,7 +19,7 @@ void testModelEulerRotation()
     Model model(2.456f, 3.23f, 5.55f, Vector4f());
     Matrix4 actual = model.getRotationMatrix();
     assert(model.rotationType == RotationType::EULER);
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testModelQuaternionRotation()
@@ -39,7 +39,7 @@ void testModelQuaternionRotation()
                 Vector4f());
     Matrix4 actual = model.getRotationMatrix();
     assert(model.rotationType == RotationType::QUATERNION);
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testModelAxisAngleRotation()
@@ -57,7 +57,7 @@ void testModelAxisAngleRotation()
                 Vector4f());
     Matrix4 actual = model.getRotationMatrix();
     assert(model.rotationType == RotationType::AXIS_ANGLE);
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testModelSwitchFromEulerToQuaternion()
@@ -73,12 +73,12 @@ void testModelSwitchFromEulerToQuaternion()
     Model model(2.456f, 3.23f, 5.55f, Vector4f());
     Matrix4 actual = model.getRotationMatrix();
     assert(model.rotationType == RotationType::EULER);
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
     // switch to quat
     model.setRotationType(RotationType::QUATERNION);
     actual = model.getRotationMatrix();
     assert(model.rotationType == RotationType::QUATERNION);
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testModelSwitchFromEulerToAxisAngle()
@@ -94,12 +94,12 @@ void testModelSwitchFromEulerToAxisAngle()
     Model model(2.456f, 3.23f, 5.55f, Vector4f());
     Matrix4 actual = model.getRotationMatrix();
     assert(model.rotationType == RotationType::EULER);
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
     // switch to axisAngle
     model.setRotationType(RotationType::AXIS_ANGLE);
     actual = model.getRotationMatrix();
     assert(model.rotationType == RotationType::AXIS_ANGLE);
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testModelSwitchFromAxisAngleToEuler()
@@ -115,12 +115,12 @@ void testModelSwitchFromAxisAngleToEuler()
     Model model(3.80020f, Vector4f(0.16825f, -0.31551f, -0.93388f, 1.f), Vector4f());
     Matrix4 actual = model.getRotationMatrix();
     assert(model.rotationType == RotationType::AXIS_ANGLE);
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
     // switch to Euler
     model.setRotationType(RotationType::EULER);
     actual = model.getRotationMatrix();
     assert(model.rotationType == RotationType::EULER);
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testModelSwitchFromAxisAngleToQuaternion()
@@ -136,12 +136,12 @@ void testModelSwitchFromAxisAngleToQuaternion()
     Model model(3.80020f, Vector4f(0.16825f, -0.31551f, -0.93388f, 1.f), Vector4f());
     Matrix4 actual = model.getRotationMatrix();
     assert(model.rotationType == RotationType::AXIS_ANGLE);
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
     // switch to Quaternion
     model.setRotationType(RotationType::QUATERNION);
     actual = model.getRotationMatrix();
     assert(model.rotationType == RotationType::QUATERNION);
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testModelSwitchFromQuaternionToEuler()
@@ -161,12 +161,12 @@ void testModelSwitchFromQuaternionToEuler()
                 Vector4f());
     Matrix4 actual = model.getRotationMatrix();
     assert(model.rotationType == RotationType::QUATERNION);
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
     // switch to Euler
     model.setRotationType(RotationType::EULER);
     actual = model.getRotationMatrix();
     assert(model.rotationType == RotationType::EULER);
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testModelSwitchFromQuaternionToAxisAngle()
@@ -186,12 +186,12 @@ void testModelSwitchFromQuaternionToAxisAngle()
                 Vector4f());
     Matrix4 actual = model.getRotationMatrix();
     assert(model.rotationType == RotationType::QUATERNION);
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
     // switch to AxisAngle
     model.setRotationType(RotationType::AXIS_ANGLE);
     actual = model.getRotationMatrix();
     assert(model.rotationType == RotationType::AXIS_ANGLE);
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testModelGetWorldTransform()
@@ -207,7 +207,7 @@ void testModelGetWorldTransform()
     Model model(2.456f, 3.23f, 5.55f, Vector4f(1.f, 2.f, 3.f, 1.f));
     Matrix4 actual = model.getWorldMatrix();
 
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testModel()

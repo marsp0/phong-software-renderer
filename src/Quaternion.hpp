@@ -11,8 +11,11 @@ class Quaternion
         Quaternion(float w, float x, float y, float z);
         ~Quaternion();
 
-        Quaternion operator*(const Quaternion& other);
-        Quaternion operator*(float value);
+        Quaternion operator*(const Quaternion& other) const;
+        Quaternion operator*(float value) const;
+        bool operator==(const Quaternion& other) const;
+        bool operator!=(const Quaternion& other) const;
+        friend std::ostream& operator<<(std::ostream& outputStream, const Quaternion& other);
 
         Quaternion conjugate();
         Quaternion inverse();
@@ -32,3 +35,4 @@ class Quaternion
 };
 
 Quaternion makeQuat(float w, float x, float y, float z);
+std::ostream& operator<<(std::ostream& outputStream, const Quaternion& other);

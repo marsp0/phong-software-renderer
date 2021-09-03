@@ -38,12 +38,12 @@ void Matrix4::set(int row, int col, float value)
     this->matrix[row][col] = value;
 }
 
-float Matrix4::get(int row, int col) 
+float Matrix4::get(int row, int col) const
 {
     return this->matrix[row][col];
 }
 
-Matrix4 Matrix4::operator*(const Matrix4& other) 
+Matrix4 Matrix4::operator*(const Matrix4& other) const
 {
     std::array<std::array<float, 4>, 4> result;
     for (int i = 0; i < 4; i++) 
@@ -60,7 +60,7 @@ Matrix4 Matrix4::operator*(const Matrix4& other)
     return Matrix4(result);
 }
 
-Matrix4 Matrix4::operator*(float value) 
+Matrix4 Matrix4::operator*(float value) const
 {
     std::array<std::array<float, 4>, 4> result;
     for (int i = 0; i < 4; i++) 
@@ -73,7 +73,7 @@ Matrix4 Matrix4::operator*(float value)
     return Matrix4(result);
 }
 
-Matrix4 Matrix4::operator+(const Matrix4& other) 
+Matrix4 Matrix4::operator+(const Matrix4& other) const
 {
     std::array<std::array<float, 4>, 4> result;
     for (int i = 0; i < 4; i++) 
@@ -86,7 +86,7 @@ Matrix4 Matrix4::operator+(const Matrix4& other)
     return Matrix4(result);
 }
 
-Matrix4 Matrix4::operator-(const Matrix4& other) 
+Matrix4 Matrix4::operator-(const Matrix4& other) const
 {
     std::array<std::array<float, 4>, 4> result;
     for (int i = 0; i < 4; i++) 
@@ -99,7 +99,7 @@ Matrix4 Matrix4::operator-(const Matrix4& other)
     return Matrix4(result);
 }
 
-Vector4f Matrix4::operator*(const Vector4f& other) 
+Vector4f Matrix4::operator*(const Vector4f& other) const
 {
     float x, y, z, w;
     x = this->matrix[0][0] * other.x + \
@@ -119,6 +119,27 @@ Vector4f Matrix4::operator*(const Vector4f& other)
         this->matrix[3][2] * other.z + \
         this->matrix[3][3] * other.w;
     return Vector4f(x, y, z, w);
+}
+
+bool Matrix4::operator==(const Matrix4& other) const 
+{
+    bool isEqual = true;
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            if (fabs(this->matrix[i][j] - other.get(i, j)) > 0.0005f)
+            {
+                isEqual = false;
+            }
+        }
+    }
+    return isEqual;
+}
+
+bool Matrix4::operator!=(const Matrix4& other) const
+{
+    return !(this->operator==(other));
 }
 
 Matrix4 Matrix4::inverse() 
@@ -302,4 +323,18 @@ void Solver::add(int first,
     {
         augmentedMatrix[first][i] = augmentedMatrix[first][i] * firstScale + augmentedMatrix[second][i] * secondScale;
     }
+}
+
+std::ostream& operator<<(std::ostream& outputStream, const Matrix4& other)
+{
+    outputStream << "-- Matrix --" << std::endl;
+    for (int i = 0; i < 4; i++) 
+    {
+        for (int j = 0; j < 4; j++) 
+        {
+            outputStream << other.get(i, j) << ", ";
+        }
+        outputStream << std::endl;
+    }
+    return outputStream;
 }

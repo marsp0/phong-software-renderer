@@ -30,7 +30,7 @@ Quaternion::~Quaternion()
 
 }
 
-Quaternion Quaternion::operator*(const Quaternion& other) 
+Quaternion Quaternion::operator*(const Quaternion& other) const
 {
     // // https://en.wikipedia.org/wiki/Quaternion#Hamilton_product
     // float w = this->w * other.w - (this->x * other.x) - (this->y * other.y) - (this->z * other.z);
@@ -44,13 +44,30 @@ Quaternion Quaternion::operator*(const Quaternion& other)
     Vector4f v1{this->x, this->y, this->z, 1.f};
     Vector4f v2{other.x, other.y, other.z, 1.f};
     Vector4f v3 = v1.cross(v2) +  v2 * this->w + v1 * other.w;
-    float w = (this->w * other.w) - v1.dot(v2);
-    return Quaternion(w, v3.x, v3.y, v3.z);
+    float newW = (this->w * other.w) - v1.dot(v2);
+    return Quaternion(newW, v3.x, v3.y, v3.z);
 }
 
-Quaternion Quaternion::operator*(float value)
+Quaternion Quaternion::operator*(float value) const
 {
     return Quaternion(this->w * value, this->x * value, this->y * value, this->z * value);
+}
+
+bool Quaternion::operator==(const Quaternion& other) const
+{
+    if (fabs(this->w - other.w) > 0.0005f || \
+        fabs(this->x - other.x) > 0.0005f || \
+        fabs(this->y - other.y) > 0.0005f || \
+        fabs(this->z - other.z) > 0.0005f)
+    {
+        return false;
+    }
+    return true;
+}
+
+bool Quaternion::operator!=(const Quaternion& other) const
+{
+    return !(this->operator==(other));
 }
 
 Quaternion Quaternion::conjugate() 
@@ -127,5 +144,11 @@ Matrix4 Quaternion::toMatrix()
 
 void Quaternion::print() 
 {
-    std::cout << "Quaternion (" << this->w << ", " << this->x << ", " << this->y << ", " << this->z << ")" << std::endl;
+    std::cout << "Quaternion(" << this->w << ", " << this->x << ", " << this->y << ", " << this->z << ")" << std::endl;
+}
+
+std::ostream& operator<<(std::ostream& outputStream, const Quaternion& other)
+{
+    outputStream << "Quaternion(" << other.w << ", " << other.x << ", " << other.y << ", " << other.z << ")";
+    return outputStream;
 }

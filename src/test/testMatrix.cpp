@@ -13,7 +13,7 @@ void testMatrixInitPlain()
         {0, 0, 0, 1}
     }};
     Matrix4 actual;
-    ASSERT_MATRIX4(actual, Matrix4(expected));
+    ASSERT_VALUE(Matrix4, actual, Matrix4(expected));
 }
 
 void testMatrixAddition() 
@@ -41,7 +41,7 @@ void testMatrixAddition()
     }};
     Matrix4 actual2{actualArray2};
     Matrix4 actual = actual1 + actual2;
-    ASSERT_MATRIX4(actual, Matrix4(expected));
+    ASSERT_VALUE(Matrix4, actual, Matrix4(expected));
 }
 
 void testMatrixSubtraction() 
@@ -69,7 +69,7 @@ void testMatrixSubtraction()
     }};
     Matrix4 actual2{actualArray2};
     Matrix4 actual = actual1 - actual2;
-    ASSERT_MATRIX4(actual, Matrix4(expected));
+    ASSERT_VALUE(Matrix4, actual, Matrix4(expected));
 }
 
 void testMatrixMatrixMultiplication() 
@@ -97,7 +97,7 @@ void testMatrixMatrixMultiplication()
     }};
     Matrix4 actual2{actualArray2};
     Matrix4 actual = actual1 * actual2;
-    ASSERT_MATRIX4(actual, Matrix4(expected));
+    ASSERT_VALUE(Matrix4, actual, Matrix4(expected));
 }
 
 void testMatrixScalarMultiplication() 
@@ -116,7 +116,7 @@ void testMatrixScalarMultiplication()
     }};
     Matrix4 actual{actualArray};
     actual = actual * -1;
-    ASSERT_MATRIX4(actual, Matrix4(expected));
+    ASSERT_VALUE(Matrix4, actual, Matrix4(expected));
 }
 
 void testMatrixScalarMultiplication2() 
@@ -135,7 +135,7 @@ void testMatrixScalarMultiplication2()
     }};
     Matrix4 actual{actualArray};
     actual = actual * 0.5f;
-    ASSERT_MATRIX4(actual, Matrix4(expected));
+    ASSERT_VALUE(Matrix4, actual, Matrix4(expected));
 }
 
 void testMatrixTranspose() 
@@ -154,7 +154,7 @@ void testMatrixTranspose()
     }};
     Matrix4 actual{actualArray};
     actual = actual.transpose();
-    ASSERT_MATRIX4(actual, Matrix4(expected));
+    ASSERT_VALUE(Matrix4, actual, Matrix4(expected));
 }
 
 void testMatrixVectorMultiplication() 
@@ -169,7 +169,7 @@ void testMatrixVectorMultiplication()
     }};
     Matrix4 inputMatrix{inputArray};
     Vector4f actual = inputMatrix * inputVector;
-    ASSERT_VECTOR4F(actual, expected);
+    ASSERT_VALUE(Vector4f, actual, expected);
 }
 
 void testMatrixInverseGaussJordan() 
@@ -189,7 +189,7 @@ void testMatrixInverseGaussJordan()
     Matrix4 actual(actualArray);
     Matrix4 expected(expectedArray);
     actual = actual.gaussJordanInverse();
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testMatrixInverseGaussJordan2() 
@@ -209,7 +209,7 @@ void testMatrixInverseGaussJordan2()
     Matrix4 actual(actualArray);
     Matrix4 expected(expectedArray);
     actual = actual.gaussJordanInverse();
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testMatrixInverseGaussJordan3() 
@@ -229,7 +229,7 @@ void testMatrixInverseGaussJordan3()
     Matrix4 actual(actualArray);
     Matrix4 expected(expectedArray);
     actual = actual.gaussJordanInverse();
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testMatrixInverseGLU() 
@@ -249,7 +249,7 @@ void testMatrixInverseGLU()
     Matrix4 actual(actualArray);
     Matrix4 expected(expectedArray);
     actual = actual.gluInverse();
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testMatrixInverseGLU2() 
@@ -269,7 +269,7 @@ void testMatrixInverseGLU2()
     Matrix4 actual(actualArray);
     Matrix4 expected(expectedArray);
     actual = actual.gluInverse();
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testMatrixInverseGLU3() 
@@ -289,7 +289,7 @@ void testMatrixInverseGLU3()
     Matrix4 actual(actualArray);
     Matrix4 expected(expectedArray);
     actual = actual.gluInverse();
-    ASSERT_MATRIX4(actual, expected);
+    ASSERT_VALUE(Matrix4, actual, expected);
 }
 
 void testMatrix() {
