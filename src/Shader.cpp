@@ -1,8 +1,9 @@
 #include "Shader.hpp"
 
-BasicShader::BasicShader(Model* model, Camera* camera): world(model->getWorldMatrix()),
-                                                        view(camera->getViewMatrix()),
-                                                        projection(camera->getProjectionMatrix())
+BasicShader::BasicShader(const Model* model, 
+                         const Camera* camera): world(model->getWorldMatrix()),
+                                                view(camera->getViewMatrix()),
+                                                projection(camera->getProjectionMatrix())
 {
     this->modelViewProjection = this->projection * this->view * this->world;
 }

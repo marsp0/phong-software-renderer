@@ -33,15 +33,16 @@ class Model
               std::unique_ptr<TextureBuffer> textureBuffer);
         ~Model();
         void update(float deltaTime);
-        Matrix4 getWorldMatrix();
-        Matrix4 getRotationMatrix();
+        Matrix4 getWorldMatrix() const;
+        Matrix4 getRotationMatrix() const;
         void setRotationType(RotationType newType);
-        const std::vector<Vector4f>& getVertices();
-        const std::vector<Vector4f>& getNormals();
-        const std::vector<Vector4f>& getTextureCoords();
-        const std::vector<int>& getVertexIndices();
-        const std::vector<int>& getNormalIndices();
-        const std::vector<int>& getTextureIndices();
+        const std::vector<Vector4f>& getVertices() const;
+        const std::vector<Vector4f>& getNormals() const;
+        const std::vector<Vector4f>& getTextureCoords() const;
+        const std::vector<int>& getVertexIndices() const;
+        const std::vector<int>& getNormalIndices() const;
+        const std::vector<int>& getTextureIndices() const;
+        const TextureBuffer*    getTextureBuffer() const;
         RotationType rotationType;
 
     private:

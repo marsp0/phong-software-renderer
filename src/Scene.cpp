@@ -68,7 +68,7 @@ const std::vector<std::unique_ptr<Model>>& Scene::getModels()
     return this->models;
 }
 
-Camera* Scene::getCamera()
+const Camera* Scene::getCamera()
 {
     return this->camera.get();
 }

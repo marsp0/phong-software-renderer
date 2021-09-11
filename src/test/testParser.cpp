@@ -89,24 +89,24 @@ void testParseTexture()
     int actualWidth = std::get<0>(actual);
     int actualHeight = std::get<1>(actual);
     int bytesPerPixel = std::get<2>(actual);
-    std::vector<unsigned short> actualData = std::get<3>(actual);;
+    std::vector<uint8_t> actualData = std::get<3>(actual);;
     ASSERT_VALUE(int, actualWidth, 3);
     ASSERT_VALUE(int, actualHeight, 3);
     ASSERT_VALUE(int, bytesPerPixel, 4);
     
     // assert image (actual texture) data
-    std::vector<unsigned short> expectedImageDataInts{
-        0, 0, 255, 255,
-        0, 0, 255, 255,
-        0, 0, 255, 255,
-        0, 255, 0, 255,
-        0, 255, 0, 255,
-        0, 255, 0, 255,
+    std::vector<uint8_t> expectedImageDataInts{
         255, 0, 0, 255,
         255, 0, 0, 255,
         255, 0, 0, 255,
+        0, 255, 0, 255,
+        0, 255, 0, 255,
+        0, 255, 0, 255,
+        0, 0, 255, 255,
+        0, 0, 255, 255,
+        0, 0, 255, 255,
     };
-    ASSERT_VALUE_ARRAY(unsigned short, actualData, expectedImageDataInts);
+    ASSERT_VALUE_ARRAY(uint8_t, actualData, expectedImageDataInts);
 }
 
 void testParser()

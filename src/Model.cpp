@@ -59,7 +59,7 @@ void Model::update(float deltaTime)
 
 }
 
-Matrix4 Model::getRotationMatrix()
+Matrix4 Model::getRotationMatrix() const
 {
     if (this->rotationType == RotationType::EULER)
     {
@@ -112,7 +112,7 @@ void Model::setRotationType(RotationType newType)
     this->rotationType = newType;
 }
 
-Matrix4 Model::getWorldMatrix()
+Matrix4 Model::getWorldMatrix() const
 {
     Matrix4 translation;
     translation.set(0, 3, this->position.x);
@@ -123,32 +123,37 @@ Matrix4 Model::getWorldMatrix()
     return translation * rotation;
 }
 
-const std::vector<Vector4f>& Model::getVertices()
+const std::vector<Vector4f>& Model::getVertices() const
 {
     return this->vertices;
 }
 
-const std::vector<Vector4f>& Model::getNormals()
+const std::vector<Vector4f>& Model::getNormals() const
 {
     return this->normals;
 }
 
-const std::vector<Vector4f>& Model::getTextureCoords()
+const std::vector<Vector4f>& Model::getTextureCoords() const
 {
     return this->textureCoords;
 }
 
-const std::vector<int>& Model::getVertexIndices()
+const std::vector<int>& Model::getVertexIndices() const
 {
     return this->vertexIndices;
 }
 
-const std::vector<int>& Model::getNormalIndices()
+const std::vector<int>& Model::getNormalIndices() const
 {
     return this->normalIndices;
 }
 
-const std::vector<int>& Model::getTextureIndices()
+const std::vector<int>& Model::getTextureIndices() const
 {
     return this->textureIndices;
+}
+
+const TextureBuffer* Model::getTextureBuffer() const
+{
+    return this->textureBuffer.get();
 }

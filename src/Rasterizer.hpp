@@ -19,13 +19,14 @@ class Rasterizer
     public:
 
         static void drawLine(std::array<Vector4f, 2> vertices, 
-                             std::array<uint8_t, 6> colors,
+                             std::array<Vector4f, 2> textureVertices,
+                             const TextureBuffer* textureBuffer,
                              Shader* shader, 
                              FrameBuffer* frameBuffer,
                              DepthBuffer* depthBuffer);
-        // TODO: https://trello.com/c/Qu1r6CSK/9-see-if-there-is-a-perf-gain-if-we-use-ref-to-stdarray-vs-copy-of-stdarray-in-the-rasterizer
         static void drawTriangle(std::array<Vector4f, 3> vertices,
-                                 std::array<uint8_t, 9> colors,
+                                 std::array<Vector4f, 3> texturVerticesa,
+                                 const TextureBuffer* textureBuffer,
                                  Shader* shader, 
                                  FrameBuffer* frameBuffer, 
                                  DepthBuffer* depthBuffer,
@@ -37,26 +38,30 @@ class Rasterizer
         
         // DrawTriangleFlat - uses the fact that a triangle can be split into a flat top/bottom triangle
         static void drawTriangleFlat(std::array<Vector4f, 3> vertices, 
-                                     std::array<uint8_t, 9> colors,
+                                     std::array<Vector4f, 3> texturVerticesa,
+                                     const TextureBuffer* textureBuffer,
                                      Shader* shader, 
                                      FrameBuffer* frameBuffer,
                                      DepthBuffer* depthBuffer);
         
         static void drawTriangleFlatBottom(std::array<Vector4f, 3> vertices, 
-                                           std::array<uint8_t, 9> colors, 
+                                           std::array<Vector4f, 3> textureVertices,
+                                           const TextureBuffer*  textureBuffer,
                                            Shader* shader, 
                                            FrameBuffer* frameBuffer,
                                            DepthBuffer* depthBuffer);
 
         static void drawTriangleFlatTop(std::array<Vector4f, 3> vertices, 
-                                        std::array<uint8_t, 9> colors, 
+                                        std::array<Vector4f, 3> textureVertices,
+                                        const TextureBuffer*  textureBuffer,
                                         Shader* shader, 
                                         FrameBuffer* frameBuffer,
                                         DepthBuffer* depthBuffer);
 
         // DrawTriangleAABB - Uses the edge method + bounding box
         static void drawTriangleAABB(std::array<Vector4f, 3> vertices, 
-                                     std::array<uint8_t, 9> colors, 
+                                     std::array<Vector4f, 3> textureVertices,
+                                     const TextureBuffer*  textureBuffer,
                                      Shader* shader, 
                                      FrameBuffer* frameBuffer,
                                      DepthBuffer* depthBuffer);

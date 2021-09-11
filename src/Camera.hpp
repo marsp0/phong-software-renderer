@@ -14,8 +14,8 @@ class Camera
         ~Camera();
 
         void update(FrameInput& input);
-        Matrix4 getViewMatrix();
-        Matrix4 getProjectionMatrix();
+        Matrix4 getViewMatrix() const;
+        Matrix4 getProjectionMatrix() const;
 
     private:
 

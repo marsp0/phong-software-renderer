@@ -69,7 +69,7 @@ void Camera::updateBasisVectors()
     this->up.normalize();
 }
 
-Matrix4 Camera::getViewMatrix()
+Matrix4 Camera::getViewMatrix() const
 {
     Matrix4 result;
     result.set(0, 0, this->right.x);
@@ -92,7 +92,7 @@ Matrix4 Camera::getViewMatrix()
     return result;
 }
 
-Matrix4 Camera::getProjectionMatrix()
+Matrix4 Camera::getProjectionMatrix() const
 {
     Matrix4 result;
     result.set(0, 0, (2 * this->frustum.near)/(this->frustum.right - this->frustum.left));

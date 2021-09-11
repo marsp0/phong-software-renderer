@@ -58,7 +58,8 @@ void SoftwareRenderer::draw()
     const std::vector<std::unique_ptr<Model>>& models = this->scene->getModels();
     for (int i = 0; i < models.size(); i++)
     {
-        this->drawModel(models[i].get());
+        const Model* model = models[i].get();
+        this->drawModel(model);
     }
 }
 
@@ -70,9 +71,10 @@ void SoftwareRenderer::clear()
     this->depthBuffer->clear(150.f);
 }
 
-void SoftwareRenderer::drawModel(Model* model) 
+void SoftwareRenderer::drawModel(const Model* model) 
 {
-    Camera* camera = this->scene->getCamera();
+    const Camera* camera = this->scene->getCamera();
+    // model->rotationType = RotationType::AXIS_ANGLE;
     std::unique_ptr<Shader> shader = this->getShader(model, camera);
     const std::vector<Vector4f>& vertices = model->getVertices();
     const std::vector<Vector4f>& normals = model->getNormals();
@@ -80,17 +82,28 @@ void SoftwareRenderer::drawModel(Model* model)
     const std::vector<int>& vertexIndices = model->getVertexIndices();
     const std::vector<int>& normalIndices = model->getNormalIndices();
     const std::vector<int>& textureIndices = model->getTextureIndices();
+    const TextureBuffer* textureBuffer = model->getTextureBuffer();
     for (int i = 0; i < vertexIndices.size(); i += 3) 
     {
         int indexV0 = vertexIndices[i];
         int indexV1 = vertexIndices[i + 1];
         int indexV2 = vertexIndices[i + 2];
 
+        int indexT0 = textureIndices[i];
+        int indexT1 = textureIndices[i + 1];
+        int indexT2 = textureIndices[i + 2];
+
         // vertex shader
         std::array<Vector4f, 3> vertexBatch{
             shader->processVertex(vertices[indexV0]),
             shader->processVertex(vertices[indexV1]),
             shader->processVertex(vertices[indexV2])
+        };
+
+        std::array<Vector4f, 3> textureVertices{
+            textureCoords[indexT0],
+            textureCoords[indexT1],
+            textureCoords[indexT2],
         };
 
         // perspective divide
@@ -101,28 +114,20 @@ void SoftwareRenderer::drawModel(Model* model)
         // transform NDC to Raster space
         // x - (-1, 1) -> (0, 2) -> (0, 1) -> (0, width)
         // y - (-1, 1) -> (0, 2) -> (0, 1) -> (0, height)
-        for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 3; j++)
         {
-            vertexBatch[i].x = (vertexBatch[i].x + 1) * 0.5f * frameBuffer->width;
-            vertexBatch[i].y = (vertexBatch[i].y + 1) * 0.5f * frameBuffer->height;
+            vertexBatch[j].x = (vertexBatch[j].x + 1) * 0.5f * frameBuffer->width;
+            vertexBatch[j].y = (vertexBatch[j].y + 1) * 0.5f * frameBuffer->height;
         }
 
-        // temporary
-        std::array<uint8_t, 9> colors{
-            (uint8_t)255,
-            (uint8_t)0,
-            (uint8_t)0,
-            (uint8_t)0,
-            (uint8_t)255,
-            (uint8_t)0,
-            (uint8_t)0,
-            (uint8_t)0,
-            (uint8_t)255,
-        };
-
+        // std::cout << "texture Vertices" << std::endl;
+        // std::cout << textureVertices[0] << std::endl;
+        // std::cout << textureVertices[1] << std::endl;
+        // std::cout << textureVertices[2] << std::endl;
         // fragment shader + rasterization
         Rasterizer::drawTriangle(vertexBatch, 
-                                 colors,  
+                                 textureVertices,
+                                 textureBuffer,
                                  shader.get(), 
                                  this->frameBuffer.get(), 
                                  this->depthBuffer.get(), 
@@ -130,7 +135,7 @@ void SoftwareRenderer::drawModel(Model* model)
     }
 }
 
-std::unique_ptr<Shader> SoftwareRenderer::getShader(Model* model, Camera* camera)
+std::unique_ptr<Shader> SoftwareRenderer::getShader(const Model* model, const Camera* camera)
 {
     return std::move(std::make_unique<BasicShader>(model, camera));
 }

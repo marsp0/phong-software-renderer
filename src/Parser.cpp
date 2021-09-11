@@ -1,5 +1,6 @@
 #include "Parser.hpp"
 
+#include <exception>
 #include <fstream>
 #include <iostream>
 
@@ -109,11 +110,19 @@ std::vector<std::unique_ptr<Model>> Parser::parseScene(const char* fileName)
             int width = std::get<0>(textureTuple);
             int height = std::get<1>(textureTuple);
             int bytesPerPixel = std::get<2>(textureTuple);
-            std::vector<unsigned short>& data = std::get<3>(textureTuple);
-            std::unique_ptr<TextureBuffer> textureBuffer = std::make_unique<TextureBuffer>(width * bytesPerPixel, height);
-            for (int i = 0; i < data.size(); i++)
+            std::vector<uint8_t>& data = std::get<3>(textureTuple);
+            std::unique_ptr<TextureBuffer> textureBuffer = std::make_unique<TextureBuffer>(width, height);
+            for (int i = 0; i < data.size(); i += bytesPerPixel)
             {
-                textureBuffer->set(i, 0, data[i]);
+                uint32_t color = 0;
+                color += data[i + 0] << 8;  // blue
+                color += data[i + 1] << 16; // green
+                color += data[i + 2] << 24; // red
+                if (bytesPerPixel == 4)
+                {
+                    color += data[i + 3];
+                }
+                textureBuffer->set(i / bytesPerPixel, 0, color);
             }
             models.push_back(std::make_unique<Model>(vertices, normals, textureCoords, vertexIndices,
                                                      normalIndices, textureIndices, std::move(textureBuffer)));
@@ -184,6 +193,12 @@ TextureInfo Parser::parseTexture(const std::string& fileName, const std::string&
     int width = Parser::getInt(buffer, 2);
     int height = Parser::getInt(buffer, 2);
     int pixelDepth = Parser::getInt(buffer, 1);
+    // image descriptor shows what corner holds the first byte
+    //                 4th bith     5th bit
+    // bottom left -      0            0
+    // bottom right -     1            0
+    // top left -         0            1
+    // top right -        1            1
     int imageDescriptor = Parser::getInt(buffer, 1);
     
     // additional header data
@@ -198,19 +213,52 @@ TextureInfo Parser::parseTexture(const std::string& fileName, const std::string&
     buffer.read(colorMapData.data(), colorMapBytes);
 
     // texture data that we will use
-    int imageDataBytes = width * height * pixelDepth / 8;
+    int bytesPerPixel = pixelDepth / 8;
+    int imageDataBytes = width * height * bytesPerPixel;
     std::vector<char> imageData;
     imageData.resize(imageDataBytes);
     buffer.read(imageData.data(), imageDataBytes);
 
-    // convert char -> unsigned short
-    std::vector<unsigned short> data;
-    for (int i = 0; i < imageData.size(); i++)
+    // convert char -> uint8
+    std::vector<uint8_t> data;
+    data.resize(imageData.size());
+    bool bottomLeft = !(imageDescriptor & 8) && !(imageDescriptor & 16);
+    bool bottomRight = (imageDescriptor & 8) && !(imageDescriptor & 16);
+    bool topLeft = !(imageDescriptor & 8) && (imageDescriptor & 16);
+    if (bottomLeft)
     {
-        unsigned char byteValue = reinterpret_cast<unsigned char&>(imageData[i]);
-        data.push_back((unsigned short)byteValue);
+        Parser::fromBottom(imageData, data, bytesPerPixel * width);
     }
-    return std::make_tuple(width, height, pixelDepth / 8, data);
+    else if (bottomRight)
+    {
+        Parser::fromBottom(imageData, data, bytesPerPixel);
+    }
+    else if (topLeft)
+    {
+        // TODO: to implement
+        std::cerr << "Parser cannot convert topLeft starting point";
+        std::terminate();
+    }
+    else
+    {
+        // TODO: to implement
+        std::cerr << "Parser cannot convert topRight starting point";
+        std::terminate();
+    }
+    return std::make_tuple(width, height, bytesPerPixel, data);
+}
+
+void Parser::fromBottom(std::vector<char>& srcBuffer, std::vector<uint8_t>& destBuffer, int step)
+{
+    int destIndex = 0;
+    for (int i = srcBuffer.size() - step; i >= 0 ; i -= step)
+    {
+        for (int j = 0; j < step; j++)
+        {
+            destBuffer[destIndex + j] = reinterpret_cast<uint8_t&>(srcBuffer[i + j]);
+        }
+        destIndex += step;
+    }
 }
 
 int Parser::getInt(std::stringstream& buffer, int len)

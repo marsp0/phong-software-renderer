@@ -17,7 +17,7 @@ class Scene
         bool handleInput(FrameInput& input);
         void update(float deltaTime, FrameInput& input);
         const std::vector<std::unique_ptr<Model>>& getModels();
-        Camera* getCamera();
+        const Camera* getCamera();
 
     private:
 

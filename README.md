@@ -4,7 +4,7 @@
 
 ### Dependencies
 
-- SDL2 `apt install libsdl2-dev`
+- SDL2
 
 ## References
 
@@ -100,3 +100,13 @@
 - [Convert char -> unsigned char](https://stackoverflow.com/a/5042335)
 - [Convert char -> unsigned char 2](https://stackoverflow.com/a/43273907)
 - [reinterpret_cast](https://en.cppreference.com/w/cpp/language/reinterpret_cast)
+
+### Texture Mapping
+
+- [Texture Mapping chapter from Fundamentals of Computer Graphics]
+- [Texture Mapping chapter from Mathematics for 3D Game Programming and Computer Graphics]
+- [Chris Hecker on Texture Mapping](http://www.chrishecker.com/Miscellaneous_Technical_Articles)
+- [Perspective correct texture mapper](http://www.lysator.liu.se/~mikaelk/doc/perspectivetexture/)
+- [Texture Filtering](https://en.wikipedia.org/wiki/Texture_filtering)
+- [Texture Mapping](https://en.wikipedia.org/wiki/Texture_mapping)
+- [OBJ Texture Coords use (0,0) as top left](https://stackoverflow.com/questions/5585368/problems-using-wavefront-objs-texture-coordinates-in-android-opengl-es/5605027#5605027)

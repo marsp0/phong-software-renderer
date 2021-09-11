@@ -4,11 +4,12 @@
 #include <vector>
 #include <memory>
 #include <unordered_map>
+#include <stdint.h>
 #include "Model.hpp"
 #include "Vector.hpp"
 
 // width, height, bytes per pixel (RGB/RGBA) and data
-typedef std::tuple<int, int, int, std::vector<unsigned short>> TextureInfo;
+typedef std::tuple<int, int, int, std::vector<uint8_t>> TextureInfo;
 typedef std::unordered_map<std::string, TextureInfo> MaterialInfoMap;
 
 class Parser
@@ -24,4 +25,5 @@ class Parser
         static std::stringstream getBuffer(const char* fileName);
         static int getInt(std::stringstream& buffer, int len);
         static std::string getBasePath(const std::string& path);
+        static void fromBottom(std::vector<char>& srcBuffer, std::vector<uint8_t>& destBuffer, int step);
 };

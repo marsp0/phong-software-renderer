@@ -19,7 +19,7 @@ class BasicShader: public Shader
 {
     public:
     
-        BasicShader(Model* model, Camera* camera);
+        BasicShader(const Model* model,const Camera* camera);
         ~BasicShader();
         Vector4f processVertex(const Vector4f& vertex);
         void processFragment();
