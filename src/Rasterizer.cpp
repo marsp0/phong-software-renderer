@@ -8,10 +8,7 @@
 
 const SDL_PixelFormat* Rasterizer::PIXEL_FORMAT(SDL_AllocFormat(SDL_PIXELFORMAT_RGB888));
 
-void Rasterizer::drawLine(std::array<Vector4f, 2> vertices, 
-                          Shader* shader, 
-                          FrameBuffer* frameBuffer,
-                          DepthBuffer* depthBuffer) 
+void Rasterizer::drawLine(std::array<Vector4f, 2> vertices, Shader* shader, FrameBuffer* frameBuffer, DepthBuffer* depthBuffer) 
 {
     // https://www.cs.helsinki.fi/group/goa/mallinnus/lines/bresenh.html
     int x0 = vertices[0].x;
@@ -44,14 +41,14 @@ void Rasterizer::drawLine(std::array<Vector4f, 2> vertices,
     int y = y0;
     for (int x = x0; x <= x1; x++) 
     { 
-        // if (steep) 
-        // { 
-        //     frameBuffer->set(y, x, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, textureBuffer[0], textureBuffer[1], textureBuffer[2]));
-        // } 
-        // else 
-        // {
-        //     frameBuffer->set(x, y, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, textureBuffer[0], textureBuffer[1], textureBuffer[2]));
-        // }
+        if (steep) 
+        { 
+            frameBuffer->set(y, x, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, 0, 255, 0));
+        } 
+        else 
+        {
+            frameBuffer->set(x, y, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, 0, 255, 0));
+        }
         error += errorStep;
         if (error > dx) 
         { 
