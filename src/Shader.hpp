@@ -11,7 +11,7 @@ class Shader
 {
     public:
         virtual Vector4f processVertex(const Vector4f& vertex) = 0;
-        virtual void processFragment() = 0;
+        virtual const std::array<float, 3>& processFragment(const std::array<float, 3>& weights) = 0;
     private:
 };
 
@@ -22,12 +22,18 @@ class BasicShader: public Shader
         BasicShader(const Model* model,const Camera* camera);
         ~BasicShader();
         Vector4f processVertex(const Vector4f& vertex);
-        void processFragment();
-    
-    private:
+        const std::array<float, 3>& processFragment(const std::array<float, 3>& weights);
 
+        // per model data
+        const TextureBuffer* diffuseTextureBuffer;
         Matrix4 modelViewProjection;
         Matrix4 world;
         Matrix4 view;
         Matrix4 projection;
+
+        // per pixel data
+        std::array<Vector4f, 3> diffuseTextureVertices;
+        std::array<float, 3> color;
+
+    private:
 };

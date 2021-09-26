@@ -15,9 +15,8 @@ enum class TextureInterp
 class TextureMapper
 {
     public:
-        static uint32_t textureColor(const TextureBuffer* textureBuffer, 
-                                     const std::array<Vector4f, 3>& textureVertices,
-                                     const std::array<float, 3>& weights,
-                                     const std::array<float, 3>& zValues);
+        static uint32_t textureSample(const TextureBuffer* textureBuffer, 
+                                      const std::array<Vector4f, 3>& textureVertices,
+                                      const std::array<float, 3>& weights);
     private:
 };

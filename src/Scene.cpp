@@ -25,10 +25,6 @@ bool Scene::handleInput(FrameInput& input)
         {
             return false;
         }
-        if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_E)
-        {
-            input.switchRasterMethod = true;
-        }
         if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_W)
         {
             input.forward = true;

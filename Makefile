@@ -4,7 +4,7 @@ CXX           	:= g++
 SRCDIR 			:= .
 OBJDIR			:= ./out
 EXECUTABLE    	:= renderer
-CXXFLAGS      	:= -std=c++17
+CXXFLAGS      	:= -std=c++17 -DBASIC_SHADER
 SRCFILES	 	:= $(shell find $(SRCDIR) -name "*.cpp")
 SRCNAMES		:= $(notdir $(SRCFILES))
 OBJFILES 	    := $(SRCNAMES:%.cpp=$(OBJDIR)/%.o)

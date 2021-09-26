@@ -5,10 +5,7 @@
 #include "Buffer.hpp"
 #include "Shader.hpp"
 
-SoftwareRenderer::SoftwareRenderer(int width, int height, ShaderType shaderType,
-                                   const char* fileName): rasterMethod(RasterMethod::EDGE_AABB), 
-                                                          shaderType(shaderType),
-                                                          input()
+SoftwareRenderer::SoftwareRenderer(int width, int height, const char* fileName): input()
 {
     this->displayManager = std::make_unique<DisplayManager>(width, height);
     this->scene = std::make_unique<Scene>(width, height, fileName);
@@ -47,10 +44,6 @@ void SoftwareRenderer::run()
 void SoftwareRenderer::update()
 {
     this->scene->update(0.01666f, this->input);
-    if (this->input.switchRasterMethod)
-    {
-        this->rasterMethod = (RasterMethod)!this->rasterMethod;
-    }
 }
 
 void SoftwareRenderer::draw()
@@ -74,37 +67,43 @@ void SoftwareRenderer::clear()
 void SoftwareRenderer::drawModel(const Model* model) 
 {
     const Camera* camera = this->scene->getCamera();
-    // model->rotationType = RotationType::AXIS_ANGLE;
-    std::unique_ptr<Shader> shader = this->getShader(model, camera);
+
+#if BASIC_SHADER
+
+    BasicShader shader(model, camera);
+    
+#endif
+
     const std::vector<Vector4f>& vertices = model->getVertices();
     const std::vector<Vector4f>& normals = model->getNormals();
-    const std::vector<Vector4f>& textureCoords = model->getTextureCoords();
+    const std::vector<Vector4f>& diffuseTextureCoords = model->getDiffuseTextureCoords();
     const std::vector<int>& vertexIndices = model->getVertexIndices();
     const std::vector<int>& normalIndices = model->getNormalIndices();
-    const std::vector<int>& textureIndices = model->getTextureIndices();
-    const TextureBuffer* textureBuffer = model->getTextureBuffer();
+    const std::vector<int>& diffuseTextureIndices = model->getDiffuseTextureIndices();
     for (int i = 0; i < vertexIndices.size(); i += 3) 
     {
         int indexV0 = vertexIndices[i];
         int indexV1 = vertexIndices[i + 1];
         int indexV2 = vertexIndices[i + 2];
 
-        int indexT0 = textureIndices[i];
-        int indexT1 = textureIndices[i + 1];
-        int indexT2 = textureIndices[i + 2];
-
         // vertex shader
         std::array<Vector4f, 3> vertexBatch{
-            shader->processVertex(vertices[indexV0]),
-            shader->processVertex(vertices[indexV1]),
-            shader->processVertex(vertices[indexV2])
+            shader.processVertex(vertices[indexV0]),
+            shader.processVertex(vertices[indexV1]),
+            shader.processVertex(vertices[indexV2])
         };
 
-        std::array<Vector4f, 3> textureVertices{
-            textureCoords[indexT0],
-            textureCoords[indexT1],
-            textureCoords[indexT2],
-        };
+#if BASIC_SHADER
+        
+        int indexT0 = diffuseTextureIndices[i];
+        int indexT1 = diffuseTextureIndices[i + 1];
+        int indexT2 = diffuseTextureIndices[i + 2];
+
+        shader.diffuseTextureVertices[0] = diffuseTextureCoords[indexT0];
+        shader.diffuseTextureVertices[1] = diffuseTextureCoords[indexT1];
+        shader.diffuseTextureVertices[2] = diffuseTextureCoords[indexT2];
+
+#endif
 
         // perspective divide
         vertexBatch[0] = vertexBatch[0] / vertexBatch[0].w;
@@ -120,22 +119,7 @@ void SoftwareRenderer::drawModel(const Model* model)
             vertexBatch[j].y = (vertexBatch[j].y + 1) * 0.5f * frameBuffer->height;
         }
 
-        // std::cout << "texture Vertices" << std::endl;
-        // std::cout << textureVertices[0] << std::endl;
-        // std::cout << textureVertices[1] << std::endl;
-        // std::cout << textureVertices[2] << std::endl;
         // fragment shader + rasterization
-        Rasterizer::drawTriangle(vertexBatch, 
-                                 textureVertices,
-                                 textureBuffer,
-                                 shader.get(), 
-                                 this->frameBuffer.get(), 
-                                 this->depthBuffer.get(), 
-                                 this->rasterMethod);
+        Rasterizer::drawTriangle(vertexBatch, &shader, this->frameBuffer.get(), this->depthBuffer.get());
     }
-}
-
-std::unique_ptr<Shader> SoftwareRenderer::getShader(const Model* model, const Camera* camera)
-{
-    return std::move(std::make_unique<BasicShader>(model, camera));
 }

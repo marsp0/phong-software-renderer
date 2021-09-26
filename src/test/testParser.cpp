@@ -15,10 +15,10 @@ void testParseScene()
     Model* model = models[0].get();
     const std::vector<Vector4f>& vertices = model->getVertices();
     const std::vector<Vector4f>& normals = model->getNormals();
-    const std::vector<Vector4f>& textureCoords = model->getTextureCoords();
+    const std::vector<Vector4f>& diffuseTextureCoords = model->getDiffuseTextureCoords();
     const std::vector<int>& vertexIndices = model->getVertexIndices();
     const std::vector<int>& normalIndices = model->getNormalIndices();
-    const std::vector<int>& textureIndices = model->getTextureIndices();
+    const std::vector<int>& diffuseTextureIndices = model->getDiffuseTextureIndices();
 
     std::vector<Vector4f> expectedVertices{
         Vector4f(-1.f, 1, -1, 1),
@@ -77,9 +77,9 @@ void testParseScene()
 
     ASSERT_VALUE_ARRAY(Vector4f, vertices, expectedVertices);
     ASSERT_VALUE_ARRAY(Vector4f, normals, expectedNormals);
-    ASSERT_VALUE_ARRAY(Vector4f, textureCoords, expectedTextureCoords);
+    ASSERT_VALUE_ARRAY(Vector4f, diffuseTextureCoords, expectedTextureCoords);
     ASSERT_VALUE_ARRAY(int, vertexIndices, expectedVertexIndices);
-    ASSERT_VALUE_ARRAY(int, textureIndices, expectedTextureIndices);
+    ASSERT_VALUE_ARRAY(int, diffuseTextureIndices, expectedTextureIndices);
     ASSERT_VALUE_ARRAY(int, normalIndices, expectedNormalIndices);
 }
 

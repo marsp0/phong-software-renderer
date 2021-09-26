@@ -9,8 +9,6 @@
 const SDL_PixelFormat* Rasterizer::PIXEL_FORMAT(SDL_AllocFormat(SDL_PIXELFORMAT_RGB888));
 
 void Rasterizer::drawLine(std::array<Vector4f, 2> vertices, 
-                          std::array<Vector4f, 2> textureVertices,
-                          const TextureBuffer* textureBuffer,
                           Shader* shader, 
                           FrameBuffer* frameBuffer,
                           DepthBuffer* depthBuffer) 
@@ -63,30 +61,7 @@ void Rasterizer::drawLine(std::array<Vector4f, 2> vertices,
     } 
 }
 
-void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices, 
-                              std::array<Vector4f, 3> textureVertices, 
-                              const TextureBuffer* textureBuffer,
-                              Shader* shader, 
-                              FrameBuffer* frameBuffer,
-                              DepthBuffer* depthBuffer,
-                              RasterMethod method)
-{
-    if (method == RasterMethod::EDGE_AABB) 
-    {
-        Rasterizer::drawTriangleAABB(vertices, textureVertices, textureBuffer, shader, frameBuffer, depthBuffer);
-    } 
-    else if (method == RasterMethod::FLAT_SPLIT) 
-    {
-        // Rasterizer::drawTriangleFlat(vertices, textureVertices, textureBuffer, shader, frameBuffer, depthBuffer);
-    }
-}
-
-void Rasterizer::drawTriangleAABB(std::array<Vector4f, 3> vertices, 
-                                  std::array<Vector4f, 3> textureVertices, 
-                                  const TextureBuffer* textureBuffer,
-                                  Shader* shader, 
-                                  FrameBuffer* frameBuffer,
-                                  DepthBuffer* depthBuffer) 
+void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices, Shader* shader, FrameBuffer* frameBuffer, DepthBuffer* depthBuffer)
 {
     // https://www.cs.drexel.edu/~david/Classes/Papers/comv175-06-pineda.pdf
     // https://fgiesen.wordpress.com/2013/02/08/triangle-rasterization-in-practice/
@@ -125,18 +100,15 @@ void Rasterizer::drawTriangleAABB(std::array<Vector4f, 3> vertices,
                 float z = (weights[0] * zValues[0]) + (weights[1] * zValues[1]) + (weights[2] * zValues[2]);
                 if (depthBuffer->get(i, j) > z)
                 {
-                    uint32_t color = TextureMapper::textureColor(textureBuffer, textureVertices, weights, zValues);
-                    uint8_t r = color >> 24;
-                    uint8_t g = color >> 16;
-                    uint8_t b = color >> 8;
                     depthBuffer->set(i, j, z);
-                    frameBuffer->set(i, j, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, r, g, b));
+                    
+                    std::array<float, 3> color = shader->processFragment(weights);
+                    frameBuffer->set(i, j, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, color[0], color[1], color[2]));
                 }
             }
         }
     }
 }
-
 
 float Rasterizer::edgeCheck(int x0, int y0, int x1, int y1, int x2, int y2) 
 {
@@ -144,98 +116,3 @@ float Rasterizer::edgeCheck(int x0, int y0, int x1, int y1, int x2, int y2)
     // Article 2 - https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/rasterization-stage
     return (y1 - y0) * (x2 - x0) - (x1 - x0) * (y2 - y0);
 }
-
-// void Rasterizer::drawTriangleFlat(std::array<Vector4f, 3> vertices, 
-//                                   std::array<Vector4f, 3> textureVertices, 
-//                                   const TextureBuffer* textureBuffer,
-//                                   Shader* shader, 
-//                                   FrameBuffer* frameBuffer,
-//                                   DepthBuffer* depthBuffer) 
-// {
-//     // http://www.sunshine2k.de/coding/java/TriangleRasterization/TriangleRasterization.html
-//     // sort points based on y
-//     if (vertices[1].y < vertices[0].y) 
-//     {
-//         std::swap(vertices[0], vertices[1]);
-//     }
-//     if (vertices[2].y < vertices[0].y) 
-//     {
-//         std::swap(vertices[0], vertices[2]);
-//     }
-//     if (vertices[2].y < vertices[1].y) 
-//     {
-//         std::swap(vertices[2], vertices[1]);
-//     }
-//     if (vertices[1].y == vertices[2].y) 
-//     {
-//         Rasterizer::drawTriangleFlatBottom(vertices, textureBuffer, shader, frameBuffer, depthBuffer);
-//     } 
-//     else if (vertices[0].y == vertices[1].y) 
-//     {
-//         Rasterizer::drawTriangleFlatTop(vertices, textureBuffer, shader, frameBuffer, depthBuffer);
-//     } 
-//     else 
-//     {
-//         float x4 = vertices[0].x + ((vertices[1].y - vertices[0].y)/(vertices[2].y - vertices[0].y)) * (vertices[2].x - vertices[0].x);
-//         Vector4f p4 = Vector4f(x4, vertices[1].y, 0.f, 1.f);
-//         std::array<Vector4f, 3> topArray{vertices[1], p4, vertices[2]};
-//         std::array<Vector4f, 3> bottomArray{vertices[0], vertices[1], p4};
-//         Rasterizer::drawTriangleFlatTop(topArray, textureBuffer, shader, frameBuffer, depthBuffer);
-//         Rasterizer::drawTriangleFlatBottom(bottomArray, textureBuffer, shader, frameBuffer, depthBuffer);
-//     }
-// }
-
-// void Rasterizer::drawTriangleFlatBottom(std::array<Vector4f, 3> vertices, 
-//                                         std::array<Vector4f, 3> textureVertices,
-//                                         const TextureBuffer* textureBuffer,
-//                                         Shader* shader, 
-//                                         FrameBuffer* frameBuffer,
-//                                         DepthBuffer* depthBuffer) 
-// {
-//     float inverseSlope2 = (vertices[2].x - vertices[0].x) / (vertices[2].y - vertices[0].y);
-//     float inverseSlope1 = (vertices[1].x - vertices[0].x) / (vertices[1].y - vertices[0].y);
-//     float x1 = vertices[0].x;
-//     float x2 = vertices[0].x;
-//     Vector4f first = Vector4f(x1, vertices[0].y, 0.f, 1.f);
-//     Vector4f second = Vector4f(x1, vertices[0].y, 0.f, 1.f);
-
-//     for (int y = vertices[0].y; y <= vertices[1].y; y++) 
-//     {
-//         first.x = x1;
-//         first.y = y;
-//         second.x = x2;
-//         second.y = y;
-//         std::array<Vector4f, 2> vertices{first, second};
-//         // std::array<Vector4f, 6> linetextureBuffer{ textureBuffer[0], textureBuffer[1], textureBuffer[2], textureBuffer[3], textureBuffer[4], textureBuffer[5]};
-//         // Rasterizer::drawLine(vertices, linetextureBuffer, shader, frameBuffer, depthBuffer);
-//         x1 += inverseSlope1;
-//         x2 += inverseSlope2;
-//     }
-// }
-
-// void Rasterizer::drawTriangleFlatTop(std::array<Vector4f, 3> vertices, 
-//                                      std::array<Vector4f, 3> textureVertices, 
-//                                      const TextureBuffer* textureBuffer,
-//                                      Shader* shader, 
-//                                      FrameBuffer* frameBuffer,
-//                                      DepthBuffer* depthBuffer) 
-// {
-//     float inverseSlope1 = (vertices[0].x - vertices[2].x) / (vertices[0].y - vertices[2].y);
-//     float inverseSlope2 = (vertices[1].x - vertices[2].x) / (vertices[1].y - vertices[2].y);
-//     float x1 = vertices[2].x;
-//     float x2 = vertices[2].x;
-//     Vector4f first = Vector4f(x1, vertices[2].y, 0.f, 1.f);
-//     Vector4f second = Vector4f(x1, vertices[2].y, 0.f, 1.f);
-//     for (int y = vertices[2].y; y >= vertices[0].y; y--) 
-//     {
-//         first.x = x1;
-//         first.y = y;
-//         second.x = x2;
-//         second.y = y;
-//         std::array<Vector4f, 2> vertices{first, second};
-//         // std::array<Vector4f, 6> linetextureBuffer{ textureBuffer[0], textureBuffer[1], textureBuffer[2], textureBuffer[3], textureBuffer[4], textureBuffer[5]};
-//         // Rasterizer::drawLine(vertices, linetextureBuffer, shader, frameBuffer, depthBuffer);
-//         x1 -= inverseSlope1;
-//         x2 -= inverseSlope2;
-//     }
-// }
