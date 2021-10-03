@@ -11,7 +11,7 @@ class Shader
 {
     public:
         virtual Vector4f processVertex(const Vector4f& vertex) = 0;
-        virtual const std::array<float, 3>& processFragment(const std::array<float, 3>& weights) = 0;
+        virtual const std::array<uint8_t, 3>& processFragment(const std::array<float, 3>& weights) = 0;
     private:
 };
 
@@ -22,7 +22,7 @@ class BasicShader: public Shader
         BasicShader(const Model* model,const Camera* camera);
         ~BasicShader();
         Vector4f processVertex(const Vector4f& vertex);
-        const std::array<float, 3>& processFragment(const std::array<float, 3>& weights);
+        const std::array<uint8_t, 3>& processFragment(const std::array<float, 3>& weights);
 
         // per model data
         const TextureBuffer* diffuseTextureBuffer;
@@ -33,7 +33,7 @@ class BasicShader: public Shader
 
         // per pixel data
         std::array<Vector4f, 3> diffuseTextureVertices;
-        std::array<float, 3> color;
+        std::array<uint8_t, 3> color;
 
     private:
 };

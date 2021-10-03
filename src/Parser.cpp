@@ -128,6 +128,11 @@ std::vector<std::unique_ptr<Model>> Parser::parseScene(const char* fileName)
                                                      normalIndices, textureIndices, std::move(textureBuffer)));
         }
     }
+    for (int i = 0; i < models.size(); i++)
+    {
+        models[i]->position.x = i * 5.f;
+        models[i]->position.y = i * 5.f;
+    }
     return std::move(models);
 }
 
@@ -222,9 +227,9 @@ TextureInfo Parser::parseTexture(const std::string& fileName, const std::string&
     // convert char -> uint8
     std::vector<uint8_t> data;
     data.resize(imageData.size());
-    bool bottomLeft = !(imageDescriptor & 8) && !(imageDescriptor & 16);
-    bool bottomRight = (imageDescriptor & 8) && !(imageDescriptor & 16);
-    bool topLeft = !(imageDescriptor & 8) && (imageDescriptor & 16);
+    bool bottomLeft = !(imageDescriptor & 16) && !(imageDescriptor & 32);
+    bool bottomRight = (imageDescriptor & 16) && !(imageDescriptor & 32);
+    bool topLeft = !(imageDescriptor & 16) && (imageDescriptor & 32);
     if (bottomLeft)
     {
         Parser::fromBottom(imageData, data, bytesPerPixel * width);
@@ -235,9 +240,10 @@ TextureInfo Parser::parseTexture(const std::string& fileName, const std::string&
     }
     else if (topLeft)
     {
-        // TODO: to implement
-        std::cerr << "Parser cannot convert topLeft starting point";
-        std::terminate();
+        for (int i = 0; i < imageData.size(); i++)
+        {
+            data[i] = imageData[i];
+        }
     }
     else
     {

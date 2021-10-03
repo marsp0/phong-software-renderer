@@ -120,6 +120,7 @@ Matrix4 Model::getWorldMatrix() const
     translation.set(2, 3, this->position.z);
 
     Matrix4 rotation = this->getRotationMatrix();
+    // translation.print();
     return translation * rotation;
 }
 

@@ -8,7 +8,7 @@
 
 const SDL_PixelFormat* Rasterizer::PIXEL_FORMAT(SDL_AllocFormat(SDL_PIXELFORMAT_RGB888));
 
-void Rasterizer::drawLine(std::array<Vector4f, 2> vertices, Shader* shader, FrameBuffer* frameBuffer, DepthBuffer* depthBuffer) 
+void Rasterizer::drawLine(std::array<Vector4f, 2> vertices, std::array<uint8_t, 3> color, FrameBuffer* frameBuffer, DepthBuffer* depthBuffer) 
 {
     // https://www.cs.helsinki.fi/group/goa/mallinnus/lines/bresenh.html
     int x0 = vertices[0].x;
@@ -43,11 +43,11 @@ void Rasterizer::drawLine(std::array<Vector4f, 2> vertices, Shader* shader, Fram
     { 
         if (steep) 
         { 
-            frameBuffer->set(y, x, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, 0, 255, 0));
+            frameBuffer->set(y, x, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, color[0], color[1], color[2]));
         } 
         else 
         {
-            frameBuffer->set(x, y, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, 0, 255, 0));
+            frameBuffer->set(x, y, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, color[0], color[1], color[2]));
         }
         error += errorStep;
         if (error > dx) 
@@ -99,8 +99,20 @@ void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices, Shader* shader, 
                 {
                     depthBuffer->set(i, j, z);
                     
-                    std::array<float, 3> color = shader->processFragment(weights);
-                    frameBuffer->set(i, j, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, color[0], color[1], color[2]));
+                    const std::array<uint8_t, 3>& color = shader->processFragment(weights);
+                    if (sqrtf((i - x0)*(i - x0) + (j - y0)*(j - y0)) < 20.f)
+                    {
+                        frameBuffer->set(i, j, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, 0, 255, 0));
+                    }
+                    else if (sqrtf((i - x1)*(i - x1) + (j - y1)*(j - y1)) < 20.f)
+                    {
+                        frameBuffer->set(i, j, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, 0, 0, 255));
+                    }
+                    else
+                    {
+                        frameBuffer->set(i, j, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, color[0], color[1], color[2]));
+                    }
+                    
                 }
             }
         }

@@ -45,15 +45,15 @@ class Model
         const TextureBuffer* getDiffuseTextureBuffer() const;
         RotationType rotationType;
 
+        // position
+        Vector4f position;
+
     private:
 
         // rotation
         std::unique_ptr<EulerRotation>      eulerRotation;
         std::unique_ptr<AxisAngleRotation>  axisAngleRotation;
-        std::unique_ptr<QuaternionRotation> quaternionRotation;
-
-        // position
-        Vector4f position;
+        std::unique_ptr<QuaternionRotation> quaternionRotation;        
 
         std::vector<Vector4f>            vertices;
         std::vector<Vector4f>            normals;

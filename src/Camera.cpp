@@ -52,6 +52,7 @@ void Camera::update(FrameInput& input)
         }
         this->updateBasisVectors();
     }
+    // this->position.print();
 }
 
 void Camera::updateBasisVectors()
@@ -75,17 +76,16 @@ Matrix4 Camera::getViewMatrix() const
     result.set(0, 0, this->right.x);
     result.set(0, 1, this->right.y);
     result.set(0, 2, this->right.z);
+    result.set(0, 3, -this->position.dot(this->right));
 
     result.set(1, 0, this->up.x);
     result.set(1, 1, this->up.y);
     result.set(1, 2, this->up.z);
+    result.set(1, 3, -this->position.dot(this->up));
 
     result.set(2, 0, -this->forward.x);
     result.set(2, 1, -this->forward.y);
     result.set(2, 2, -this->forward.z);
-
-    result.set(0, 3, -this->position.dot(this->right));
-    result.set(1, 3, -this->position.dot(this->up));
     result.set(2, 3,  this->position.dot(this->forward));
 
     result.set(3, 3, 1.f);

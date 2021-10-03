@@ -78,6 +78,7 @@
 - [Scratch a pixel - Volumne 1](https://www.scratchapixel.com/index.php?redirect)
 - [Lookat derivation (Camera space -> World space)](https://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/lookat-function)
 - [Lookat derivation (World space -> Camera space)](http://www.songho.ca/opengl/gl_camera.html)
+- [View matrix derivation](https://www.mauriciopoppe.com/notes/computer-graphics/viewing/view-transform/)
 - [Perspective projection derivation](https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/building-basic-perspective-projection-matrix)
 - [Perspective projection derivation (OpenGL)](https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/opengl-perspective-projection-matrix)
 - [Free camera](https://learnopengl.com/Getting-started/Camera)
@@ -100,6 +101,8 @@
 - [Convert char -> unsigned char](https://stackoverflow.com/a/5042335)
 - [Convert char -> unsigned char 2](https://stackoverflow.com/a/43273907)
 - [reinterpret_cast](https://en.cppreference.com/w/cpp/language/reinterpret_cast)
+- [OBJ texture ref point](https://stackoverflow.com/questions/5585368/problems-using-wavefront-objs-texture-coordinates-in-android-opengl-es/5605027#5605027)
+- [OBJ texture problem](https://stackoverflow.com/questions/8837328/troubles-parsing-wavefront-obj-texture-coordinates)
 
 ### Texture Mapping
 

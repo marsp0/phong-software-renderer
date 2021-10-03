@@ -15,8 +15,8 @@ enum class TextureInterp
 class TextureMapper
 {
     public:
-        static uint32_t textureSample(const TextureBuffer* textureBuffer, 
-                                      const std::array<Vector4f, 3>& textureVertices,
-                                      const std::array<float, 3>& weights);
+        static uint32_t sample(const TextureBuffer* textureBuffer, 
+                               const std::array<Vector4f, 3>& textureVertices,
+                               const std::array<float, 3>& weights);
     private:
 };

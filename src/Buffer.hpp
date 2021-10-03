@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include <vector>
+#include <assert.h>
 
 template<typename T>
 class Buffer {
@@ -24,6 +25,7 @@ class Buffer {
 
         T get(int x, int y) const
         {
+            assert(x <= this->width && y <= this->height);
             return this->buffer[x + y * this->width];
         }
 
