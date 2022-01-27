@@ -25,7 +25,7 @@ class Buffer {
 
         T get(int x, int y) const
         {
-            assert(x <= this->width && y <= this->height);
+            assert(x < this->width && y < this->height);
             return this->buffer[x + y * this->width];
         }
 

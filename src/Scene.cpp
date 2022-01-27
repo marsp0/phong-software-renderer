@@ -7,7 +7,7 @@
 Scene::Scene(int width, int height, const char* fileName): models()
 {
     this->models = Parser::parseScene(fileName);
-    this->camera = std::make_unique<Camera>(Vector4f(-10.f, -10.f, 10.f, 1.f), 1.5707f, 
+    this->camera = std::make_unique<Camera>(Vector4f(0.f, 0.f, 5.f, 1.f), 1.5707f, 
                                             (float)width/(float)height, 10.f, 100.f);
 }
 

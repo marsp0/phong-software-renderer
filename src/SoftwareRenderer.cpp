@@ -34,7 +34,7 @@ void SoftwareRenderer::run()
         this->draw();
 
         // swap buffer
-        this->displayManager->swapBuffers(this->frameBuffer.get());
+        this->swapBuffers();
 
         // clean up
         this->clear();
@@ -52,66 +52,21 @@ void SoftwareRenderer::draw()
     for (int i = 0; i < models.size(); i++)
     {
         const Model* model = models[i].get();
-        // const TextureBuffer* texture = model->getDiffuseTextureBuffer();
-        // for (int x = 0; x < texture->width; x++)
-        // {
-        //     for (int y = 0; y < texture->height; y++)
-        //     {
-        //         uint32_t color = texture->get(x, y);
-        //         uint8_t r = color >> 24;
-        //         uint8_t g = color >> 16;
-        //         uint8_t b = color >> 8;
-        //         this->frameBuffer->set(x, y, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, r, g, b));
-        //     }
-        // }
-        // this->drawModel(model);
-        // model->position.print();
+        this->drawModel(model);
     }
-    const Camera* camera = this->scene->getCamera();
-    Matrix4 view = camera->getViewMatrix();
-    Matrix4 projection = camera->getProjectionMatrix();
-    std::array<uint8_t, 3> white{255, 255, 255};
-    std::array<uint8_t, 3> red{255, 0, 0};
-    std::array<uint8_t, 3> green{0, 255, 0};
-    std::array<uint8_t, 3> blue{0, 0, 255};
-    Vector4f origin(0.f, 0.f, 0.f, 0.f);
-    // transform
-    Vector4f worldUp = projection * view * camera->worldUp;
-    Vector4f up = projection * view * camera->up;
-    Vector4f right = projection * view * camera->right;
-    Vector4f forward = projection * view * camera->forward;
-    // perspective divide
-    worldUp = worldUp / worldUp.w;
-    right = right / right.w;
-    up = up / up.w;
-    forward = forward / forward.w;
-    // ndc to raster
-    origin.x = (origin.x + 1) * 0.5f * frameBuffer->width;
-    origin.y = (origin.y + 1) * 0.5f * frameBuffer->height;
-    worldUp.x = (worldUp.x + 1) * 0.5f * frameBuffer->width;
-    worldUp.y = (worldUp.y + 1) * 0.5f * frameBuffer->height;
-    right.x = (right.x + 1) * 0.5f * frameBuffer->width;
-    right.y = (right.y + 1) * 0.5f * frameBuffer->height;
-    up.x = (up.x + 1) * 0.5f * frameBuffer->width;
-    up.y = (up.y + 1) * 0.5f * frameBuffer->height;
-    forward.x = (forward.x + 1) * 0.5f * frameBuffer->width;
-    forward.y = (forward.y + 1) * 0.5f * frameBuffer->height;
-    std::array<Vector4f, 2> worldUpLine{origin, worldUp};
-    std::array<Vector4f, 2> camRightLine{origin, right};
-    std::array<Vector4f, 2> camUpLine{origin, up};
-    std::array<Vector4f, 2> camForwardLine{origin, forward};
-    Rasterizer::drawLine(worldUpLine, white, this->frameBuffer.get(), this->depthBuffer.get());
-    Rasterizer::drawLine(camRightLine, red, this->frameBuffer.get(), this->depthBuffer.get());
-    Rasterizer::drawLine(camUpLine, green, this->frameBuffer.get(), this->depthBuffer.get());
-    Rasterizer::drawLine(camForwardLine, blue, this->frameBuffer.get(), this->depthBuffer.get());
 }
 
 void SoftwareRenderer::clear()
 {
     this->input.clear();
-    this->frameBuffer->clear();
+    this->frameBuffer->clear(2147483647);
     // TODO: this should take the far plane as arg
     this->depthBuffer->clear(150.f);
+}
+
+void SoftwareRenderer::swapBuffers()
+{
+    this->displayManager->swapBuffers(this->frameBuffer.get());
 }
 
 void SoftwareRenderer::drawModel(const Model* model) 
@@ -168,7 +123,7 @@ void SoftwareRenderer::drawModel(const Model* model)
         for (int j = 0; j < 3; j++)
         {
             vertexBatch[j].x = (vertexBatch[j].x + 1) * 0.5f * frameBuffer->width;
-            vertexBatch[j].y = (vertexBatch[j].y + 1) * 0.5f * frameBuffer->height;
+            vertexBatch[j].y = (-vertexBatch[j].y + 1) * 0.5f * frameBuffer->height;
         }
 
         // fragment shader + rasterization

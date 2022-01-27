@@ -6,7 +6,7 @@ uint32_t TextureMapper::sample(const TextureBuffer* textureBuffer,
 {
     float u = textureVertices[0].x * weights[0] + textureVertices[1].x * weights[1] + textureVertices[2].x * weights[2];
     float v = textureVertices[0].y * weights[0] + textureVertices[1].y * weights[1] + textureVertices[2].y * weights[2];
-    int width = u * textureBuffer->width;
-    int height = v * textureBuffer->height;
+    int width = u * (textureBuffer->width - 1);
+    int height = v * (textureBuffer->height - 1);
     return textureBuffer->get(width, height);
 }

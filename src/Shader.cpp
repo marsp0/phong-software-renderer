@@ -18,9 +18,6 @@ BasicShader::~BasicShader()
 
 Vector4f BasicShader::processVertex(const Vector4f& vertex)
 {
-    Vector4 world_vec = this->world * vertex;
-    Vector4 view_vec = this->view * world_vec;
-    Vector4 proj_vec = this->projection * view_vec;
     return this->modelViewProjection * vertex;
 }
 
@@ -33,8 +30,5 @@ const std::array<uint8_t, 3>& BasicShader::processFragment(const std::array<floa
     this->color[0] = color >> 24;
     this->color[1] = color >> 16;
     this->color[2] = color >> 8;
-    // this->color[0] = weights[0] * 255;
-    // this->color[1] = weights[1] * 255;
-    // this->color[2] = weights[2] * 255;
     return this->color;
 }
