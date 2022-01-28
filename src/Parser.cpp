@@ -7,150 +7,289 @@
 
 std::vector<std::unique_ptr<Model>> Parser::parseScene(const char* fileName)
 {
-    std::vector<std::unique_ptr<Model>> models;
-    MaterialInfoMap textures;
-    std::stringstream buffer = Parser::getBuffer(fileName);
     std::string line;
+    std::string token;
     std::string materialFile;
-    // iterates over every model
-    while (std::getline(buffer, line))
-    {
-        std::string             name;
-        std::string             material;
-        std::string             entry;
-        std::vector<int>        vertexIndices;
-        std::vector<int>        normalIndices;
-        std::vector<int>        textureIndices;
-        std::vector<Vector4f>   vertices;
-        std::vector<Vector4f>   normals;
-        std::vector<Vector4f>   textureCoords;
+    MaterialInfoMap textures;
+    std::vector<std::unique_ptr<Model>> models;
+    std::ifstream file(fileName, std::ifstream::in);
 
-        std::stringstream lineBuffer;
-        lineBuffer << line;
+    while(!file.eof())
+    {
+        std::getline(file, line);
+        std::istringstream lineBuffer(line);
+        lineBuffer >> token;
+        if (token == "mtllib")
+        {
+            lineBuffer >> token;
+            std::string filePath = Parser::getBasePath(fileName) + token;
+            // textures = Parser::parseMaterialInfo(filePath);
+        }
+        else if (token == "o")
+        {
+            lineBuffer >> token;
+            std::unique_ptr<MeshInfo> meshInfo = Parser::parseMesh(file, token);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // std::vector<std::unique_ptr<Model>> models;
+    // MaterialInfoMap textures;
+    // std::stringstream buffer = Parser::getBuffer(fileName);
+    // std::string line;
+    // std::string materialFile;
+    // // iterates over every model
+    // while (std::getline(buffer, line))
+    // {
+    //     std::string             name;
+    //     std::string             material;
+    //     std::string             entry;
+    //     std::vector<int>        vertexIndices;
+    //     std::vector<int>        normalIndices;
+    //     std::vector<int>        textureIndices;
+    //     std::vector<Vector4f>   vertices;
+    //     std::vector<Vector4f>   normals;
+    //     std::vector<Vector4f>   textureCoords;
+
+    //     std::stringstream lineBuffer;
+    //     lineBuffer << line;
         
-        std::getline(lineBuffer, entry, ' ');
-        if (entry == "mtllib")
-        {
-            std::getline(lineBuffer, materialFile, ' ');
-            std::string filePath = Parser::getBasePath(fileName) + materialFile;
-            textures = Parser::parseMaterialInfo(filePath);
-        }
-        else if (entry == "o")
-        {
-            std::getline(lineBuffer, name, ' ');
-            // iterate over every attribute of the model
-            while (std::getline(buffer, line))
-            {
-                std::stringstream attributeBuffer;
-                attributeBuffer << line;
+    //     std::getline(lineBuffer, entry, ' ');
+    //     if (entry == "mtllib")
+    //     {
+    //         std::getline(lineBuffer, materialFile, ' ');
+    //         std::string filePath = Parser::getBasePath(fileName) + materialFile;
+    //         textures = Parser::parseMaterialInfo(filePath);
+    //     }
+    //     else if (entry == "o")
+    //     {
+    //         std::getline(lineBuffer, name, ' ');
+    //         // iterate over every attribute of the model
+    //         while (std::getline(buffer, line))
+    //         {
+    //             std::stringstream attributeBuffer;
+    //             attributeBuffer << line;
 
-                std::string element;
-                std::string attributeName;
-                std::getline(attributeBuffer, attributeName, ' ');
-                if (attributeName == "v" || attributeName == "vn")
-                {
-                    std::getline(attributeBuffer, element, ' ');
-                    float x = std::stof(element);
+    //             std::string element;
+    //             std::string attributeName;
+    //             std::getline(attributeBuffer, attributeName, ' ');
+    //             if (attributeName == "v" || attributeName == "vn")
+    //             {
+    //                 std::getline(attributeBuffer, element, ' ');
+    //                 float x = std::stof(element);
                     
-                    std::getline(attributeBuffer, element, ' ');
-                    float y = std::stof(element);
+    //                 std::getline(attributeBuffer, element, ' ');
+    //                 float y = std::stof(element);
 
-                    std::getline(attributeBuffer, element, ' ');
-                    float z = std::stof(element);
+    //                 std::getline(attributeBuffer, element, ' ');
+    //                 float z = std::stof(element);
                     
-                    if (attributeName == "v")
-                    {
-                        vertices.push_back(Vector4f(x, y, z, 1.f));
-                    }
-                    else
-                    {
-                        normals.push_back(Vector4f(x, y, z, 1.f));
-                    }
-                }
-                else if (attributeName == "vt")
-                {
-                    std::getline(attributeBuffer, element, ' ');
-                    float x = std::stof(element);
+    //                 if (attributeName == "v")
+    //                 {
+    //                     vertices.push_back(Vector4f(x, y, z, 1.f));
+    //                 }
+    //                 else
+    //                 {
+    //                     normals.push_back(Vector4f(x, y, z, 1.f));
+    //                 }
+    //             }
+    //             else if (attributeName == "vt")
+    //             {
+    //                 std::getline(attributeBuffer, element, ' ');
+    //                 float x = std::stof(element);
                     
-                    std::getline(attributeBuffer, element, ' ');
-                    float y = std::stof(element);
+    //                 std::getline(attributeBuffer, element, ' ');
+    //                 float y = std::stof(element);
                     
-                    textureCoords.push_back(Vector4f(x, y, 0.f, 1.f));
-                }
-                else if (attributeName == "usemtl")
-                {
-                    std::getline(attributeBuffer, material, ' ');
-                }
-                else if (attributeName == "f")
-                {
-                    std::string index;
-                    while (std::getline(attributeBuffer, element, ' '))
-                    {
-                        std::stringstream indicesBuffer;
-                        indicesBuffer << element;
-                        std::getline(indicesBuffer, index, '/');
-                        int v = std::stoi(index);
-                        std::getline(indicesBuffer, index, '/');
-                        int t = std::stoi(index);
-                        std::getline(indicesBuffer, index, '/');
-                        int n = std::stoi(index);
-                        vertexIndices.push_back(v - 1);
-                        textureIndices.push_back(t - 1);
-                        normalIndices.push_back(n - 1);
-                    }
-                }
+    //                 textureCoords.push_back(Vector4f(x, y, 0.f, 1.f));
+    //             }
+    //             else if (attributeName == "usemtl")
+    //             {
+    //                 std::getline(attributeBuffer, material, ' ');
+    //             }
+    //             else if (attributeName == "f")
+    //             {
+    //                 std::string index;
+    //                 while (std::getline(attributeBuffer, element, ' '))
+    //                 {
+    //                     std::stringstream indicesBuffer;
+    //                     indicesBuffer << element;
+    //                     std::getline(indicesBuffer, index, '/');
+    //                     int v = std::stoi(index);
+    //                     std::getline(indicesBuffer, index, '/');
+    //                     int t = std::stoi(index);
+    //                     std::getline(indicesBuffer, index, '/');
+    //                     int n = std::stoi(index);
+    //                     vertexIndices.push_back(v - 1);
+    //                     textureIndices.push_back(t - 1);
+    //                     normalIndices.push_back(n - 1);
+    //                 }
+    //             }
 
-                // peek to see if the next row is a new object
-                if (buffer.peek() == 'o')
-                {
-                    break;
-                }
-            }
-            TextureInfo textureTuple = textures[material];
-            int width = std::get<0>(textureTuple);
-            int height = std::get<1>(textureTuple);
-            int bytesPerPixel = std::get<2>(textureTuple);
-            std::vector<uint8_t>& data = std::get<3>(textureTuple);
-            std::unique_ptr<TextureBuffer> textureBuffer = std::make_unique<TextureBuffer>(width, height);
+    //             // peek to see if the next row is a new object
+    //             if (buffer.peek() == 'o')
+    //             {
+    //                 break;
+    //             }
+    //         }
+    //         TextureInfo textureTuple = textures[material];
+    //         int width = std::get<0>(textureTuple);
+    //         int height = std::get<1>(textureTuple);
+    //         int bytesPerPixel = std::get<2>(textureTuple);
+    //         std::vector<uint8_t>& data = std::get<3>(textureTuple);
+    //         std::unique_ptr<TextureBuffer> textureBuffer = std::make_unique<TextureBuffer>(width, height);
 
-            for (int i = 0; i < width; i++)
-            {
-                for (int j = 0; j < height; j++)
-                {
-                    uint32_t color = 0;
-                    int index = (i * width + j) * bytesPerPixel;
-                    color += data[index + 0] << 8;  // blue
-                    color += data[index + 1] << 16; // green
-                    color += data[index + 2] << 24; // red
-                    if (bytesPerPixel == 4)
-                    {
-                        color += data[index + 3];
-                    }
-                    textureBuffer->set(i, j, color);
-                }
-            }
-            // for (int i = 0; i < data.size(); i += bytesPerPixel)
-            // {
-            //     uint32_t color = 0;
-            //     color += data[i + 0] << 8;  // blue
-            //     color += data[i + 1] << 16; // green
-            //     color += data[i + 2] << 24; // red
-            //     if (bytesPerPixel == 4)
-            //     {
-            //         color += data[i + 3];
-            //     }
-            //     textureBuffer->set(i / bytesPerPixel, 0, color);
-            // }
-            models.push_back(std::make_unique<Model>(vertices, normals, textureCoords, vertexIndices,
-                                                     normalIndices, textureIndices, std::move(textureBuffer)));
-        }
-    }
-    for (int i = 0; i < models.size(); i++)
-    {
-        models[i]->position.x = i * 5.f;
-        models[i]->position.y = i * 5.f;
-    }
+    //         for (int i = 0; i < width; i++)
+    //         {
+    //             for (int j = 0; j < height; j++)
+    //             {
+    //                 uint32_t color = 0;
+    //                 int index = (i * width + j) * bytesPerPixel;
+    //                 color += data[index + 0] << 8;  // blue
+    //                 color += data[index + 1] << 16; // green
+    //                 color += data[index + 2] << 24; // red
+    //                 if (bytesPerPixel == 4)
+    //                 {
+    //                     color += data[index + 3];
+    //                 }
+    //                 textureBuffer->set(i, j, color);
+    //             }
+    //         }
+    //         // for (int i = 0; i < data.size(); i += bytesPerPixel)
+    //         // {
+    //         //     uint32_t color = 0;
+    //         //     color += data[i + 0] << 8;  // blue
+    //         //     color += data[i + 1] << 16; // green
+    //         //     color += data[i + 2] << 24; // red
+    //         //     if (bytesPerPixel == 4)
+    //         //     {
+    //         //         color += data[i + 3];
+    //         //     }
+    //         //     textureBuffer->set(i / bytesPerPixel, 0, color);
+    //         // }
+    //         models.push_back(std::make_unique<Model>(vertices, normals, textureCoords, vertexIndices,
+    //                                                  normalIndices, textureIndices, std::move(textureBuffer)));
+    //     }
+    // }
+    // for (int i = 0; i < models.size(); i++)
+    // {
+    //     models[i]->position.x = i * 5.f;
+    //     models[i]->position.y = i * 5.f;
+    // }
     return std::move(models);
+}
+
+std::unique_ptr<MeshInfo> Parser::parseMesh(std::ifstream& file, std::string& name)
+{
+
+    std::unique_ptr<MeshInfo> meshInfo = std::make_unique<MeshInfo>();
+    meshInfo->name = name;
+
+    while ((unsigned char)file.peek() != 'o')
+    {
+        std::cout << "ds" << std::endl;
+        std::string line;
+        std::string token;
+        std::string first;
+        std::string second;
+        std::string third;
+        std::getline(file, line);
+        std::istringstream lineBuffer(line);
+        lineBuffer >> token;
+        if (token == "v" || token == "vn")
+        {
+            lineBuffer >> first >> second >> third;
+            float x = std::stof(first);
+            float y = std::stof(second);
+            float z = std::stof(third);
+            if (token == "v")
+            {
+                meshInfo->vertices->push_back(Vector4f(x, y, z, 1.f));
+            }
+            else
+            {
+                meshInfo->vertices->push_back(Vector4f(x, y, z, 1.f));
+            }
+        }
+        else if (token == "vt")
+        {
+            lineBuffer >> first >> second;
+            float x = std::stof(first);
+            float y = std::stof(second);
+            meshInfo->textureCoords->push_back(Vector4f(x, y, 0.f, 1.f));
+        }
+        else if (token == "usemtl")
+        {
+            lineBuffer >> meshInfo->material;
+        }
+        else if (token == "f")
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                lineBuffer >> token;
+                std::cout << token << std::endl;
+                // std::getline(indicesBuffer, index, '/');
+                // int v = std::stoi(index);
+                // std::getline(indicesBuffer, index, '/');
+                // int t = std::stoi(index);
+                // std::getline(indicesBuffer, index, '/');
+                // int n = std::stoi(index);
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+            // std::string index;
+            // while (std::getline(attributeBuffer, element, ' '))
+            // {
+            //     std::stringstream indicesBuffer;
+            //     indicesBuffer << element;
+            //     std::getline(indicesBuffer, index, '/');
+            //     int v = std::stoi(index);
+            //     std::getline(indicesBuffer, index, '/');
+            //     int t = std::stoi(index);
+            //     std::getline(indicesBuffer, index, '/');
+            //     int n = std::stoi(index);
+            //     vertexIndices.push_back(v - 1);
+            //     textureIndices.push_back(t - 1);
+            //     normalIndices.push_back(n - 1);
+            // }
+        }
+
+    }
+    return std::move(meshInfo);
 }
 
 std::stringstream Parser::getBuffer(const char* fileName)
