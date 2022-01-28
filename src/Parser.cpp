@@ -112,18 +112,35 @@ std::vector<std::unique_ptr<Model>> Parser::parseScene(const char* fileName)
             int bytesPerPixel = std::get<2>(textureTuple);
             std::vector<uint8_t>& data = std::get<3>(textureTuple);
             std::unique_ptr<TextureBuffer> textureBuffer = std::make_unique<TextureBuffer>(width, height);
-            for (int i = 0; i < data.size(); i += bytesPerPixel)
+
+            for (int i = 0; i < width; i++)
             {
-                uint32_t color = 0;
-                color += data[i + 0] << 8;  // blue
-                color += data[i + 1] << 16; // green
-                color += data[i + 2] << 24; // red
-                if (bytesPerPixel == 4)
+                for (int j = 0; j < height; j++)
                 {
-                    color += data[i + 3];
+                    uint32_t color = 0;
+                    int index = (i * width + j) * bytesPerPixel;
+                    color += data[index + 0] << 8;  // blue
+                    color += data[index + 1] << 16; // green
+                    color += data[index + 2] << 24; // red
+                    if (bytesPerPixel == 4)
+                    {
+                        color += data[index + 3];
+                    }
+                    textureBuffer->set(i, j, color);
                 }
-                textureBuffer->set(i / bytesPerPixel, 0, color);
             }
+            // for (int i = 0; i < data.size(); i += bytesPerPixel)
+            // {
+            //     uint32_t color = 0;
+            //     color += data[i + 0] << 8;  // blue
+            //     color += data[i + 1] << 16; // green
+            //     color += data[i + 2] << 24; // red
+            //     if (bytesPerPixel == 4)
+            //     {
+            //         color += data[i + 3];
+            //     }
+            //     textureBuffer->set(i / bytesPerPixel, 0, color);
+            // }
             models.push_back(std::make_unique<Model>(vertices, normals, textureCoords, vertexIndices,
                                                      normalIndices, textureIndices, std::move(textureBuffer)));
         }
@@ -230,19 +247,33 @@ TextureInfo Parser::parseTexture(const std::string& fileName, const std::string&
     bool bottomLeft = !(imageDescriptor & 16) && !(imageDescriptor & 32);
     bool bottomRight = (imageDescriptor & 16) && !(imageDescriptor & 32);
     bool topLeft = !(imageDescriptor & 16) && (imageDescriptor & 32);
+
     if (bottomLeft)
-    {
-        Parser::fromBottom(imageData, data, bytesPerPixel * width);
-    }
-    else if (bottomRight)
-    {
-        Parser::fromBottom(imageData, data, bytesPerPixel);
-    }
-    else if (topLeft)
     {
         for (int i = 0; i < imageData.size(); i++)
         {
             data[i] = imageData[i];
+        }
+    }
+    else if (bottomRight)
+    {
+        for (int i = 0; i < imageData.size(); i += bytesPerPixel * width)
+        {
+            for (int j = i; j < i + bytesPerPixel * width; j++)
+            {
+                data[i + bytesPerPixel * width - 1] = imageData[j];
+            }
+
+        }
+    }
+    else if (topLeft)
+    {
+        for (int i = (height * width - width) * bytesPerPixel; i > 0; i -= width * bytesPerPixel)
+        {
+            for (int j = 0; j < width * bytesPerPixel; j++)
+            {
+                data[height * width - i + j] = imageData[i + j];
+            }
         }
     }
     else
@@ -251,6 +282,37 @@ TextureInfo Parser::parseTexture(const std::string& fileName, const std::string&
         std::cerr << "Parser cannot convert topRight starting point";
         std::terminate();
     }
+
+
+
+
+
+
+
+
+
+
+    // if (bottomLeft)
+    // {
+    //     Parser::fromBottom(imageData, data, bytesPerPixel * width);
+    // }
+    // else if (bottomRight)
+    // {
+    //     Parser::fromBottom(imageData, data, bytesPerPixel);
+    // }
+    // else if (topLeft)
+    // {
+    //     for (int i = 0; i < imageData.size(); i++)
+    //     {
+    //         data[i] = imageData[i];
+    //     }
+    // }
+    // else
+    // {
+    //     // TODO: to implement
+    //     std::cerr << "Parser cannot convert topRight starting point";
+    //     std::terminate();
+    // }
     return std::make_tuple(width, height, bytesPerPixel, data);
 }
 

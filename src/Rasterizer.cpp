@@ -72,7 +72,6 @@ void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices, Shader* shader, 
     int maxx = std::max({x0, x1, x2});
     int miny = std::min({y0, y1, y2});
     int maxy = std::max({y0, y1, y2});
-    std::array<float, 3> wValues{vertices[0].w, vertices[1].w, vertices[2].w};
     std::array<float, 3> zValues{vertices[0].z, vertices[1].z, vertices[2].z};
     float area = 1.f / Rasterizer::edgeCheck(x0, y0, x1, y1, x2, y2);
     for (int i = minx; i <= maxx; i++) 
@@ -84,7 +83,7 @@ void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices, Shader* shader, 
                 Rasterizer::edgeCheck(x1, y1, x2, y2, i, j),
                 Rasterizer::edgeCheck(x2, y2, x0, y0, i, j)
             };
-            if (weights[0] <= 0 && weights[1] <= 0 && weights[2] <= 0) 
+            if (weights[0] >= 0 && weights[1] >= 0 && weights[2] >= 0) 
             {
                 weights[0] *= area;
                 weights[1] *= area;
@@ -94,17 +93,13 @@ void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices, Shader* shader, 
                 // 1. its because we have z values that are < 1 after the perspective divide
                 // 2. all z values were uniformly scaled
                 // I think that if we have a z value > 1 here it would break
-                float z = (weights[0] * zValues[0]) + (weights[1] * zValues[1]) + (weights[2] * zValues[2]);
+                float z = weights[0] * zValues[0] + weights[1] * zValues[1] + weights[2] * zValues[2];
                 if (depthBuffer->get(i, j) > z)
                 {
                     depthBuffer->set(i, j, z);
                     const std::array<uint8_t, 3>& color = shader->processFragment(weights);
                     frameBuffer->set(i, j, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, color[0], color[1], color[2]));
                 }
-            }
-            else
-            {
-                // std::cout << "failed weight check" << std::endl;
             }
         }
     }

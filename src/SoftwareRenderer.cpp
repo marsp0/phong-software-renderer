@@ -53,7 +53,27 @@ void SoftwareRenderer::draw()
     {
         const Model* model = models[i].get();
         this->drawModel(model);
+
+        const TextureBuffer* texture = model->getDiffuseTextureBuffer();
+        std::cout << "dsa" << std::endl;
+        // for (int i = 0; texture->width; i++)
+        // {
+        //     for (int j = 0; j < texture->height; j++)
+        //     {
+        //         uint32_t color = texture->get(i, j);
+        //         std::cout << "dsa" << std::endl;
+        //         this->frameBuffer->set(i, j, texture->get(i, j));
+        //     }
+        // }
     }
+
+
+    // std::array<Vector4f, 2> lineV1{Vector4f(0.f, 200.f, 0.f, 1.f), Vector4f(300.f, 200.f, 0.f, 1.f)};
+    // std::array<Vector4f, 2> lineV2{Vector4f(500.f, 200.f, 0.f, 1.f), Vector4f(600.f, 200.f, 0.f, 1.f)};
+    // std::array<Vector4f, 2> lineV3{Vector4f(0.f, 400.f, 0.f, 1.f), Vector4f(300.f, 400.f, 0.f, 1.f)};
+    // Rasterizer::drawLine(lineV1, std::array<uint8_t, 3>{0, 255, 0}, this->frameBuffer.get(), this->depthBuffer.get());
+    // Rasterizer::drawLine(lineV2, std::array<uint8_t, 3>{0, 255, 0}, this->frameBuffer.get(), this->depthBuffer.get());
+    // Rasterizer::drawLine(lineV3, std::array<uint8_t, 3>{0, 255, 0}, this->frameBuffer.get(), this->depthBuffer.get());
 }
 
 void SoftwareRenderer::clear()
@@ -92,6 +112,11 @@ void SoftwareRenderer::drawModel(const Model* model)
         int indexV1 = vertexIndices[i + 1];
         int indexV2 = vertexIndices[i + 2];
 
+        // std::cout << "Vertices are" << std::endl;
+        // vertices[indexV0].print();
+        // vertices[indexV1].print();
+        // vertices[indexV2].print();
+
         // Shader setup
         #if BASIC_SHADER
         
@@ -106,27 +131,38 @@ void SoftwareRenderer::drawModel(const Model* model)
         #endif
 
         // vertex shader
-        std::array<Vector4f, 3> vertexBatch{
+        std::array<Vector4f, 3> processedVertices{
             shader.processVertex(vertices[indexV0]),
             shader.processVertex(vertices[indexV1]),
             shader.processVertex(vertices[indexV2])
         };
 
         // perspective divide
-        vertexBatch[0] = vertexBatch[0] / vertexBatch[0].w;
-        vertexBatch[1] = vertexBatch[1] / vertexBatch[1].w;
-        vertexBatch[2] = vertexBatch[2] / vertexBatch[2].w;
+        processedVertices[0] = processedVertices[0] / processedVertices[0].w;
+        processedVertices[1] = processedVertices[1] / processedVertices[1].w;
+        processedVertices[2] = processedVertices[2] / processedVertices[2].w;
 
         // transform NDC to Raster space
         // x - (-1, 1) -> (0, 2) -> (0, 1) -> (0, width)
         // y - (-1, 1) -> (0, 2) -> (0, 1) -> (0, height)
         for (int j = 0; j < 3; j++)
         {
-            vertexBatch[j].x = (vertexBatch[j].x + 1) * 0.5f * frameBuffer->width;
-            vertexBatch[j].y = (-vertexBatch[j].y + 1) * 0.5f * frameBuffer->height;
+            processedVertices[j].x = (processedVertices[j].x + 1) * 0.5f * frameBuffer->width;
+            processedVertices[j].y = (processedVertices[j].y + 1) * 0.5f * frameBuffer->height;
         }
 
+        // std::cout << "Vertices are" << std::endl;
+        // processedVertices[0].print();
+        // processedVertices[1].print();
+        // processedVertices[2].print();
+
+        // std::cout << "texture vertices are " << std::endl;
+        // shader.diffuseTextureVertices[0].print();
+        // shader.diffuseTextureVertices[1].print();
+        // shader.diffuseTextureVertices[2].print();
+        // std::cout << "---" << std::endl;
+
         // fragment shader + rasterization
-        Rasterizer::drawTriangle(vertexBatch, &shader, this->frameBuffer.get(), this->depthBuffer.get());
+        Rasterizer::drawTriangle(processedVertices, &shader, this->frameBuffer.get(), this->depthBuffer.get());
     }
 }

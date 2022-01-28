@@ -9,7 +9,7 @@ class Buffer {
     
     public:
 
-        Buffer(int width, int height): width(width), height(height)
+        Buffer(int width, int height): width(width), height(height), origin(width * height - width)
         {
             this->buffer.resize(this->width * this->height);
         }
@@ -20,13 +20,13 @@ class Buffer {
 
         void set(int x, int y, T value) 
         {
-            this->buffer[x + y * this->width] = value;
+            this->buffer[origin - y * this->width + x] = value;
         }
 
         T get(int x, int y) const
         {
             assert(x < this->width && y < this->height);
-            return this->buffer[x + y * this->width];
+            return this->buffer[origin - y * this->width + x];
         }
 
         int size() const
@@ -50,6 +50,7 @@ class Buffer {
         // Data
         int width;
         int height;
+        int origin;
         std::vector<T> buffer;
     
     private:
