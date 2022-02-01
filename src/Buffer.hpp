@@ -4,14 +4,17 @@
 #include <vector>
 #include <assert.h>
 
+#include <iostream>
+
 template<typename T>
 class Buffer {
     
     public:
 
-        Buffer(int width, int height): width(width), height(height), origin(width * height - width)
+        Buffer(int width, int height, T initialValue = (T)0): width(width), height(height), origin(width * height - width)
         {
             this->buffer.resize(this->width * this->height);
+            this->clear(initialValue);
         }
         ~Buffer() 
         {

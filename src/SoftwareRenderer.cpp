@@ -9,8 +9,8 @@ SoftwareRenderer::SoftwareRenderer(int width, int height, const char* fileName):
 {
     this->displayManager = std::make_unique<DisplayManager>(width, height);
     this->scene = std::make_unique<Scene>(width, height, fileName);
-    this->frameBuffer = std::make_unique<FrameBuffer>(width, height);
-    this->depthBuffer = std::make_unique<DepthBuffer>(width, height);
+    this->frameBuffer = std::make_unique<FrameBuffer>(width, height, 2147483647);
+    this->depthBuffer = std::make_unique<DepthBuffer>(width, height, 150.f);
     
 }
 
@@ -53,27 +53,7 @@ void SoftwareRenderer::draw()
     {
         const Model* model = models[i].get();
         this->drawModel(model);
-
-        const TextureBuffer* texture = model->getDiffuseTextureBuffer();
-        std::cout << "dsa" << std::endl;
-        // for (int i = 0; texture->width; i++)
-        // {
-        //     for (int j = 0; j < texture->height; j++)
-        //     {
-        //         uint32_t color = texture->get(i, j);
-        //         std::cout << "dsa" << std::endl;
-        //         this->frameBuffer->set(i, j, texture->get(i, j));
-        //     }
-        // }
     }
-
-
-    // std::array<Vector4f, 2> lineV1{Vector4f(0.f, 200.f, 0.f, 1.f), Vector4f(300.f, 200.f, 0.f, 1.f)};
-    // std::array<Vector4f, 2> lineV2{Vector4f(500.f, 200.f, 0.f, 1.f), Vector4f(600.f, 200.f, 0.f, 1.f)};
-    // std::array<Vector4f, 2> lineV3{Vector4f(0.f, 400.f, 0.f, 1.f), Vector4f(300.f, 400.f, 0.f, 1.f)};
-    // Rasterizer::drawLine(lineV1, std::array<uint8_t, 3>{0, 255, 0}, this->frameBuffer.get(), this->depthBuffer.get());
-    // Rasterizer::drawLine(lineV2, std::array<uint8_t, 3>{0, 255, 0}, this->frameBuffer.get(), this->depthBuffer.get());
-    // Rasterizer::drawLine(lineV3, std::array<uint8_t, 3>{0, 255, 0}, this->frameBuffer.get(), this->depthBuffer.get());
 }
 
 void SoftwareRenderer::clear()
@@ -112,11 +92,6 @@ void SoftwareRenderer::drawModel(const Model* model)
         int indexV1 = vertexIndices[i + 1];
         int indexV2 = vertexIndices[i + 2];
 
-        // std::cout << "Vertices are" << std::endl;
-        // vertices[indexV0].print();
-        // vertices[indexV1].print();
-        // vertices[indexV2].print();
-
         // Shader setup
         #if BASIC_SHADER
         
@@ -150,17 +125,6 @@ void SoftwareRenderer::drawModel(const Model* model)
             processedVertices[j].x = (processedVertices[j].x + 1) * 0.5f * frameBuffer->width;
             processedVertices[j].y = (processedVertices[j].y + 1) * 0.5f * frameBuffer->height;
         }
-
-        // std::cout << "Vertices are" << std::endl;
-        // processedVertices[0].print();
-        // processedVertices[1].print();
-        // processedVertices[2].print();
-
-        // std::cout << "texture vertices are " << std::endl;
-        // shader.diffuseTextureVertices[0].print();
-        // shader.diffuseTextureVertices[1].print();
-        // shader.diffuseTextureVertices[2].print();
-        // std::cout << "---" << std::endl;
 
         // fragment shader + rasterization
         Rasterizer::drawTriangle(processedVertices, &shader, this->frameBuffer.get(), this->depthBuffer.get());

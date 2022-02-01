@@ -13,7 +13,10 @@ class Rasterizer
     public:
 
         static void drawLine(std::array<Vector4f, 2> vertices, std::array<uint8_t, 3> color, FrameBuffer* frameBuffer, DepthBuffer* depthBuffer);
-        static void drawTriangle(std::array<Vector4f, 3> vertices, Shader* shader, FrameBuffer* frameBuffer, DepthBuffer* depthBuffer);
+        static void drawTriangle(std::array<Vector4f, 3> vertices, 
+                                 Shader* shader, 
+                                 FrameBuffer* frameBuffer, 
+                                 DepthBuffer* depthBuffer);
 
         static const SDL_PixelFormat* PIXEL_FORMAT;
 

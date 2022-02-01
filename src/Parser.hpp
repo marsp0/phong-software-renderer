@@ -5,47 +5,62 @@
 #include <memory>
 #include <unordered_map>
 #include <stdint.h>
+#include <filesystem>
+
 #include "Model.hpp"
 #include "Vector.hpp"
 
-struct MeshInfo
+namespace parser
 {
-    std::string name;
-    std::string material;
-    std::unique_ptr<std::vector<int>> vertexIndices;
-    std::unique_ptr<std::vector<int>> normalIndices;
-    std::unique_ptr<std::vector<int>> textureIndices;
-    std::unique_ptr<std::vector<Vector4f>> vertices;
-    std::unique_ptr<std::vector<Vector4f>> normals;
-    std::unique_ptr<std::vector<Vector4f>> textureCoords;
-};
+    // 
+    // classes
+    // 
 
-// width, height, bytes per pixel (RGB/RGBA) and data
-struct TextureInfo2
-{
-    int width;
-    int height;
-    int bytesPerPixel;
-    std::vector<uint8_t> data;
-};
+    struct MeshInfo
+    {
+        std::string name;
+        std::string material;
+        std::vector<int> vertexIndices;
+        std::vector<int> normalIndices;
+        std::vector<int> textureIndices;
+        std::vector<Vector4f> vertices;
+        std::vector<Vector4f> normals;
+        std::vector<Vector4f> textureCoords;
+    };
 
-typedef std::tuple<int, int, int, std::vector<uint8_t>> TextureInfo;
-typedef std::unordered_map<std::string, TextureInfo> MaterialInfoMap;
+    struct TextureInfo
+    {
+        int imageIDLen;
+        int colorMapType;
+        int imageType;
+        int colorMapFirstEntryIndex;
+        int colorMapSize;
+        int colorMapEntrySize;
+        int xOrigin;
+        int yOrigin;
+        int width;
+        int height;
+        int pixelDepth;
+        int bytesPerPixel;
+        std::vector<uint32_t> data;
+    };
 
-class Parser
-{
-    public:
+    typedef std::unordered_map<std::string, TextureInfo> MaterialMap;
 
-        static std::vector<std::unique_ptr<Model>> parseScene(const char* fileName);
-        static MaterialInfoMap parseMaterialInfo(const std::string& fileName);
-        static TextureInfo parseTexture(const std::string& fileName,const std::string& name);
-    
-    private:
+    // 
+    // functions
+    // 
 
-        static std::unique_ptr<MeshInfo> parseMesh(std::ifstream& file, std::string& name);
+    std::vector<std::unique_ptr<Model>> parseScene(const std::string& fileName);
+    MaterialMap parseMaterial(const std::filesystem::path& materialFile);
+    TextureInfo parseTexture(const std::filesystem::path& textureFile);
+    std::vector<char> parseDataBlock(std::ifstream& file, int size);
+    MeshInfo parseMesh(std::ifstream& file, const std::string& name);
+    void parseMeshAttribute(std::istringstream& buffer, std::vector<Vector4f>& storage, unsigned int amount);
+    void parseMeshFace(std::istringstream& buffer, 
+                       std::vector<int>& vertexIndices,
+                       std::vector<int>& normalIndices,
+                       std::vector<int>& textureIndices);
+    int getInt(std::ifstream& buffer, int len);
 
-        static std::stringstream getBuffer(const char* fileName);
-        static int getInt(std::stringstream& buffer, int len);
-        static std::string getBasePath(const std::string& path);
-        static void fromBottom(std::vector<char>& srcBuffer, std::vector<uint8_t>& destBuffer, int step);
 };

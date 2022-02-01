@@ -10,7 +10,7 @@
 
 void testParseScene()
 {
-    std::vector<std::unique_ptr<Model>> models = Parser::parseScene("./src/test/testParser.obj");
+    std::vector<std::unique_ptr<Model>> models = parser::parseScene("./src/test/testParser.obj");
     ASSERT_VALUE(int, models.size(), 1);
     Model* model = models[0].get();
     const std::vector<Vector4f>& vertices = model->getVertices();
@@ -85,28 +85,31 @@ void testParseScene()
 
 void testParseTexture()
 {
-    TextureInfo actual = Parser::parseTexture("./src/test/threebythree.tga", "testName");
-    int actualWidth = std::get<0>(actual);
-    int actualHeight = std::get<1>(actual);
-    int bytesPerPixel = std::get<2>(actual);
-    std::vector<uint8_t> actualData = std::get<3>(actual);;
+    parser::TextureInfo actual = parser::parseTexture("./src/test/threebythree.tga");
+    int actualWidth = actual.width;
+    int actualHeight = actual.height;
+    int bytesPerPixel = actual.bytesPerPixel;
+    std::vector<uint32_t> actualData = actual.data;
     ASSERT_VALUE(int, actualWidth, 3);
     ASSERT_VALUE(int, actualHeight, 3);
     ASSERT_VALUE(int, bytesPerPixel, 4);
     
-    // assert image (actual texture) data
-    std::vector<uint8_t> expectedImageDataInts{
-        255, 0, 0, 255,
-        255, 0, 0, 255,
-        255, 0, 0, 255,
-        0, 255, 0, 255,
-        0, 255, 0, 255,
-        0, 255, 0, 255,
-        0, 0, 255, 255,
-        0, 0, 255, 255,
-        0, 0, 255, 255,
+    // // assert image (actual texture) data
+    //     255, 0, 0, 255,
+    //     255, 0, 0, 255,
+    //     255, 0, 0, 255,
+    //     0, 255, 0, 255,
+    //     0, 255, 0, 255,
+    //     0, 255, 0, 255,
+    //     0, 0, 255, 255,
+    //     0, 0, 255, 255,
+    //     0, 0, 255, 255,
+    std::vector<uint32_t> expectedImageDataInts{
+        65535,      65535,      65535,
+        16711935,   16711935,   16711935,
+        4278190335, 4278190335, 4278190335,
     };
-    ASSERT_VALUE_ARRAY(uint8_t, actualData, expectedImageDataInts);
+    ASSERT_VALUE_ARRAY(uint32_t, actualData, expectedImageDataInts);
 }
 
 void testParser()

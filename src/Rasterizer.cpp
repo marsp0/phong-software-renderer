@@ -62,6 +62,7 @@ void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices, Shader* shader, 
 {
     // https://www.cs.drexel.edu/~david/Classes/Papers/comv175-06-pineda.pdf
     // https://fgiesen.wordpress.com/2013/02/08/triangle-rasterization-in-practice/
+    // https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/rasterization-stage
     int x0 = vertices[0].x;
     int y0 = vertices[0].y;
     int x1 = vertices[1].x;
@@ -72,35 +73,43 @@ void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices, Shader* shader, 
     int maxx = std::max({x0, x1, x2});
     int miny = std::min({y0, y1, y2});
     int maxy = std::max({y0, y1, y2});
-    std::array<float, 3> zValues{vertices[0].z, vertices[1].z, vertices[2].z};
+
     float area = 1.f / Rasterizer::edgeCheck(x0, y0, x1, y1, x2, y2);
     for (int i = minx; i <= maxx; i++) 
     {
         for (int j = miny; j <= maxy; j++) 
         {
-            std::array<float, 3> weights{
-                Rasterizer::edgeCheck(x0, y0, x1, y1, i, j),
-                Rasterizer::edgeCheck(x1, y1, x2, y2, i, j),
-                Rasterizer::edgeCheck(x2, y2, x0, y0, i, j)
-            };
-            if (weights[0] >= 0 && weights[1] >= 0 && weights[2] >= 0) 
+            // v0 maps to edge v1v2
+            // v1 maps to edge v2v0
+            // v2 maps to edge v0v1
+            std::array<float, 3> weights{ Rasterizer::edgeCheck(x1, y1, x2, y2, i, j),
+                                          Rasterizer::edgeCheck(x2, y2, x0, y0, i, j),
+                                          Rasterizer::edgeCheck(x0, y0, x1, y1, i, j)};
+
+            // continue if point is not in triangle
+            // CCW order= negative is inside / positive is outside (we are using this)
+            // CW order = negative is outside/ positive is inside
+            if (weights[0] > 0 && weights[1] > 0 && weights[2] > 0)
             {
-                weights[0] *= area;
-                weights[1] *= area;
-                weights[2] *= area;
-                // Note: this is using the z instead of 1/z to interpolate the depth.
-                // Not sure why it works. I suspect that 
-                // 1. its because we have z values that are < 1 after the perspective divide
-                // 2. all z values were uniformly scaled
-                // I think that if we have a z value > 1 here it would break
-                float z = weights[0] * zValues[0] + weights[1] * zValues[1] + weights[2] * zValues[2];
-                if (depthBuffer->get(i, j) > z)
-                {
-                    depthBuffer->set(i, j, z);
-                    const std::array<uint8_t, 3>& color = shader->processFragment(weights);
-                    frameBuffer->set(i, j, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, color[0], color[1], color[2]));
-                }
+                continue;
             }
+            
+            // normalize weights
+            // w0 + w1 + w2 = 0
+            weights[0] *= area;
+            weights[1] *= area;
+            weights[2] *= area;
+
+            float z = weights[0] * vertices[0].z + weights[1] * vertices[1].z + weights[2] * vertices[2].z;
+
+            if (depthBuffer->get(i, j) < z)
+            {
+                continue;
+            }
+
+            depthBuffer->set(i, j, z);
+            const std::array<uint8_t, 3> color = shader->processFragment(weights);
+            frameBuffer->set(i, j, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, color[0], color[1], color[2]));
         }
     }
 }
