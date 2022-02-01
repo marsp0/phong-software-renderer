@@ -102,7 +102,7 @@ void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices, Shader* shader, 
 
             float z = weights[0] * vertices[0].z + weights[1] * vertices[1].z + weights[2] * vertices[2].z;
 
-            if (depthBuffer->get(i, j) < z)
+            if (depthBuffer->get(i, j) > z)
             {
                 continue;
             }
