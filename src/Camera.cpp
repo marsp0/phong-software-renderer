@@ -69,6 +69,7 @@ Matrix4 Camera::getProjectionMatrix() const
     float right = this->frustum.right;
     float top = this->frustum.top;
     float bottom = this->frustum.bottom;
+    
     result.set(0, 0, (2 * near)/(right - left));
     result.set(0, 2, (right + left)/(right - left));
 

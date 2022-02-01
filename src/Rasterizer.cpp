@@ -89,13 +89,13 @@ void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices, Shader* shader, 
             // continue if point is not in triangle
             // CCW order= negative is inside / positive is outside (we are using this)
             // CW order = negative is outside/ positive is inside
-            if (weights[0] > 0 && weights[1] > 0 && weights[2] > 0)
+            if (weights[0] > 0 || weights[1] > 0 || weights[2] > 0)
             {
                 continue;
             }
             
             // normalize weights
-            // w0 + w1 + w2 = 0
+            // w0 + w1 + w2 = 1
             weights[0] *= area;
             weights[1] *= area;
             weights[2] *= area;
