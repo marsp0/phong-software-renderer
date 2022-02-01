@@ -69,6 +69,9 @@ void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices, Shader* shader, 
     int y1 = vertices[1].y;
     int x2 = vertices[2].x;
     int y2 = vertices[2].y;
+    float z0 = 1.f/vertices[0].z;
+    float z1 = 1.f/vertices[1].z;
+    float z2 = 1.f/vertices[2].z;
     int minx = std::min({x0, x1, x2});
     int maxx = std::max({x0, x1, x2});
     int miny = std::min({y0, y1, y2});
@@ -100,7 +103,7 @@ void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices, Shader* shader, 
             weights[1] *= area;
             weights[2] *= area;
 
-            float z = weights[0] * vertices[0].z + weights[1] * vertices[1].z + weights[2] * vertices[2].z;
+            float z = 1.f/(weights[0] * z0 + weights[1] * z1 + weights[2] * z2);
 
             if (depthBuffer->get(i, j) > z)
             {
