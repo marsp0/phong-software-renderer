@@ -16,18 +16,19 @@ class Camera
         void update(FrameInput& input);
         Matrix4 getViewMatrix() const;
         Matrix4 getProjectionMatrix() const;
-        Vector4f        forward;
-        Vector4f        position;
+        Vector4f getPosition() const;
         
-        Vector4f        right;
-        Vector4f        up;
-        Vector4f        worldUp;
 
     private:
 
         void updateBasisVectors();
 
-        
+        Vector4f        forward;
+        Vector4f        position;
+        Vector4f        right;
+        Vector4f        up;
+        Vector4f        worldUp;
+
         Frustum         frustum;
         float           pitch;
         float           yaw;

@@ -86,11 +86,24 @@ void SoftwareRenderer::drawModel(const Model* model)
     const std::vector<int>& vertexIndices = model->getVertexIndices();
     const std::vector<int>& normalIndices = model->getNormalIndices();
     const std::vector<int>& diffuseTextureIndices = model->getDiffuseTextureIndices();
+    Vector4f cameraPosition = camera->getPosition();
     for (int i = 0; i < vertexIndices.size(); i += 3) 
     {
         int indexV0 = vertexIndices[i];
         int indexV1 = vertexIndices[i + 1];
         int indexV2 = vertexIndices[i + 2];
+
+        int indexN0 = normalIndices[i];
+        int indexN1 = normalIndices[i + 1];
+        int indexN2 = normalIndices[i + 2];
+
+        // back face culling
+        Vector4f camPosition_M = model->getWorldMatrix().inverse() * cameraPosition;
+        Vector4f viewDirection_M = vertices[indexV0] - camPosition_M;
+        if (viewDirection_M.dot(normals[indexN0]) >= 0)
+        {
+            continue;
+        }
 
         // Shader setup
         #if BASIC_SHADER

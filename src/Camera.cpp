@@ -83,3 +83,8 @@ Matrix4 Camera::getProjectionMatrix() const
     result.set(3, 3, 0.f);
     return result;
 }
+
+Vector4f Camera::getPosition() const
+{
+    return this->position;
+}
