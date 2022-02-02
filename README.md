@@ -54,8 +54,6 @@
 - [Barycentric Coordinates 1](https://fgiesen.wordpress.com/2013/02/06/the-barycentric-conspirac/)
 - [Barycentric Coordinates 2](https://users.csc.calpoly.edu/~zwood/teaching/csc471/2017F/barycentric.pdf)
 - [Barycentric Coordinates 3](https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/rasterization-stage)
-- [Perspective correct interpolation 1](https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/perspective-correct-interpolation-vertex-attributes)
-- [Perspective correct interpolation 2](https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/perspective-correct-interpolation-vertex-attributes)
 - [Triangle rasterization in practice](https://fgiesen.wordpress.com/2013/02/08/triangle-rasterization-in-practice/)
 
 ### Orientation
@@ -114,3 +112,5 @@
 - [Texture Filtering](https://en.wikipedia.org/wiki/Texture_filtering)
 - [Texture Mapping](https://en.wikipedia.org/wiki/Texture_mapping)
 - [OBJ Texture Coords use (0,0) as top left](https://stackoverflow.com/questions/5585368/problems-using-wavefront-objs-texture-coordinates-in-android-opengl-es/5605027#5605027)
+- [Perspective correct interpolation 1](https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/perspective-correct-interpolation-vertex-attributes)
+- [Perspective correct interpolation 2](https://stackoverflow.com/questions/24441631/how-exactly-does-opengl-do-perspectively-correct-linear-interpolation)
