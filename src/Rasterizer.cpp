@@ -103,14 +103,19 @@ void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices, Shader* shader, 
             weights[1] *= area;
             weights[2] *= area;
 
-            float z = 1.f/(weights[0] * z0 + weights[1] * z1 + weights[2] * z2);
+            float depth = 1.f/(weights[0] * z0 + weights[1] * z1 + weights[2] * z2);
 
-            if (z > depthBuffer->get(i, j))
+            if (depth > depthBuffer->get(i, j))
             {
                 continue;
             }
 
-            depthBuffer->set(i, j, z);
+            // perspective correct texture mapping
+            weights[0] = weights[0] * z0 * depth;
+            weights[1] = weights[1] * z1 * depth;
+            weights[2] = weights[2] * z2 * depth;
+
+            depthBuffer->set(i, j, depth);
             const std::array<uint8_t, 3> color = shader->processFragment(weights);
             frameBuffer->set(i, j, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, color[0], color[1], color[2]));
         }
