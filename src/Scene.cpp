@@ -6,8 +6,8 @@
 
 Scene::Scene(int width, int height, const char* fileName): models()
 {
-    this->models = Parser::parseScene(fileName);
-    this->camera = std::make_unique<Camera>(Vector4f(-7.16f, -31.f, 29.f, 1.f), 1.5707f, 
+    this->models = parser::parseScene(fileName);
+    this->camera = std::make_unique<Camera>(Vector4f(3.f, 3.f, 3.f, 1.f), 1.5707f, 
                                             (float)width/(float)height, 10.f, 100.f);
 }
 
@@ -24,10 +24,6 @@ bool Scene::handleInput(FrameInput& input)
         if (event.type == SDL_QUIT || event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) 
         {
             return false;
-        }
-        if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_E)
-        {
-            input.switchRasterMethod = true;
         }
         if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_W)
         {
@@ -68,7 +64,7 @@ const std::vector<std::unique_ptr<Model>>& Scene::getModels()
     return this->models;
 }
 
-Camera* Scene::getCamera()
+const Camera* Scene::getCamera()
 {
     return this->camera.get();
 }

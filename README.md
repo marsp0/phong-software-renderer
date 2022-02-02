@@ -4,7 +4,7 @@
 
 ### Dependencies
 
-- SDL2 `apt install libsdl2-dev`
+- SDL2
 
 ## References
 
@@ -54,7 +54,6 @@
 - [Barycentric Coordinates 1](https://fgiesen.wordpress.com/2013/02/06/the-barycentric-conspirac/)
 - [Barycentric Coordinates 2](https://users.csc.calpoly.edu/~zwood/teaching/csc471/2017F/barycentric.pdf)
 - [Barycentric Coordinates 3](https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/rasterization-stage)
-- [Perspective correct interpolation](https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/perspective-correct-interpolation-vertex-attributes)
 - [Triangle rasterization in practice](https://fgiesen.wordpress.com/2013/02/08/triangle-rasterization-in-practice/)
 
 ### Orientation
@@ -78,6 +77,7 @@
 - [Scratch a pixel - Volumne 1](https://www.scratchapixel.com/index.php?redirect)
 - [Lookat derivation (Camera space -> World space)](https://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/lookat-function)
 - [Lookat derivation (World space -> Camera space)](http://www.songho.ca/opengl/gl_camera.html)
+- [View matrix derivation](https://www.mauriciopoppe.com/notes/computer-graphics/viewing/view-transform/)
 - [Perspective projection derivation](https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/building-basic-perspective-projection-matrix)
 - [Perspective projection derivation (OpenGL)](https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/opengl-perspective-projection-matrix)
 - [Free camera](https://learnopengl.com/Getting-started/Camera)
@@ -100,3 +100,17 @@
 - [Convert char -> unsigned char](https://stackoverflow.com/a/5042335)
 - [Convert char -> unsigned char 2](https://stackoverflow.com/a/43273907)
 - [reinterpret_cast](https://en.cppreference.com/w/cpp/language/reinterpret_cast)
+- [OBJ texture ref point](https://stackoverflow.com/questions/5585368/problems-using-wavefront-objs-texture-coordinates-in-android-opengl-es/5605027#5605027)
+- [OBJ texture problem](https://stackoverflow.com/questions/8837328/troubles-parsing-wavefront-obj-texture-coordinates)
+
+### Texture Mapping
+
+- [Texture Mapping chapter from Fundamentals of Computer Graphics]
+- [Texture Mapping chapter from Mathematics for 3D Game Programming and Computer Graphics]
+- [Chris Hecker on Texture Mapping](http://www.chrishecker.com/Miscellaneous_Technical_Articles)
+- [Perspective correct texture mapper](http://www.lysator.liu.se/~mikaelk/doc/perspectivetexture/)
+- [Texture Filtering](https://en.wikipedia.org/wiki/Texture_filtering)
+- [Texture Mapping](https://en.wikipedia.org/wiki/Texture_mapping)
+- [OBJ Texture Coords use (0,0) as top left](https://stackoverflow.com/questions/5585368/problems-using-wavefront-objs-texture-coordinates-in-android-opengl-es/5605027#5605027)
+- [Perspective correct interpolation 1](https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/perspective-correct-interpolation-vertex-attributes)
+- [Perspective correct interpolation 2](https://stackoverflow.com/questions/24441631/how-exactly-does-opengl-do-perspectively-correct-linear-interpolation)

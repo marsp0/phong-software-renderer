@@ -4,24 +4,63 @@
 #include <vector>
 #include <memory>
 #include <unordered_map>
+#include <stdint.h>
+#include <filesystem>
+
 #include "Model.hpp"
 #include "Vector.hpp"
 
-// width, height, bytes per pixel (RGB/RGBA) and data
-typedef std::tuple<int, int, int, std::vector<unsigned short>> TextureInfo;
-typedef std::unordered_map<std::string, TextureInfo> MaterialInfoMap;
-
-class Parser
+namespace parser
 {
-    public:
+    // 
+    // classes
+    // 
 
-        static std::vector<std::unique_ptr<Model>> parseScene(const char* fileName);
-        static MaterialInfoMap parseMaterialInfo(const std::string& fileName);
-        static TextureInfo parseTexture(const std::string& fileName,const std::string& name);
-    
-    private:
+    struct MeshInfo
+    {
+        std::string name;
+        std::string material;
+        std::vector<int> vertexIndices;
+        std::vector<int> normalIndices;
+        std::vector<int> textureIndices;
+        std::vector<Vector4f> vertices;
+        std::vector<Vector4f> normals;
+        std::vector<Vector4f> textureCoords;
+    };
 
-        static std::stringstream getBuffer(const char* fileName);
-        static int getInt(std::stringstream& buffer, int len);
-        static std::string getBasePath(const std::string& path);
+    struct TextureInfo
+    {
+        int imageIDLen;
+        int colorMapType;
+        int imageType;
+        int colorMapFirstEntryIndex;
+        int colorMapSize;
+        int colorMapEntrySize;
+        int xOrigin;
+        int yOrigin;
+        int width;
+        int height;
+        int pixelDepth;
+        int bytesPerPixel;
+        std::vector<uint32_t> data;
+    };
+
+    typedef std::unordered_map<std::string, TextureInfo> MaterialMap;
+
+    // 
+    // functions
+    // 
+
+    std::vector<std::unique_ptr<Model>> parseScene(const std::string& fileName);
+    MaterialMap parseMaterial(const std::filesystem::path& materialFile);
+    TextureInfo parseTexture(const std::filesystem::path& textureFile);
+    std::vector<char> parseDataBlock(std::ifstream& file, int size);
+    MeshInfo parseMesh(std::ifstream& file, const std::string& name);
+    void parseMeshAttribute(std::istringstream& buffer, std::vector<Vector4f>& storage, unsigned int amount);
+    void parseMeshFace(std::istringstream& buffer, 
+                       std::vector<int>& vertexIndices,
+                       std::vector<int>& normalIndices,
+                       std::vector<int>& textureIndices);
+    int getInt(std::ifstream& buffer, int len);
+
 };

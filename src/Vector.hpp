@@ -82,12 +82,12 @@ class Vector4
                               1.f);
         }
 
-        T magnitudeSquared()
+        T magnitudeSquared() const
         {
             return this->x * this->x + this->y * this->y + this->z * this->z;
         }
 
-        float magnitude()
+        float magnitude() const
         {
             return sqrtf(this->magnitudeSquared());
         }
@@ -100,7 +100,7 @@ class Vector4
             this->z /= scale;
         }
 
-        void print()
+        void print() const
         {
             std::cout << "Vector(" << this->x << ", " << this->y << ", " << this->z << ")" << std::endl;
         }

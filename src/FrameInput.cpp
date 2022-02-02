@@ -8,5 +8,4 @@ void FrameInput::clear()
     this->right = false;
     this->relativeX = 0;
     this->relativeY = 0;
-    this->switchRasterMethod = false;
 }

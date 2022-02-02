@@ -10,7 +10,7 @@
 
 void runRenderer() 
 {
-    SoftwareRenderer renderer(WIDTH, HEIGHT, ShaderType::BASIC, "/home/martin/Downloads/untitled.obj");
+    SoftwareRenderer renderer(WIDTH, HEIGHT, "/home/martin/Documents/Projects/software-renderer/assets/cube/cube.obj");
     renderer.run();
 }
 

@@ -15,7 +15,5 @@ class FrameInput
         int32_t relativeX;
         int32_t relativeY;
 
-        bool switchRasterMethod;
-
     private:
 };

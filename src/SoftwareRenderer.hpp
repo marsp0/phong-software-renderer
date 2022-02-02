@@ -10,23 +10,18 @@
 #include "Rasterizer.hpp"
 #include "Camera.hpp"
 
-enum class ShaderType
-{
-    BASIC = 0
-};
-
 class SoftwareRenderer 
 {
     public:
-        SoftwareRenderer(int width, int height, ShaderType shaderType, const char* fileName);
+
+        SoftwareRenderer(int width, int height, const char* fileName);
         ~SoftwareRenderer();
         void run();
         void update();
         void draw();
-        void drawModel(Model* model);
         void clear();
-
-        std::unique_ptr<Shader> getShader(Model* model, Camera* camera);
+        void swapBuffers();
+        void drawModel(const Model* model);
 
     private:
 
@@ -34,8 +29,6 @@ class SoftwareRenderer
         std::unique_ptr<DisplayManager> displayManager;
         std::unique_ptr<FrameBuffer>    frameBuffer;
         std::unique_ptr<DepthBuffer>    depthBuffer;
-        RasterMethod                    rasterMethod;
         std::unique_ptr<Scene>          scene;
-        ShaderType                      shaderType;
         FrameInput                      input;
 };
