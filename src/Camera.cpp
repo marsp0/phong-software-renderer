@@ -38,7 +38,7 @@ void Camera::update(FrameInput& input)
     this->up.normalize();
 }
 
-Matrix4 Camera::getViewMatrix() const
+Matrix4 Camera::getViewTransform() const
 {
     Matrix4 result;
     result.set(0, 0, this->right.x);
@@ -60,7 +60,7 @@ Matrix4 Camera::getViewMatrix() const
     return result;
 }
 
-Matrix4 Camera::getProjectionMatrix() const
+Matrix4 Camera::getProjectionTransform() const
 {
     Matrix4 result;
     float near = this->frustum.near;

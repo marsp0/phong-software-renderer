@@ -86,7 +86,7 @@ void SoftwareRenderer::drawModel(const Model* model)
     const std::vector<int>& vertexIndices = model->getVertexIndices();
     const std::vector<int>& normalIndices = model->getNormalIndices();
     const std::vector<int>& diffuseTextureIndices = model->getDiffuseTextureIndices();
-    Vector4f cameraPosition_M = model->getWorldMatrix().inverse() * camera->getPosition();
+    Vector4f cameraPosition_M = model->getWorldTransform().inverse() * camera->getPosition();
 
     for (int i = 0; i < vertexIndices.size(); i += 3) 
     {

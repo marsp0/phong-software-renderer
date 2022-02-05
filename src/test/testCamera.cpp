@@ -16,7 +16,7 @@ void testCameraViewMatrix()
     // }};
     // Matrix4 expected(expectedArray);
     // Camera camera(Vector4f(1.f, 1.f, 1.f, 1.f), 3.14f, 1.33f, 10.f, 100.f);
-    // Matrix4 actual = camera.getViewMatrix();
+    // Matrix4 actual = camera.getViewTransform();
     // ASSERT_VALUE(Matrix4, actual, expected);
 }
 
@@ -38,7 +38,7 @@ void testCameraPerspectiveProjection()
     }};
     Matrix4 expected(expectedArray);
     Camera camera(Vector4f(1.f, 1.f, 1.f, 1.f), fovX, aspectRatio, near, far);
-    Matrix4 actual = camera.getProjectionMatrix();
+    Matrix4 actual = camera.getProjectionTransform();
     ASSERT_VALUE(Matrix4, actual, expected);
 }
 

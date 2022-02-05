@@ -33,8 +33,8 @@ class Model
               std::unique_ptr<TextureBuffer> diffuseTextureBuffer);
         ~Model();
         void update(float deltaTime);
-        Matrix4 getWorldMatrix() const;
-        Matrix4 getRotationMatrix() const;
+        Matrix4 getWorldTransform() const;
+        Matrix4 getRotationTransform() const;
         void setRotationType(RotationType newType);
         const std::vector<Vector4f>& getVertices() const;
         const std::vector<Vector4f>& getNormals() const;

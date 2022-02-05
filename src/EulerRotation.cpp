@@ -15,7 +15,7 @@ EulerRotation::~EulerRotation()
 
 }
 
-Matrix4 EulerRotation::getRotationMatrix()
+Matrix4 EulerRotation::getRotationTransform()
 {
     // Rotate in order Z -> Y -> X
     // 
@@ -62,13 +62,13 @@ Matrix4 EulerRotation::getRotationMatrix()
 
 void EulerRotation::updateFromQuaternion(QuaternionRotation* rotation)
 {
-    Matrix4 matrix = rotation->getRotationMatrix();
+    Matrix4 matrix = rotation->getRotationTransform();
     this->updateFromRotationMatrix(matrix);
 }
 
 void EulerRotation::updateFromAxisAngle(AxisAngleRotation* rotation)
 {
-    Matrix4 matrix = rotation->getRotationMatrix();
+    Matrix4 matrix = rotation->getRotationTransform();
     this->updateFromRotationMatrix(matrix);
 }
 

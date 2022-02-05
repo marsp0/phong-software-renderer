@@ -59,17 +59,17 @@ void Model::update(float deltaTime)
 
 }
 
-Matrix4 Model::getRotationMatrix() const
+Matrix4 Model::getRotationTransform() const
 {
     if (this->rotationType == RotationType::EULER)
     {
-        return this->eulerRotation->getRotationMatrix();
+        return this->eulerRotation->getRotationTransform();
     }
     else if (this->rotationType == RotationType::QUATERNION)
     {
-        return this->quaternionRotation->getRotationMatrix();
+        return this->quaternionRotation->getRotationTransform();
     }
-    return this->axisAngleRotation->getRotationMatrix();
+    return this->axisAngleRotation->getRotationTransform();
 }
 
 void Model::setRotationType(RotationType newType)
@@ -112,14 +112,14 @@ void Model::setRotationType(RotationType newType)
     this->rotationType = newType;
 }
 
-Matrix4 Model::getWorldMatrix() const
+Matrix4 Model::getWorldTransform() const
 {
     Matrix4 translation;
     translation.set(0, 3, this->position.x);
     translation.set(1, 3, this->position.y);
     translation.set(2, 3, this->position.z);
 
-    Matrix4 rotation = this->getRotationMatrix();
+    Matrix4 rotation = this->getRotationTransform();
     return translation * rotation;
 }
 
