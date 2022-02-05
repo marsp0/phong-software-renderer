@@ -14,7 +14,7 @@ QuaternionRotation::~QuaternionRotation()
 
 }
 
-Matrix4 QuaternionRotation::getRotationMatrix()
+Matrix4 QuaternionRotation::getRotationTransform()
 {
     return this->quaternion.toMatrix();
 }

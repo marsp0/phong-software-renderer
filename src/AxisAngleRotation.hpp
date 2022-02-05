@@ -13,7 +13,7 @@ class AxisAngleRotation
         AxisAngleRotation(float angle, Vector4f axis);
         ~AxisAngleRotation();
 
-        Matrix4 getRotationMatrix();
+        Matrix4 getRotationTransform();
         void updateFromQuaternion(QuaternionRotation* rotation);
         void updateFromEuler(EulerRotation* rotation);
    

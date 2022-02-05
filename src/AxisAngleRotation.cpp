@@ -14,7 +14,7 @@ AxisAngleRotation::~AxisAngleRotation()
 
 }
 
-Matrix4 AxisAngleRotation::getRotationMatrix()
+Matrix4 AxisAngleRotation::getRotationTransform()
 {
     // taken from https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula#Matrix_notation
     float sinA = sin(this->angle);

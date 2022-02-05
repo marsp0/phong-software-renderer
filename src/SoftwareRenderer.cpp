@@ -48,11 +48,10 @@ void SoftwareRenderer::update()
 
 void SoftwareRenderer::draw()
 {
-    const std::vector<std::unique_ptr<Model>>& models = this->scene->getModels();
+    const std::vector<Model*> models = this->scene->getModels();
     for (int i = 0; i < models.size(); i++)
     {
-        const Model* model = models[i].get();
-        this->drawModel(model);
+        this->drawModel(models[i]);
     }
 }
 
@@ -86,7 +85,8 @@ void SoftwareRenderer::drawModel(const Model* model)
     const std::vector<int>& vertexIndices = model->getVertexIndices();
     const std::vector<int>& normalIndices = model->getNormalIndices();
     const std::vector<int>& diffuseTextureIndices = model->getDiffuseTextureIndices();
-    Vector4f cameraPosition = camera->getPosition();
+    Vector4f cameraPosition_M = model->getWorldTransform().inverse() * camera->getPosition();
+
     for (int i = 0; i < vertexIndices.size(); i += 3) 
     {
         int indexV0 = vertexIndices[i];
@@ -98,9 +98,7 @@ void SoftwareRenderer::drawModel(const Model* model)
         int indexN2 = normalIndices[i + 2];
 
         // back face culling
-        Vector4f camPosition_M = model->getWorldMatrix().inverse() * cameraPosition;
-        Vector4f viewDirection_M = vertices[indexV0] - camPosition_M;
-        if (viewDirection_M.dot(normals[indexN0]) >= 0)
+        if (this->cullBackFace(vertices[indexV0], normals[indexN0], cameraPosition_M))
         {
             continue;
         }
@@ -142,4 +140,14 @@ void SoftwareRenderer::drawModel(const Model* model)
         // fragment shader + rasterization
         Rasterizer::drawTriangle(processedVertices, &shader, this->frameBuffer.get(), this->depthBuffer.get());
     }
+}
+
+bool SoftwareRenderer::cullBackFace(const Vector4f& vertex, const Vector4f& normal, const Vector4f& camPosition_M)
+{
+    Vector4f viewDirection_M = vertex - camPosition_M;
+    if (viewDirection_M.dot(normal) >= 0)
+    {
+        return true;
+    }
+    return false;
 }

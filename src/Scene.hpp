@@ -16,10 +16,12 @@ class Scene
         ~Scene();
         bool handleInput(FrameInput& input);
         void update(float deltaTime, FrameInput& input);
-        const std::vector<std::unique_ptr<Model>>& getModels();
+        const std::vector<Model*> getModels();
         const Camera* getCamera();
 
     private:
+        
+        bool isInsideFrustum(Model* model);
 
         // Data
         std::vector<float>                  lights;

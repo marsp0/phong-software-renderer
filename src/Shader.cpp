@@ -3,9 +3,9 @@
 #include "TextureMapper.hpp"
 
 BasicShader::BasicShader(const Model* model, 
-                         const Camera* camera): world(model->getWorldMatrix()),
-                                                view(camera->getViewMatrix()),
-                                                projection(camera->getProjectionMatrix()),
+                         const Camera* camera): world(model->getWorldTransform()),
+                                                view(camera->getViewTransform()),
+                                                projection(camera->getProjectionTransform()),
                                                 diffuseTextureBuffer(model->getDiffuseTextureBuffer())
 {
     this->modelViewProjection = this->projection * this->view * this->world;

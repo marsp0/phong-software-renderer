@@ -16,7 +16,7 @@ class EulerRotation
         EulerRotation(float x, float y, float z);
         ~EulerRotation();
 
-        Matrix4 getRotationMatrix();
+        Matrix4 getRotationTransform();
         void updateFromQuaternion(QuaternionRotation* rotation);
         void updateFromAxisAngle(AxisAngleRotation* rotation);
         void updateFromRotationMatrix(Matrix4& matrix);
