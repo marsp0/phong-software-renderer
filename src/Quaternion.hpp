@@ -17,12 +17,12 @@ class Quaternion
         bool operator!=(const Quaternion& other) const;
         friend std::ostream& operator<<(std::ostream& outputStream, const Quaternion& other);
 
-        Quaternion conjugate();
-        Quaternion inverse();
-        float magnitude();
-        float magnitudeSquared();
+        Quaternion conjugate() const;
+        Quaternion inverse() const;
+        float magnitude() const;
+        float magnitudeSquared() const;
         void normalize();
-        Matrix4 toMatrix();
+        Matrix4 toMatrix() const;
 
         // util
         void print();

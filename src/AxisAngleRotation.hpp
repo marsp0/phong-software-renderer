@@ -13,9 +13,9 @@ class AxisAngleRotation
         AxisAngleRotation(float angle, Vector4f axis);
         ~AxisAngleRotation();
 
-        Matrix4 getRotationTransform();
-        void updateFromQuaternion(QuaternionRotation* rotation);
-        void updateFromEuler(EulerRotation* rotation);
+        Matrix4 getRotationTransform() const;
+        void updateFromQuaternion(const QuaternionRotation& rotation);
+        void updateFromEuler(const EulerRotation& rotation);
    
         float angle;
         Vector4f axis;

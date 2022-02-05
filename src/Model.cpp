@@ -9,44 +9,53 @@ Model::Model(std::vector<Vector4f> vertices,
              std::vector<int> vertexIndices,
              std::vector<int> normalIndices,
              std::vector<int> diffuseTextureIndices,
-             std::unique_ptr<TextureBuffer> diffuseTextureBuffer): vertices(vertices), normals(normals), diffuseTextureCoords(diffuseTextureCoords),
-                                                            vertexIndices(vertexIndices), normalIndices(normalIndices),
-                                                            diffuseTextureIndices(diffuseTextureIndices), rotationType(RotationType::QUATERNION),
-                                                            position(), diffuseTextureBuffer(std::move(diffuseTextureBuffer))
+             std::unique_ptr<TextureBuffer> diffuseTextureBuffer,
+             QuaternionRotation rotation): 
+             vertices(vertices), normals(normals), diffuseTextureCoords(diffuseTextureCoords),
+             vertexIndices(vertexIndices), normalIndices(normalIndices),
+             diffuseTextureIndices(diffuseTextureIndices),
+             position(), diffuseTextureBuffer(std::move(diffuseTextureBuffer)),
+             quaternionRotation(rotation), rotationType(RotationType::QUATERNION),
+             axisAngleRotation(0, Vector4f(1.f, 0.f, 0.f, 1.f)),
+             eulerRotation(0.f, 0.f, 0.f)
 {
-    this->eulerRotation = std::make_unique<EulerRotation>(0.f, 0.f, 0.f);
-    this->axisAngleRotation = std::make_unique<AxisAngleRotation>(0.f, Vector4f());
-    this->quaternionRotation = std::make_unique<QuaternionRotation>(0.f, 0.f, 0.f, 1.f);
+    
 }
 
-Model::Model(float x, float y, float z, Vector4f position): vertices(), normals(), diffuseTextureCoords(), vertexIndices(),
-                                                            normalIndices(), diffuseTextureIndices(),
-                                                            rotationType(RotationType::EULER),
-                                                            position(position), diffuseTextureBuffer()
+Model::Model(std::vector<Vector4f> vertices,
+             std::vector<Vector4f> normals,
+             std::vector<Vector4f> diffuseTextureCoords,
+             std::vector<int> vertexIndices,
+             std::vector<int> normalIndices,
+             std::vector<int> diffuseTextureIndices,
+             std::unique_ptr<TextureBuffer> diffuseTextureBuffer,
+             EulerRotation rotation): 
+             vertices(vertices), normals(normals), diffuseTextureCoords(diffuseTextureCoords),
+             vertexIndices(vertexIndices), normalIndices(normalIndices),
+             diffuseTextureIndices(diffuseTextureIndices),
+             position(), diffuseTextureBuffer(std::move(diffuseTextureBuffer)),
+             eulerRotation(rotation), rotationType(RotationType::EULER),
+             quaternionRotation(1.f, 0.f, 0.f, 1.f), axisAngleRotation(0, Vector4f(1.f, 0.f, 0.f, 1.f))
 {
-    this->eulerRotation = std::make_unique<EulerRotation>(x, y, z);
-    this->axisAngleRotation = std::make_unique<AxisAngleRotation>(0.f, Vector4f());
-    this->quaternionRotation = std::make_unique<QuaternionRotation>(0.f, 0.f, 0.f, 0.f);
+    
 }
 
-Model::Model(float w, float x, float y, float z, Vector4f position): vertices(), normals(), diffuseTextureCoords(), vertexIndices(),
-                                                                     normalIndices(), diffuseTextureIndices(),
-                                                                     rotationType(RotationType::QUATERNION),
-                                                                     position(position), diffuseTextureBuffer()
+Model::Model(std::vector<Vector4f> vertices,
+             std::vector<Vector4f> normals,
+             std::vector<Vector4f> diffuseTextureCoords,
+             std::vector<int> vertexIndices,
+             std::vector<int> normalIndices,
+             std::vector<int> diffuseTextureIndices,
+             std::unique_ptr<TextureBuffer> diffuseTextureBuffer,
+             AxisAngleRotation rotation): 
+             vertices(vertices), normals(normals), diffuseTextureCoords(diffuseTextureCoords),
+             vertexIndices(vertexIndices), normalIndices(normalIndices),
+             diffuseTextureIndices(diffuseTextureIndices),
+             position(), diffuseTextureBuffer(std::move(diffuseTextureBuffer)),
+             axisAngleRotation(rotation), rotationType(RotationType::AXIS_ANGLE),
+             quaternionRotation(1.f, 0.f, 0.f, 1.f), eulerRotation(0.f, 0.f, 0.f)
 {
-    this->eulerRotation = std::make_unique<EulerRotation>(0.f, 0.f, 0.f);
-    this->axisAngleRotation = std::make_unique<AxisAngleRotation>(0.f, Vector4f());
-    this->quaternionRotation = std::make_unique<QuaternionRotation>(w, x, y, z);
-}
-
-Model::Model(float angle, Vector4f axis, Vector4f position): vertices(), normals(), diffuseTextureCoords(), vertexIndices(),
-                                                             normalIndices(), diffuseTextureIndices(),
-                                                             rotationType(RotationType::AXIS_ANGLE),
-                                                             position(position), diffuseTextureBuffer()
-{
-    this->eulerRotation = std::make_unique<EulerRotation>(0.f, 0.f, 0.f);
-    this->axisAngleRotation = std::make_unique<AxisAngleRotation>(angle, axis);
-    this->quaternionRotation = std::make_unique<QuaternionRotation>(0.f, 0.f, 0.f, 0.f);
+    
 }
 
 Model::~Model() 
@@ -63,13 +72,13 @@ Matrix4 Model::getRotationTransform() const
 {
     if (this->rotationType == RotationType::EULER)
     {
-        return this->eulerRotation->getRotationTransform();
+        return this->eulerRotation.getRotationTransform();
     }
     else if (this->rotationType == RotationType::QUATERNION)
     {
-        return this->quaternionRotation->getRotationTransform();
+        return this->quaternionRotation.getRotationTransform();
     }
-    return this->axisAngleRotation->getRotationTransform();
+    return this->axisAngleRotation.getRotationTransform();
 }
 
 void Model::setRotationType(RotationType newType)
@@ -80,33 +89,33 @@ void Model::setRotationType(RotationType newType)
     {
         if (newType == RotationType::QUATERNION)
         {
-            this->quaternionRotation->updateFromEuler(this->eulerRotation.get());
+            this->quaternionRotation.updateFromEuler(this->eulerRotation);
         }
         else // axis angle
         {
-            this->axisAngleRotation->updateFromEuler(this->eulerRotation.get());
+            this->axisAngleRotation.updateFromEuler(this->eulerRotation);
         }
     }
     else if (this->rotationType == RotationType::QUATERNION)
     {
         if (newType == RotationType::EULER)
         {
-            this->eulerRotation->updateFromQuaternion(this->quaternionRotation.get());
+            this->eulerRotation.updateFromQuaternion(this->quaternionRotation);
         }
         else // axis angle
         {
-            this->axisAngleRotation->updateFromQuaternion(this->quaternionRotation.get());
+            this->axisAngleRotation.updateFromQuaternion(this->quaternionRotation);
         }
     }
     else
     {
         if (newType == RotationType::EULER)
         {
-            this->eulerRotation->updateFromAxisAngle(this->axisAngleRotation.get());
+            this->eulerRotation.updateFromAxisAngle(this->axisAngleRotation);
         }
         else // quaternion
         {
-            this->quaternionRotation->updateFromAxisAngle(this->axisAngleRotation.get());
+            this->quaternionRotation.updateFromAxisAngle(this->axisAngleRotation);
         }
     }
     this->rotationType = newType;

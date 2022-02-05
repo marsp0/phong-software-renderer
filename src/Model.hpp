@@ -23,14 +23,21 @@ class Model
 {
     public:
 
-        // Methods
-        Model(float eulerX, float eulerY, float eulerZ, Vector4f position);
-        Model(float quatW, float quatX, float quatY, float quatZ, Vector4f position);
-        Model(float angle, Vector4f axis, Vector4f position);
         Model(std::vector<Vector4f> vertices, std::vector<Vector4f> normals,
               std::vector<Vector4f> diffuseTextureCoords, std::vector<int> vertexIndices,
               std::vector<int> normalIndices, std::vector<int> diffuseTextureIndices,
-              std::unique_ptr<TextureBuffer> diffuseTextureBuffer);
+              std::unique_ptr<TextureBuffer> diffuseTextureBuffer,
+              QuaternionRotation rotation);
+        Model(std::vector<Vector4f> vertices, std::vector<Vector4f> normals,
+              std::vector<Vector4f> diffuseTextureCoords, std::vector<int> vertexIndices,
+              std::vector<int> normalIndices, std::vector<int> diffuseTextureIndices,
+              std::unique_ptr<TextureBuffer> diffuseTextureBuffer,
+              EulerRotation rotation);
+        Model(std::vector<Vector4f> vertices, std::vector<Vector4f> normals,
+              std::vector<Vector4f> diffuseTextureCoords, std::vector<int> vertexIndices,
+              std::vector<int> normalIndices, std::vector<int> diffuseTextureIndices,
+              std::unique_ptr<TextureBuffer> diffuseTextureBuffer,
+              AxisAngleRotation rotation);
         ~Model();
         void update(float deltaTime);
         Matrix4 getWorldTransform() const;
@@ -51,9 +58,9 @@ class Model
     private:
 
         // rotation
-        std::unique_ptr<EulerRotation>      eulerRotation;
-        std::unique_ptr<AxisAngleRotation>  axisAngleRotation;
-        std::unique_ptr<QuaternionRotation> quaternionRotation;        
+        EulerRotation                    eulerRotation;
+        AxisAngleRotation                axisAngleRotation;
+        QuaternionRotation               quaternionRotation;        
 
         std::vector<Vector4f>            vertices;
         std::vector<Vector4f>            normals;
