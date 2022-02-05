@@ -22,7 +22,7 @@ class Quaternion
         float magnitude();
         float magnitudeSquared();
         void normalize();
-        Matrix4 toMatrix();
+        Matrix4 toMatrix() const;
 
         // util
         void print();

@@ -102,7 +102,7 @@ void Quaternion::normalize()
     this->z /= magnitude;
 }
 
-Matrix4 Quaternion::toMatrix() 
+Matrix4 Quaternion::toMatrix() const
 {
     // as seen here : http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/index.htm
     // this matrix is simply the result of qpq^-1

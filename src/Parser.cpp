@@ -1,5 +1,7 @@
 #include "Parser.hpp"
 
+#include "Quaternion.hpp"
+
 #include <exception>
 #include <fstream>
 
@@ -59,7 +61,8 @@ namespace parser
                                                      mesh.vertexIndices, 
                                                      mesh.normalIndices,
                                                      mesh.textureIndices,
-                                                     std::move(textureBuffer)));
+                                                     std::move(textureBuffer),
+                                                     Quaternion(1.f, 0.f, 0.f, 0.f)));
         }
         return std::move(models);
     }
