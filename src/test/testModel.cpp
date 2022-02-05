@@ -219,9 +219,9 @@ void testModelSwitchFromQuaternionToAxisAngle()
 void testModelGetWorldTransform()
 {
     std::array<std::array<float, 4>, 4> expectedArray{{
-        {-0.74014f, -0.66662f, -0.08829f, 1.f},
-        {0.47648f, -0.61256f,  0.63065f, 2.f},
-        {-0.47449f,  0.42470f,  0.77102f, 3.f},
+        {-0.74014f, -0.66662f, -0.08829f, 0.f},
+        {0.47648f, -0.61256f,  0.63065f, 0.f},
+        {-0.47449f,  0.42470f,  0.77102f, 0.f},
         {0.f, 0.f, 0.f, 1.f}
     }};
     Matrix4 expected(expectedArray);
