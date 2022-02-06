@@ -48,11 +48,10 @@ void SoftwareRenderer::update()
 
 void SoftwareRenderer::draw()
 {
-    const std::vector<std::unique_ptr<Model>>& models = this->scene->getModels();
+    const std::vector<Model*> models = this->scene->getModels();
     for (int i = 0; i < models.size(); i++)
     {
-        const Model* model = models[i].get();
-        this->drawModel(model);
+        this->drawModel(models[i]);
     }
 }
 

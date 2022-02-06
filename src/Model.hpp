@@ -19,6 +19,12 @@ enum class RotationType
     AXIS_ANGLE
 };
 
+struct AABB
+{
+    Vector4f min;
+    Vector4f max;
+};
+
 class Model 
 {
     public:
@@ -50,23 +56,23 @@ class Model
         const std::vector<int>& getNormalIndices() const;
         const std::vector<int>& getDiffuseTextureIndices() const;
         const TextureBuffer* getDiffuseTextureBuffer() const;
+        
         RotationType rotationType;
-
-        // position
         Vector4f position;
 
     private:
 
-        // rotation
-        EulerRotation                    eulerRotation;
-        AxisAngleRotation                axisAngleRotation;
-        QuaternionRotation               quaternionRotation;        
+        void constructAABB();
 
-        std::vector<Vector4f>            vertices;
-        std::vector<Vector4f>            normals;
-        std::vector<Vector4f>            diffuseTextureCoords;
-        std::vector<int>                 vertexIndices;
-        std::vector<int>                 normalIndices;
-        std::vector<int>                 diffuseTextureIndices;
-        std::unique_ptr<TextureBuffer>   diffuseTextureBuffer;
+        AABB                            boundingBox;
+        EulerRotation                   eulerRotation;
+        AxisAngleRotation               axisAngleRotation;
+        QuaternionRotation              quaternionRotation;
+        std::vector<Vector4f>           vertices;
+        std::vector<Vector4f>           normals;
+        std::vector<Vector4f>           diffuseTextureCoords;
+        std::vector<int>                vertexIndices;
+        std::vector<int>                normalIndices;
+        std::vector<int>                diffuseTextureIndices;
+        std::unique_ptr<TextureBuffer>  diffuseTextureBuffer;
 };

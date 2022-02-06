@@ -19,7 +19,7 @@ Model::Model(std::vector<Vector4f> vertices,
              axisAngleRotation(0, Vector4f(1.f, 0.f, 0.f, 1.f)),
              eulerRotation(0.f, 0.f, 0.f)
 {
-    
+    this->constructAABB();
 }
 
 Model::Model(std::vector<Vector4f> vertices,
@@ -37,7 +37,7 @@ Model::Model(std::vector<Vector4f> vertices,
              eulerRotation(rotation), rotationType(RotationType::EULER),
              quaternionRotation(1.f, 0.f, 0.f, 1.f), axisAngleRotation(0, Vector4f(1.f, 0.f, 0.f, 1.f))
 {
-    
+    this->constructAABB();
 }
 
 Model::Model(std::vector<Vector4f> vertices,
@@ -55,7 +55,7 @@ Model::Model(std::vector<Vector4f> vertices,
              axisAngleRotation(rotation), rotationType(RotationType::AXIS_ANGLE),
              quaternionRotation(1.f, 0.f, 0.f, 1.f), eulerRotation(0.f, 0.f, 0.f)
 {
-    
+    this->constructAABB();
 }
 
 Model::~Model() 
@@ -165,4 +165,21 @@ const std::vector<int>& Model::getDiffuseTextureIndices() const
 const TextureBuffer* Model::getDiffuseTextureBuffer() const
 {
     return this->diffuseTextureBuffer.get();
+}
+
+void Model::constructAABB()
+{
+    float max = std::numeric_limits<float>::max();
+    this->boundingBox.min = Vector4f(max, max, max, 1.f);
+    this->boundingBox.max = Vector4f(-5000.f, -5000.f, -5000.f, 1.f);
+    for (int i = 0; i < this->vertices.size(); i++)
+    {
+        this->boundingBox.min.x = std::min(this->vertices[i].x, this->boundingBox.min.x);
+        this->boundingBox.min.y = std::min(this->vertices[i].y, this->boundingBox.min.y);
+        this->boundingBox.min.z = std::min(this->vertices[i].z, this->boundingBox.min.z);
+
+        this->boundingBox.max.x = std::max(this->vertices[i].x, this->boundingBox.max.x);
+        this->boundingBox.max.y = std::max(this->vertices[i].y, this->boundingBox.max.y);
+        this->boundingBox.max.z = std::max(this->vertices[i].z, this->boundingBox.max.z);
+    }
 }
