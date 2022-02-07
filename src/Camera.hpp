@@ -2,9 +2,14 @@
 
 #include "Matrix.hpp"
 #include "Vector.hpp"
-#include "Frustum.hpp"
 #include "EulerRotation.hpp"
 #include "FrameInput.hpp"
+
+struct Plane
+{
+    Vector4f normal;
+    Vector4f point;
+};
 
 class Camera
 {
@@ -20,14 +25,34 @@ class Camera
 
     private:
 
+        void updateBasisVectors();
+        void updateFrustumPlanes();
+
         Vector4f        forward;
         Vector4f        position;
         Vector4f        right;
         Vector4f        up;
         Vector4f        worldUp;
-        
-        Frustum         frustum;
+
         float           pitch;
         float           yaw;
         float           sensitivity;
+
+        // frustum values
+        float horizontalFOV;
+        float aspectRatio;
+        float frustumNear;
+        float frustumFar;
+        float frustumTop;
+        float frustumBottom;
+        float frustumRight;
+        float frustumLeft;
+
+        // frustum planes
+        Plane topPlane;
+        Plane bottomPlane;
+        Plane leftPlane;
+        Plane rightPlane;
+        Plane nearPlane;
+        Plane farPlane;
 };
