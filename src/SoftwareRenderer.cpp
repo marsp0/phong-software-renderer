@@ -48,11 +48,10 @@ void SoftwareRenderer::update()
 
 void SoftwareRenderer::draw()
 {
-    const std::vector<std::unique_ptr<Model>>& models = this->scene->getModels();
+    const std::vector<Model*> models = this->scene->getModels();
     for (int i = 0; i < models.size(); i++)
     {
-        const Model* model = models[i].get();
-        this->drawModel(model);
+        this->drawModel(models[i]);
     }
 }
 
@@ -86,11 +85,22 @@ void SoftwareRenderer::drawModel(const Model* model)
     const std::vector<int>& vertexIndices = model->getVertexIndices();
     const std::vector<int>& normalIndices = model->getNormalIndices();
     const std::vector<int>& diffuseTextureIndices = model->getDiffuseTextureIndices();
+    Vector4f cameraPosition_M = model->getWorldTransform().inverse() * camera->getPosition();
+
     for (int i = 0; i < vertexIndices.size(); i += 3) 
     {
         int indexV0 = vertexIndices[i];
         int indexV1 = vertexIndices[i + 1];
         int indexV2 = vertexIndices[i + 2];
+
+        int indexN0 = normalIndices[i];
+        int indexN1 = normalIndices[i + 1];
+        int indexN2 = normalIndices[i + 2];
+
+        if (this->cullBackFace(vertices[indexV0], normals[indexN0], cameraPosition_M))
+        {
+            continue;
+        }
 
         // Shader setup
         #if BASIC_SHADER
@@ -130,3 +140,13 @@ void SoftwareRenderer::drawModel(const Model* model)
         Rasterizer::drawTriangle(processedVertices, &shader, this->frameBuffer.get(), this->depthBuffer.get());
     }
 }
+
+bool SoftwareRenderer::cullBackFace(const Vector4f& vertex, const Vector4f& normal, const Vector4f& camPosition_M)
+ {
+     Vector4f viewDirection_M = vertex - camPosition_M;
+     if (viewDirection_M.dot(normal) >= 0)
+     {
+         return true;
+     }
+     return false;
+ }

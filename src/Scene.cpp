@@ -4,11 +4,12 @@
 
 #include "Parser.hpp"
 
-Scene::Scene(int width, int height, const char* fileName): models()
+Scene::Scene(int width, int height, const char* fileName): 
+             models()
 {
     this->models = parser::parseScene(fileName);
     this->camera = std::make_unique<Camera>(Vector4f(3.f, 3.f, 3.f, 1.f), 1.5707f, 
-                                            (float)width/(float)height, 10.f, 100.f);
+                                            (float)width/(float)height, 1.f, 100.f);
 }
 
 Scene::~Scene() 
@@ -59,9 +60,18 @@ void Scene::update(float deltaTime, FrameInput& input)
     this->camera->update(input);
 }
 
-const std::vector<std::unique_ptr<Model>>& Scene::getModels()
+const std::vector<Model*> Scene::getModels()
 {
-    return this->models;
+    std::vector<Model*> visibleModels;
+    for (int i = 0; i < this->models.size(); i++)
+    {
+        Model* model = this->models[i].get();
+        if (this->camera->isVisible(model))
+        {
+            visibleModels.push_back(model);
+        }
+    }
+    return visibleModels;
 }
 
 const Camera* Scene::getCamera()

@@ -3,6 +3,8 @@
 #include <exception>
 #include <fstream>
 
+#include "QuaternionRotation.hpp"
+
 
 namespace parser
 {
@@ -59,7 +61,8 @@ namespace parser
                                                      mesh.vertexIndices, 
                                                      mesh.normalIndices,
                                                      mesh.textureIndices,
-                                                     std::move(textureBuffer)));
+                                                     std::move(textureBuffer),
+                                                     QuaternionRotation(1.f, 0.f, 0.f, 0.f)));
         }
         return std::move(models);
     }

@@ -70,12 +70,12 @@ bool Quaternion::operator!=(const Quaternion& other) const
     return !(this->operator==(other));
 }
 
-Quaternion Quaternion::conjugate() 
+Quaternion Quaternion::conjugate() const
 {
     return Quaternion(w, -this->x, -this->y, -this->z);
 }
 
-Quaternion Quaternion::inverse() 
+Quaternion Quaternion::inverse() const
 {
     // TODO: see if the divide by the magnitude is a perf issue.
     // We are going to be using normalized quats almost always but if that divide is not an issue
@@ -83,12 +83,12 @@ Quaternion Quaternion::inverse()
     return this->conjugate() * (1.f/this->magnitudeSquared());
 }
 
-float Quaternion::magnitudeSquared() 
+float Quaternion::magnitudeSquared() const
 {
     return this->w * this->w + this->x * this->x + this->y * this->y + this->z * this->z;
 }
 
-float Quaternion::magnitude() 
+float Quaternion::magnitude() const 
 {
     return sqrtf(this->magnitudeSquared());
 }
@@ -102,7 +102,7 @@ void Quaternion::normalize()
     this->z /= magnitude;
 }
 
-Matrix4 Quaternion::toMatrix() 
+Matrix4 Quaternion::toMatrix() const 
 {
     // as seen here : http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/index.htm
     // this matrix is simply the result of qpq^-1

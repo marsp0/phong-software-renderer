@@ -22,6 +22,7 @@ class SoftwareRenderer
         void clear();
         void swapBuffers();
         void drawModel(const Model* model);
+        bool cullBackFace(const Vector4f& vertex, const Vector4f& normal, const Vector4f& camPosition_M);
 
     private:
 

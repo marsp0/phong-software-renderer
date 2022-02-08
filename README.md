@@ -114,3 +114,8 @@
 - [OBJ Texture Coords use (0,0) as top left](https://stackoverflow.com/questions/5585368/problems-using-wavefront-objs-texture-coordinates-in-android-opengl-es/5605027#5605027)
 - [Perspective correct interpolation 1](https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/perspective-correct-interpolation-vertex-attributes)
 - [Perspective correct interpolation 2](https://stackoverflow.com/questions/24441631/how-exactly-does-opengl-do-perspectively-correct-linear-interpolation)
+
+### Culling
+
+- [Backface Culling](https://en.wikipedia.org/wiki/Back-face_culling)
+- [Frustum Culling](https://learnopengl.com/Guest-Articles/2021/Scene/Frustum-Culling)

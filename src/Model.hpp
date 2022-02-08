@@ -19,22 +19,35 @@ enum class RotationType
     AXIS_ANGLE
 };
 
+struct AABB
+{
+    Vector4f min;
+    Vector4f max;
+};
+
 class Model 
 {
     public:
 
-        // Methods
-        Model(float eulerX, float eulerY, float eulerZ, Vector4f position);
-        Model(float quatW, float quatX, float quatY, float quatZ, Vector4f position);
-        Model(float angle, Vector4f axis, Vector4f position);
         Model(std::vector<Vector4f> vertices, std::vector<Vector4f> normals,
               std::vector<Vector4f> diffuseTextureCoords, std::vector<int> vertexIndices,
               std::vector<int> normalIndices, std::vector<int> diffuseTextureIndices,
-              std::unique_ptr<TextureBuffer> diffuseTextureBuffer);
+              std::unique_ptr<TextureBuffer> diffuseTextureBuffer,
+              QuaternionRotation rotation);
+        Model(std::vector<Vector4f> vertices, std::vector<Vector4f> normals,
+              std::vector<Vector4f> diffuseTextureCoords, std::vector<int> vertexIndices,
+              std::vector<int> normalIndices, std::vector<int> diffuseTextureIndices,
+              std::unique_ptr<TextureBuffer> diffuseTextureBuffer,
+              EulerRotation rotation);
+        Model(std::vector<Vector4f> vertices, std::vector<Vector4f> normals,
+              std::vector<Vector4f> diffuseTextureCoords, std::vector<int> vertexIndices,
+              std::vector<int> normalIndices, std::vector<int> diffuseTextureIndices,
+              std::unique_ptr<TextureBuffer> diffuseTextureBuffer,
+              AxisAngleRotation rotation);
         ~Model();
         void update(float deltaTime);
-        Matrix4 getWorldMatrix() const;
-        Matrix4 getRotationMatrix() const;
+        Matrix4 getWorldTransform() const;
+        Matrix4 getRotationTransform() const;
         void setRotationType(RotationType newType);
         const std::vector<Vector4f>& getVertices() const;
         const std::vector<Vector4f>& getNormals() const;
@@ -43,23 +56,24 @@ class Model
         const std::vector<int>& getNormalIndices() const;
         const std::vector<int>& getDiffuseTextureIndices() const;
         const TextureBuffer* getDiffuseTextureBuffer() const;
+        AABB getBoundingBox() const;
+        
         RotationType rotationType;
-
-        // position
         Vector4f position;
 
     private:
 
-        // rotation
-        std::unique_ptr<EulerRotation>      eulerRotation;
-        std::unique_ptr<AxisAngleRotation>  axisAngleRotation;
-        std::unique_ptr<QuaternionRotation> quaternionRotation;        
+        void constructBoundingBox();
 
-        std::vector<Vector4f>            vertices;
-        std::vector<Vector4f>            normals;
-        std::vector<Vector4f>            diffuseTextureCoords;
-        std::vector<int>                 vertexIndices;
-        std::vector<int>                 normalIndices;
-        std::vector<int>                 diffuseTextureIndices;
-        std::unique_ptr<TextureBuffer>   diffuseTextureBuffer;
+        AABB                            boundingBox;
+        EulerRotation                   eulerRotation;
+        AxisAngleRotation               axisAngleRotation;
+        QuaternionRotation              quaternionRotation;
+        std::vector<Vector4f>           vertices;
+        std::vector<Vector4f>           normals;
+        std::vector<Vector4f>           diffuseTextureCoords;
+        std::vector<int>                vertexIndices;
+        std::vector<int>                normalIndices;
+        std::vector<int>                diffuseTextureIndices;
+        std::unique_ptr<TextureBuffer>  diffuseTextureBuffer;
 };
