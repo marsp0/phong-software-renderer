@@ -71,7 +71,6 @@ const std::vector<Model*> Scene::getModels()
             visibleModels.push_back(model);
         }
     }
-    std::cout << "Visible is: "  << visibleModels.size() << std::endl;
     return visibleModels;
 }
 
