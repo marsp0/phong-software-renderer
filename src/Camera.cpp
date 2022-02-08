@@ -96,12 +96,12 @@ void Camera::updateFrustumPlanes()
 {
     float halfHorizontalSide = std::tan(this->horizontalFOV / 2.f) * this->frustumFar;
     float halfVerticalSide = halfHorizontalSide / this->aspectRatio;
-    Vector4f vecToFarPlane = this->forward * this->frustumFar;
+    Vector4f vecToFarPlane = -this->forward * this->frustumFar;
 
-    this->nearPlane.normal = this->forward;
+    this->nearPlane.normal = -this->forward;
     this->nearPlane.point = this->position + this->forward * this->frustumNear;
 
-    this->farPlane.normal = -this->forward;
+    this->farPlane.normal = this->forward;
     this->farPlane.point = this->position + vecToFarPlane;
 
     Vector4f leftPlaneVec = vecToFarPlane - this->right * halfHorizontalSide;
@@ -123,4 +123,63 @@ void Camera::updateFrustumPlanes()
     bottomPlaneVec.normalize();
     this->bottomPlane.normal = this->right.cross(bottomPlaneVec);
     this->bottomPlane.point = this->position;
+}
+
+bool Camera::isVisible(Model* model)
+{
+    // check every point against every plane
+    AABB box = model->getBoundingBox();
+    Vector4f min = box.min;
+    Vector4f max = box.max;
+    std::vector<Vector4f> points{
+        Vector4f(min.x, min.y, min.z, 1.f),
+        Vector4f(min.x, min.y, max.z, 1.f),
+        Vector4f(min.x, max.y, min.z, 1.f),
+        Vector4f(min.x, max.y, max.z, 1.f),
+
+        Vector4f(max.x, max.y, max.z, 1.f),
+        Vector4f(max.x, max.y, min.z, 1.f),
+        Vector4f(max.x, min.y, max.z, 1.f),
+        Vector4f(max.x, min.y, min.z, 1.f)
+    };
+
+    if (this->isModelBehindPlane(this->nearPlane, points))
+    {
+        return false;
+    }
+    if (this->isModelBehindPlane(this->farPlane, points))
+    {
+        return false;
+    }
+    if (this->isModelBehindPlane(this->topPlane, points))
+    {
+        return false;
+    }
+    if (this->isModelBehindPlane(this->bottomPlane, points))
+    {
+        return false;
+    }
+    if (this->isModelBehindPlane(this->leftPlane, points))
+    {
+        return false;
+    }
+    if (this->isModelBehindPlane(this->rightPlane, points))
+    {
+        return false;
+    }
+    return true;
+}
+
+bool Camera::isModelBehindPlane(const Plane& plane, std::vector<Vector4f>& points)
+{
+    for (int i = 0; i < points.size(); i++)
+    {
+        Vector4f plane2model = points[i] - plane.point;
+        plane2model.normalize();
+        if (plane.normal.dot(plane2model) >= 0.f)
+        {
+            return false;
+        }
+    }
+    return true;
 }

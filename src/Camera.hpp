@@ -4,6 +4,7 @@
 #include "Vector.hpp"
 #include "EulerRotation.hpp"
 #include "FrameInput.hpp"
+#include "Model.hpp"
 
 struct Plane
 {
@@ -22,9 +23,11 @@ class Camera
         Matrix4 getViewTransform() const;
         Matrix4 getProjectionTransform() const;
         Vector4f getPosition() const;
+        bool isVisible(Model* model);
 
     private:
 
+        bool isModelBehindPlane(const Plane& plane, std::vector<Vector4f>& points);
         void updateBasisVectors();
         void updateFrustumPlanes();
 

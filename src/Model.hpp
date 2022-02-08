@@ -56,13 +56,14 @@ class Model
         const std::vector<int>& getNormalIndices() const;
         const std::vector<int>& getDiffuseTextureIndices() const;
         const TextureBuffer* getDiffuseTextureBuffer() const;
+        AABB getBoundingBox() const;
         
         RotationType rotationType;
         Vector4f position;
 
     private:
 
-        void constructAABB();
+        void constructBoundingBox();
 
         AABB                            boundingBox;
         EulerRotation                   eulerRotation;
