@@ -82,6 +82,12 @@ void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices, Shader* shader, 
     {
         for (int j = miny; j <= maxy; j++) 
         {
+            // discard fragments that are outside viewport
+            if (0 > i || i >= frameBuffer->width || 0 > j || j >= frameBuffer->height)
+            {
+                continue;
+            }
+
             // v0 maps to edge v1v2
             // v1 maps to edge v2v0
             // v2 maps to edge v0v1
