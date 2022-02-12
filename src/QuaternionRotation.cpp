@@ -31,14 +31,10 @@ void QuaternionRotation::updateFromEuler(const EulerRotation& rotation)
     float cosY = cos(rotation.y * 0.5f);
     float cosZ = cos(rotation.z * 0.5f);
 
-    float angle = 2.f * acos(cosX * cosY * cosZ - sinX * sinY * sinZ);
-    Vector4f axis{
-        sinX * cosY * cosZ + cosX * sinY * sinZ,
-        cosX * sinY * cosZ - sinX * cosY * sinZ,
-        cosX * cosY * sinZ + sinX * sinY * cosZ,
-        1.f
-    };
-    this->updateFromAxisAngle(angle, axis);
+    this->quaternion.x = sinX * cosY * cosZ - cosX * sinY * sinZ;
+    this->quaternion.y = cosX * sinY * cosZ + sinX * cosY * sinZ;
+    this->quaternion.z = cosX * cosY * sinZ - sinX * sinY * cosZ;
+    this->quaternion.w = cosX * cosY * cosZ + sinX * sinY * sinZ;
 }
 
 void QuaternionRotation::updateFromAxisAngle(const AxisAngleRotation& rotation)

@@ -10,7 +10,7 @@
 
 void runRenderer() 
 {
-    SoftwareRenderer renderer(WIDTH, HEIGHT, "/home/martin/Documents/Projects/software-renderer/assets/cube/cube.obj");
+    SoftwareRenderer renderer(WIDTH, HEIGHT, "./assets/cube/cube.obj");
     renderer.run();
 }
 

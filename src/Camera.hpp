@@ -40,6 +40,7 @@ class Camera
         float           pitch;
         float           yaw;
         float           sensitivity;
+        EulerRotation   orientation;
 
         // frustum values
         float horizontalFOV;

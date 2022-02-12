@@ -29,9 +29,9 @@ void testAxisAngleUpdateFromEuler()
     axisAngle.updateFromEuler(euler);
 
     std::array<std::array<float, 4>, 4> rawMat{{
-        {-0.74014f, -0.66662f, -0.08829f, 0.f},
-        {0.47648f, -0.61256f,  0.63065f, 0.f},
-        {-0.47449f,  0.42470f,  0.77102f, 0.f},
+        { -0.7401446f, -0.5595578f, -0.3729357f, 0.f},
+        {0.6666262f, -0.5377397f, -0.5161836f, 0.f},
+        {0.0882922f, -0.6306592f,  0.7710210f, 0.f},
         {0.f, 0.f, 0.f, 1.f}
     }};
     Matrix4 expected(rawMat);
@@ -94,9 +94,9 @@ void testQuaternionRotation()
 void testQuaternionUpdateFromEuler()
 {
     std::array<std::array<float, 4>, 4> rawMat{{
-        {-0.74014f, -0.66662f, -0.08829f, 0.f},
-        {0.47648f, -0.61256f,  0.63065f, 0.f},
-        {-0.47449f,  0.42470f,  0.77102f, 0.f},
+        { -0.7401446f, -0.5595578f, -0.3729357f, 0.f},
+        {0.6666262f, -0.5377397f, -0.5161836f, 0.f},
+        {0.0882922f, -0.6306592f,  0.7710210f, 0.f},
         {0.f, 0.f, 0.f, 1.f}
     }};
     Matrix4 expected(rawMat);
@@ -130,9 +130,9 @@ void testQuaternionUpdateFromAxisAngle()
 void testEulerRotation()
 {
     std::array<std::array<float, 4>, 4> rawMat{{
-        {-0.74014f, -0.66662f, -0.08829f, 0.f},
-        {0.47648f, -0.61256f,  0.63065f, 0.f},
-        {-0.47449f,  0.42470f,  0.77102f, 0.f},
+        { -0.7401446f, -0.5595578f, -0.3729357f, 0.f},
+        {0.6666262f, -0.5377397f, -0.5161836f, 0.f},
+        {0.0882922f, -0.6306592f,  0.7710210f, 0.f},
         {0.f, 0.f, 0.f, 1.f}
     }};
     Matrix4 expected(rawMat);

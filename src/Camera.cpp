@@ -5,11 +5,10 @@
 
 Camera::Camera(Vector4f position, float fovX, float aspectRatio, float near,  float far): 
                position(position), worldUp(0.f, 1.f, 0.f, 1.f), pitch(0.f), yaw(0.f), 
-               sensitivity(.5f), horizontalFOV(fovX), aspectRatio(aspectRatio),
-               frustumNear(near), frustumFar(far)
+               sensitivity(.7f), horizontalFOV(fovX), aspectRatio(aspectRatio),
+               frustumNear(near), frustumFar(far), orientation(0.f, 0.f, 0.f)
 {
     this->updateBasisVectors();
-    this->updateFrustumPlanes();
     this->frustumRight = tan(fovX / 2) * this->frustumNear;
     this->frustumLeft = -this->frustumRight;
     
@@ -24,17 +23,39 @@ Camera::~Camera()
 
 void Camera::update(FrameInput& input)
 {
+    float speed = 0.5f;
+    if (input.forward)
+    {
+        this->position = this->position + this->forward * speed;
+    }
     if (input.left)
     {
-        this->position = this->position - this->right * 0.2f;
+        this->position = this->position - this->right * speed;
     }
-    else if (input.right)
+    if (input.backward)
     {
-        this->position = this->position + this->right * 0.2f;
+        this->position = this->position - this->forward * speed;
+    }
+    if (input.right)
+    {
+        this->position = this->position + this->right * speed;
     }
 
-    this->updateBasisVectors();
-    this->updateFrustumPlanes();
+    if (input.relativeX != 0 || input.relativeY != 0)
+    {
+        this->orientation.x -= this->sensitivity * (float)(input.relativeY) * PI_OVER_180;
+        this->orientation.y -= this->sensitivity * (float)(input.relativeX) * PI_OVER_180;
+        if (this->orientation.x > MAX_PITCH)
+        {
+            this->orientation.x = (float)MAX_PITCH;
+        }
+        else if (this->orientation.x < -MAX_PITCH)
+        {
+            this->orientation.x = -(float)MAX_PITCH;
+        }
+
+        this->updateBasisVectors();
+    }
 }
 
 Matrix4 Camera::getViewTransform() const
@@ -50,10 +71,10 @@ Matrix4 Camera::getViewTransform() const
     result.set(1, 2, this->up.z);
     result.set(1, 3,-this->up.dot(this->position));
 
-    result.set(2, 0, this->forward.x);
-    result.set(2, 1, this->forward.y);
-    result.set(2, 2, this->forward.z);
-    result.set(2, 3,-this->forward.dot(this->position));
+    result.set(2, 0, -this->forward.x);
+    result.set(2, 1, -this->forward.y);
+    result.set(2, 2, -this->forward.z);
+    result.set(2, 3,  this->forward.dot(this->position));
 
     result.set(3, 3, 1.f);
     return result;
@@ -84,24 +105,26 @@ Vector4f Camera::getPosition() const
 
 void Camera::updateBasisVectors()
 {
-    this->forward = this->position;
+    this->forward = this->orientation.getRotationTransform() * Vector4f(0.f, 0.f, -1.f, 1.f);
     this->forward.normalize();
-    this->right = this->worldUp.cross(this->forward);
+    this->right = this->forward.cross(this->worldUp);
     this->right.normalize();
-    this->up = this->forward.cross(this->right);
+    this->up = this->right.cross(this->forward);
     this->up.normalize();
+
+    this->updateFrustumPlanes();
 }
 
 void Camera::updateFrustumPlanes()
 {
     float halfHorizontalSide = std::tan(this->horizontalFOV / 2.f) * this->frustumFar;
     float halfVerticalSide = halfHorizontalSide / this->aspectRatio;
-    Vector4f vecToFarPlane = -this->forward * this->frustumFar;
+    Vector4f vecToFarPlane = this->forward * this->frustumFar;
 
-    this->nearPlane.normal = -this->forward;
+    this->nearPlane.normal = this->forward;
     this->nearPlane.point = this->position + this->forward * this->frustumNear;
 
-    this->farPlane.normal = this->forward;
+    this->farPlane.normal = -this->forward;
     this->farPlane.point = this->position + vecToFarPlane;
 
     Vector4f leftPlaneVec = vecToFarPlane - this->right * halfHorizontalSide;

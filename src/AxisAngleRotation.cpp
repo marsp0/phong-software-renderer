@@ -50,10 +50,10 @@ void AxisAngleRotation::updateFromEuler(const EulerRotation& rotation)
     float cosY = cos(rotation.y * 0.5f);
     float cosZ = cos(rotation.z * 0.5f);
 
-    this->angle = 2.f * acos(cosX * cosY * cosZ - sinX * sinY * sinZ);
-    this->axis.x = sinX * cosY * cosZ + cosX * sinY * sinZ;
-    this->axis.y = cosX * sinY * cosZ - sinX * cosY * sinZ;
-    this->axis.z = cosX * cosY * sinZ + sinX * sinY * cosZ;
+    this->angle = 2.f * acos(cosX * cosY * cosZ + sinX * sinY * sinZ);
+    this->axis.x = sinX * cosY * cosZ - cosX * sinY * sinZ;
+    this->axis.y = cosX * sinY * cosZ + sinX * cosY * sinZ;
+    this->axis.z = cosX * cosY * sinZ - sinX * sinY * cosZ;
     this->axis.normalize();
 }
 

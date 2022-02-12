@@ -17,7 +17,7 @@ EulerRotation::~EulerRotation()
 
 Matrix4 EulerRotation::getRotationTransform() const
 {
-    // Rotate in order Z -> Y -> X
+    // Rotate in order X -> Y -> Z
     // 
     // Matrix to rotate around X
     //      1       0       0
@@ -33,7 +33,7 @@ Matrix4 EulerRotation::getRotationTransform() const
     //    cosG    -sinG     0
     //    sinG     cosG     0
     //      0       0       1
-    // matrix below represents X * Y * Z
+    // matrix below represents Z * Y * X
 
     float sinX = sin(this->x);
     float cosX = cos(this->x);
@@ -42,19 +42,19 @@ Matrix4 EulerRotation::getRotationTransform() const
     float sinZ = sin(this->z);
     float cosZ = cos(this->z);
     Matrix4 result;
-    result.set(0, 0,  cosY * cosZ);
-    result.set(0, 1, -cosY * sinZ);
-    result.set(0, 2,  sinY);
+    result.set(0, 0, cosZ * cosY);
+    result.set(0, 1, sinY * sinX * cosZ - sinZ * cosX);
+    result.set(0, 2, cosZ * sinY * cosX + sinX * sinZ);
     result.set(0, 3, 0.f);
 
-    result.set(1, 0,  cosX * sinZ + cosZ * sinX * sinY);
-    result.set(1, 1,  cosX * cosZ - sinX * sinY * sinZ);
-    result.set(1, 2, -cosY * sinX);
+    result.set(1, 0, sinZ * cosY);
+    result.set(1, 1, sinZ * sinY * sinX + cosX * cosZ);
+    result.set(1, 2, sinZ * sinY * cosX - sinX * cosZ);
     result.set(1, 3, 0.f);
 
-    result.set(2, 0, sinX * sinZ - cosX * cosZ * sinY);
-    result.set(2, 1, cosZ * sinX + cosX * sinY * sinZ);
-    result.set(2, 2, cosX * cosY);
+    result.set(2, 0, -sinY);
+    result.set(2, 1, cosY * sinX);
+    result.set(2, 2, cosY * cosX);
     result.set(2, 3, 0.f);
 
     return result;
@@ -77,23 +77,28 @@ void EulerRotation::updateFromRotationMatrix(Matrix4& matrix)
     // taken from https://github.com/gaschler/rotationconverter
     // which is the source for this calculator
     // http://www.andre-gaschler.com/rotationconverter/
-    float g = matrix.get(0, 2);
-    float l = matrix.get(1, 2);
-    float e = matrix.get(2, 2);
-    float f = matrix.get(0, 1);
+    // a   f   g
+    // h   k   l
+    // m   n   e
     float a = matrix.get(0, 0);
-    float n = matrix.get(2, 1);
+    float f = matrix.get(0, 1);
+    float g = matrix.get(0, 2);
+    float h = matrix.get(1, 0);
     float k = matrix.get(1, 1);
-    this->y = asin(this->clamp(g, -1.f, 1.f));
-    if (fabs(g < 0.9999f))
+    float l = matrix.get(1, 2);
+    float m = matrix.get(2, 0);
+    float n = matrix.get(2, 1);
+    float e = matrix.get(2, 2);
+    this->y = asin(-this->clamp(m, -1.f, 1.f));
+    if (fabs(m < 0.9999f))
     {
-        this->x = atan2(-l, e);
-        this->z = atan2(-f, a);
+        this->x = atan2(n, e);
+        this->z = atan2(h, a);
     }
     else
     {
-        this->x = atan2(n, k);
-        this->z = 0.f;
+        this->x = 0.f;
+        this->z = atan2(-f, k);
     }
 }
 

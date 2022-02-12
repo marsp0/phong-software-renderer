@@ -58,12 +58,12 @@ void testCameraFrustumCull()
                  std::vector<int>(), std::vector<int>(), std::vector<int>(), std::move(buffer), QuaternionRotation(1.f, 0.f, 0.f, 0.f)};
 
     // test both objects visible
-    Camera camera1{Vector4f(5.f, 5.f, 5.f, 1.f), 1.5707f, 800.f/600.f, 1.f, 100.f};
+    Camera camera1{Vector4f(0.f, 0.f, 10.f, 1.f), 1.5707f, 800.f/600.f, 1.f, 100.f};
     ASSERT_VALUE(bool, camera1.isVisible(&model1), true);
     ASSERT_VALUE(bool, camera1.isVisible(&model2), true);
 
     // test only 1 is visible
-    Camera camera2{Vector4f(-5.f, 0.f, 0.f, 1.f), 1.5707f, 800.f/600.f, 1.f, 100.f};
+    Camera camera2{Vector4f(-2.f, -2.f, 1.f, 1.f), 1.5707f, 800.f/600.f, 1.f, 100.f};
     ASSERT_VALUE(bool, camera2.isVisible(&model1), true);
     ASSERT_VALUE(bool, camera2.isVisible(&model2), false); // <--------- FALSE as model2 is behind the camera
 }
