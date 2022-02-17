@@ -32,8 +32,9 @@ class BasicShader: public Shader
         Matrix4 projection;
 
         // per pixel data
-        std::array<Vector4f, 3> diffuseTextureVertices;
-        std::array<uint8_t, 3> color;
+        Vector4f diffuseTextureV0;
+        Vector4f diffuseTextureV1;
+        Vector4f diffuseTextureV2;
 
     private:
 };

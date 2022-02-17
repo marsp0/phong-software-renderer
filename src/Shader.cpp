@@ -24,5 +24,7 @@ Vector4f BasicShader::processVertex(const Vector4f& vertex)
 uint32_t BasicShader::processFragment(float w0, float w1, float w2) 
 {
     
-    return TextureMapper::sample(this->diffuseTextureBuffer, this->diffuseTextureVertices, w0, w1, w2);
+    return TextureMapper::sample(this->diffuseTextureBuffer, 
+                                 this->diffuseTextureV0, this->diffuseTextureV1, this->diffuseTextureV2, 
+                                 w0, w1, w2);
 }

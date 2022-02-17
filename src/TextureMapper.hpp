@@ -16,7 +16,7 @@ class TextureMapper
 {
     public:
         static uint32_t sample(const TextureBuffer* textureBuffer, 
-                               const std::array<Vector4f, 3>& textureVertices,
+                               const Vector4f& t0, const Vector4f& t1, const Vector4f& t2,
                                float w0, float w1, float w2);
     private:
 };
