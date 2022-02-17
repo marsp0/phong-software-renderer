@@ -72,21 +72,16 @@ void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices, Shader* shader, 
     float z0 = 1.f/vertices[0].w;
     float z1 = 1.f/vertices[1].w;
     float z2 = 1.f/vertices[2].w;
-    int minx = std::min({x0, x1, x2});
-    int maxx = std::max({x0, x1, x2});
-    int miny = std::min({y0, y1, y2});
-    int maxy = std::max({y0, y1, y2});
+    int minx = std::max(std::min({x0, x1, x2}), 0);
+    int maxx = std::min(std::max({x0, x1, x2}), frameBuffer->width - 1);
+    int miny = std::max(std::min({y0, y1, y2}), 0);
+    int maxy = std::min(std::max({y0, y1, y2}), frameBuffer->height - 1);
 
     float area = 1.f / Rasterizer::edgeCheck(x0, y0, x1, y1, x2, y2);
     for (int i = minx; i <= maxx; i++) 
     {
         for (int j = miny; j <= maxy; j++) 
         {
-            // discard fragments that are outside viewport
-            if (0 > i || i >= frameBuffer->width || 0 > j || j >= frameBuffer->height)
-            {
-                continue;
-            }
 
             // v0 maps to edge v1v2
             // v1 maps to edge v2v0

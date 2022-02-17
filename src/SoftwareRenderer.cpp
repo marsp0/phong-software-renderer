@@ -1,9 +1,10 @@
 #include "SoftwareRenderer.hpp"
 
-#include <iostream>
-
 #include "Buffer.hpp"
 #include "Shader.hpp"
+
+#include <iostream>
+#include <chrono>
 
 SoftwareRenderer::SoftwareRenderer(int width, int height, const char* fileName): input()
 {
@@ -48,11 +49,14 @@ void SoftwareRenderer::update()
 
 void SoftwareRenderer::draw()
 {
+    std::chrono::steady_clock::time_point before = std::chrono::steady_clock::now();
     const std::vector<Model*> models = this->scene->getModels();
     for (int i = 0; i < models.size(); i++)
     {
         this->drawModel(models[i]);
     }
+    std::chrono::steady_clock::time_point after = std::chrono::steady_clock::now();
+    std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(after - before).count() << std::endl;
 }
 
 void SoftwareRenderer::clear()
