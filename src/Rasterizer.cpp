@@ -79,10 +79,10 @@ void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices, Shader* shader, 
 
     float area = 1.f / Rasterizer::edgeCheck(x0, y0, x1, y1, x2, y2);
 
-    int edgeA = Rasterizer::edgeCheck(x1, y1, x2, y2, minx, miny);
-    int edgeB = Rasterizer::edgeCheck(x2, y2, x0, y0, minx, miny);
-    int edgeC = Rasterizer::edgeCheck(x0, y0, x1, y1, minx, miny);
-    int initialEdgeA, initialEdgeB, initialEdgeC;
+    int initialEdgeA = Rasterizer::edgeCheck(x1, y1, x2, y2, minx, miny);
+    int initialEdgeB = Rasterizer::edgeCheck(x2, y2, x0, y0, minx, miny);
+    int initialEdgeC = Rasterizer::edgeCheck(x0, y0, x1, y1, minx, miny);
+    int edgeA, edgeB, edgeC;
     int dxA = x2 - x1;
     int dxB = x0 - x2;
     int dxC = x1 - x0;
@@ -92,53 +92,55 @@ void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices, Shader* shader, 
 
     for (int y = miny; y <= maxy; y++)
     {
-        initialEdgeA = edgeA;
-        initialEdgeB = edgeB;
-        initialEdgeC = edgeC;
+        edgeA = initialEdgeA;
+        edgeB = initialEdgeB;
+        edgeC = initialEdgeC;
 
         for (int x = minx; x <= maxx; x++)
         {
-            // v0 maps to edge v1v2
-            // v1 maps to edge v2v0
-            // v2 maps to edge v0v1
-            std::array<float, 3> weights{(float)initialEdgeA, (float)initialEdgeB, (float)initialEdgeC};
+            // w0 maps to edge v1v2
+            // w1 maps to edge v2v0
+            // w2 maps to edge v0v1
+            float w0 = edgeA;
+            float w1 = edgeB;
+            float w2 = edgeC;
 
             // skip if we are not in triangle
             // CCW order= negative is inside / positive is outside (we are using this)
             // CW order = negative is outside/ positive is inside
-            if (weights[0] <= 0 && weights[1] <= 0 && weights[2] <= 0)
+            if (w0 <= 0 && w1 <= 0 && w2 <= 0)
             {
 
                 // normalize weights
                 // w0 + w1 + w2 = 1
-                weights[0] *= area;
-                weights[1] *= area;
-                weights[2] *= area;
+                w0 *= area;
+                w1 *= area;
+                w2 *= area;
 
-                float depth = 1.f/(weights[0] * z0 + weights[1] * z1 + weights[2] * z2);
+                float depth = 1.f/(w0 * z0 + w1 * z1 + w2 * z2);
 
                 if (depth <= depthBuffer->get(x, y))
                 {
 
                     // perspective correct texture mapping
-                    weights[0] = weights[0] * z0 * depth;
-                    weights[1] = weights[1] * z1 * depth;
-                    weights[2] = weights[2] * z2 * depth;
+                    w0 = w0 * z0 * depth;
+                    w1 = w1 * z1 * depth;
+                    w2 = w2 * z2 * depth;
 
                     depthBuffer->set(x, y, depth);
-                    uint32_t color = shader->processFragment(weights);
+                    uint32_t color = shader->processFragment(w0, w1, w2);
                     frameBuffer->set(x, y, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, color >> 24, color >> 16, color >> 8));
                 }
             }
 
-            initialEdgeA += dyA;
-            initialEdgeB += dyB;
-            initialEdgeC += dyC;
+            edgeA += dyA;
+            edgeB += dyB;
+            edgeC += dyC;
         }
 
-        edgeA -= dxA;
-        edgeB -= dxB;
-        edgeC -= dxC;
+        initialEdgeA -= dxA;
+        initialEdgeB -= dxB;
+        initialEdgeC -= dxC;
     }
 }
 

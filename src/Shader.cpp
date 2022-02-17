@@ -21,8 +21,8 @@ Vector4f BasicShader::processVertex(const Vector4f& vertex)
     return this->modelViewProjection * vertex;
 }
 
-uint32_t BasicShader::processFragment(const std::array<float, 3>& weights) 
+uint32_t BasicShader::processFragment(float w0, float w1, float w2) 
 {
     
-    return TextureMapper::sample(this->diffuseTextureBuffer, this->diffuseTextureVertices, weights);
+    return TextureMapper::sample(this->diffuseTextureBuffer, this->diffuseTextureVertices, w0, w1, w2);
 }
