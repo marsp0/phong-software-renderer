@@ -72,59 +72,75 @@ void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices, Shader* shader, 
     float z0 = 1.f/vertices[0].w;
     float z1 = 1.f/vertices[1].w;
     float z2 = 1.f/vertices[2].w;
-    int minx = std::min({x0, x1, x2});
-    int maxx = std::max({x0, x1, x2});
-    int miny = std::min({y0, y1, y2});
-    int maxy = std::max({y0, y1, y2});
+    int minx = std::max(std::min({x0, x1, x2}), 0);
+    int maxx = std::min(std::max({x0, x1, x2}), frameBuffer->width - 1);
+    int miny = std::max(std::min({y0, y1, y2}), 0);
+    int maxy = std::min(std::max({y0, y1, y2}), frameBuffer->height - 1);
 
     float area = 1.f / Rasterizer::edgeCheck(x0, y0, x1, y1, x2, y2);
-    for (int i = minx; i <= maxx; i++) 
-    {
-        for (int j = miny; j <= maxy; j++) 
-        {
-            // discard fragments that are outside viewport
-            if (0 > i || i >= frameBuffer->width || 0 > j || j >= frameBuffer->height)
-            {
-                continue;
-            }
 
-            // v0 maps to edge v1v2
-            // v1 maps to edge v2v0
-            // v2 maps to edge v0v1
-            std::array<float, 3> weights{ Rasterizer::edgeCheck(x1, y1, x2, y2, i, j),
-                                          Rasterizer::edgeCheck(x2, y2, x0, y0, i, j),
-                                          Rasterizer::edgeCheck(x0, y0, x1, y1, i, j)};
+    int initialEdgeA = Rasterizer::edgeCheck(x1, y1, x2, y2, minx, miny);
+    int initialEdgeB = Rasterizer::edgeCheck(x2, y2, x0, y0, minx, miny);
+    int initialEdgeC = Rasterizer::edgeCheck(x0, y0, x1, y1, minx, miny);
+    int edgeA, edgeB, edgeC;
+    int dxA = x2 - x1;
+    int dxB = x0 - x2;
+    int dxC = x1 - x0;
+    int dyA = y2 - y1;
+    int dyB = y0 - y2;
+    int dyC = y1 - y0;
+
+    for (int y = miny; y <= maxy; y++)
+    {
+        edgeA = initialEdgeA;
+        edgeB = initialEdgeB;
+        edgeC = initialEdgeC;
+
+        for (int x = minx; x <= maxx; x++)
+        {
+            // w0 maps to edge v1v2
+            // w1 maps to edge v2v0
+            // w2 maps to edge v0v1
+            float w0 = edgeA;
+            float w1 = edgeB;
+            float w2 = edgeC;
 
             // skip if we are not in triangle
             // CCW order= negative is inside / positive is outside (we are using this)
             // CW order = negative is outside/ positive is inside
-            if (weights[0] > 0 || weights[1] > 0 || weights[2] > 0)
+            if (w0 <= 0 && w1 <= 0 && w2 <= 0)
             {
-                continue;
+
+                // normalize weights
+                // w0 + w1 + w2 = 1
+                w0 *= area;
+                w1 *= area;
+                w2 *= area;
+
+                float depth = 1.f/(w0 * z0 + w1 * z1 + w2 * z2);
+
+                if (depth <= depthBuffer->get(x, y))
+                {
+
+                    // perspective correct texture mapping
+                    w0 = w0 * z0 * depth;
+                    w1 = w1 * z1 * depth;
+                    w2 = w2 * z2 * depth;
+
+                    depthBuffer->set(x, y, depth);
+                    uint32_t color = shader->processFragment(w0, w1, w2);
+                    frameBuffer->set(x, y, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, color >> 24, color >> 16, color >> 8));
+                }
             }
 
-            // normalize weights
-            // w0 + w1 + w2 = 1
-            weights[0] *= area;
-            weights[1] *= area;
-            weights[2] *= area;
-
-            float depth = 1.f/(weights[0] * z0 + weights[1] * z1 + weights[2] * z2);
-
-            if (depth > depthBuffer->get(i, j))
-            {
-                continue;
-            }
-
-            // perspective correct texture mapping
-            weights[0] = weights[0] * z0 * depth;
-            weights[1] = weights[1] * z1 * depth;
-            weights[2] = weights[2] * z2 * depth;
-
-            depthBuffer->set(i, j, depth);
-            const std::array<uint8_t, 3> color = shader->processFragment(weights);
-            frameBuffer->set(i, j, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, color[0], color[1], color[2]));
+            edgeA += dyA;
+            edgeB += dyB;
+            edgeC += dyC;
         }
+
+        initialEdgeA -= dxA;
+        initialEdgeB -= dxB;
+        initialEdgeC -= dxC;
     }
 }
 

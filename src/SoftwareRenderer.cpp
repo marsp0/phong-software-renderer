@@ -1,9 +1,10 @@
 #include "SoftwareRenderer.hpp"
 
-#include <iostream>
-
 #include "Buffer.hpp"
 #include "Shader.hpp"
+
+#include <iostream>
+#include <chrono>
 
 SoftwareRenderer::SoftwareRenderer(int width, int height, const char* fileName): input()
 {
@@ -48,11 +49,14 @@ void SoftwareRenderer::update()
 
 void SoftwareRenderer::draw()
 {
+    std::chrono::steady_clock::time_point before = std::chrono::steady_clock::now();
     const std::vector<Model*> models = this->scene->getModels();
     for (int i = 0; i < models.size(); i++)
     {
         this->drawModel(models[i]);
     }
+    std::chrono::steady_clock::time_point after = std::chrono::steady_clock::now();
+    std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(after - before).count() << std::endl;
 }
 
 void SoftwareRenderer::clear()
@@ -109,18 +113,17 @@ void SoftwareRenderer::drawModel(const Model* model)
         int indexT1 = diffuseTextureIndices[i + 1];
         int indexT2 = diffuseTextureIndices[i + 2];
 
-        shader.diffuseTextureVertices[0] = diffuseTextureCoords[indexT0];
-        shader.diffuseTextureVertices[1] = diffuseTextureCoords[indexT1];
-        shader.diffuseTextureVertices[2] = diffuseTextureCoords[indexT2];
+        shader.diffuseTextureV0 = diffuseTextureCoords[indexT0];
+        shader.diffuseTextureV1 = diffuseTextureCoords[indexT1];
+        shader.diffuseTextureV2 = diffuseTextureCoords[indexT2];
 
         #endif
 
         // vertex shader
-        std::array<Vector4f, 3> processedVertices{
-            shader.processVertex(vertices[indexV0]),
-            shader.processVertex(vertices[indexV1]),
-            shader.processVertex(vertices[indexV2])
-        };
+        std::array<Vector4f, 3> processedVertices;
+        processedVertices[0] = shader.processVertex(vertices[indexV0]);
+        processedVertices[1] = shader.processVertex(vertices[indexV1]);
+        processedVertices[2] = shader.processVertex(vertices[indexV2]);
 
         // perspective divide
         processedVertices[0] = processedVertices[0] / processedVertices[0].w;
