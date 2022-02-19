@@ -5,7 +5,8 @@
 Software renderer written from scratch. The goal of the project is for me to be able to better understand the graphics pipeline and what goes under the hood.
 
 ## Currently supported features
-- Perspective correct interpolation
+- Single Threaded Forward Renderer
+- Perspective correct attribute interpolation
 - Frustum culling
 - Backface culling
 

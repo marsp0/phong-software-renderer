@@ -1,16 +1,7 @@
 #pragma once
 
-#include <array>
-
 #include "Buffer.hpp"
 #include "Vector.hpp"
-
-// Texture Interpolation
-enum class TextureInterp
-{
-    LINEAR = 0,
-    PERSPECTIVE_CORRECT
-};
 
 class TextureMapper
 {

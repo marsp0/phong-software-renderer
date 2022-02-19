@@ -76,12 +76,7 @@ void SoftwareRenderer::drawModel(const Model* model)
 {
     const Camera* camera = this->scene->getCamera();
 
-    // Shader creation
-    #if BASIC_SHADER
-
-    BasicShader shader(model, camera);
-    
-    #endif
+    Shader shader(model, camera);
 
     const std::vector<Vector4f>& vertices = model->getVertices();
     const std::vector<Vector4f>& normals = model->getNormals();
@@ -106,9 +101,6 @@ void SoftwareRenderer::drawModel(const Model* model)
             continue;
         }
 
-        // Shader setup
-        #if BASIC_SHADER
-        
         int indexT0 = diffuseTextureIndices[i];
         int indexT1 = diffuseTextureIndices[i + 1];
         int indexT2 = diffuseTextureIndices[i + 2];
@@ -116,8 +108,6 @@ void SoftwareRenderer::drawModel(const Model* model)
         shader.diffuseTextureV0 = diffuseTextureCoords[indexT0];
         shader.diffuseTextureV1 = diffuseTextureCoords[indexT1];
         shader.diffuseTextureV2 = diffuseTextureCoords[indexT2];
-
-        #endif
 
         // vertex shader
         std::array<Vector4f, 3> processedVertices;

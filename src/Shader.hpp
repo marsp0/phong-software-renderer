@@ -7,20 +7,11 @@
 #include "Model.hpp"
 #include "Camera.hpp"
 
-class Shader
-{
-    public:
-        virtual Vector4f processVertex(const Vector4f& vertex) = 0;
-        virtual uint32_t processFragment(float w0, float w1, float w2) = 0;
-    private:
-};
-
-class BasicShader: public Shader
+class BasicShader
 {
     public:
     
         BasicShader(const Model* model,const Camera* camera);
-        ~BasicShader();
         Vector4f processVertex(const Vector4f& vertex);
         uint32_t processFragment(float w0, float w1, float w2);
 
@@ -38,3 +29,32 @@ class BasicShader: public Shader
 
     private:
 };
+
+class GouraudShader
+{
+    public:
+    
+        GouraudShader(const Model* model,const Camera* camera);
+        Vector4f processVertex(const Vector4f& vertex);
+        uint32_t processFragment(float w0, float w1, float w2);
+
+        // per model data
+        const TextureBuffer* diffuseTextureBuffer;
+        Matrix4 modelViewProjection;
+        Matrix4 world;
+        Matrix4 view;
+        Matrix4 projection;
+
+        // per pixel data
+        Vector4f diffuseTextureV0;
+        Vector4f diffuseTextureV1;
+        Vector4f diffuseTextureV2;
+
+    private:
+};
+
+#if BASIC_SHADER
+    typedef BasicShader Shader;
+#elif GOURAUD_SHADER
+    typedef GouraudShader Shader;
+#endif
