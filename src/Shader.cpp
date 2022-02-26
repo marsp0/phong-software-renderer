@@ -1,6 +1,6 @@
 #include "Shader.hpp"
 
-#include "TextureMapper.hpp"
+#include "Sampler.hpp"
 
 // // // // // // // // // //
 // Gouraud Shader
@@ -21,7 +21,7 @@ Vector4f GouraudShader::processVertex(const Vector4f& vertex)
 uint32_t GouraudShader::processFragment(float w0, float w1, float w2) 
 {
     
-    return TextureMapper::sample(this->diffuseTextureBuffer, 
-                                 this->diffuseTextureV0, this->diffuseTextureV1, this->diffuseTextureV2, 
-                                 w0, w1, w2);
+    return Sampler::sample<TextureBuffer>(this->diffuseTextureBuffer, 
+                                          this->diffuseTextureV0, this->diffuseTextureV1, this->diffuseTextureV2, 
+                                          w0, w1, w2);
 }
