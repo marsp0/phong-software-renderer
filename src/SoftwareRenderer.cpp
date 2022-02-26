@@ -57,7 +57,7 @@ void SoftwareRenderer::draw()
         this->drawModel(models[i]);
     }
     std::chrono::steady_clock::time_point after = std::chrono::steady_clock::now();
-    std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(after - before).count() << std::endl;
+    std::cout << "Rendering took: " << std::chrono::duration_cast<std::chrono::milliseconds>(after - before).count() << "ms" << std::endl;
 }
 
 void SoftwareRenderer::clear()

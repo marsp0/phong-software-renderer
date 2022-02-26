@@ -126,8 +126,8 @@ void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices, Shader* shader, 
                     w2 = w2 * z2 * depth;
 
                     depthBuffer->set(x, y, depth);
-                    uint32_t color = shader->processFragment(w0, w1, w2);
-                    frameBuffer->set(x, y, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, color >> 24, color >> 16, color >> 8));
+                    Vector4i color = shader->processFragment(w0, w1, w2);
+                    frameBuffer->set(x, y, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, color.x, color.y, color.z));
                 }
             }
 
