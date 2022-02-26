@@ -10,7 +10,8 @@ SoftwareRenderer::SoftwareRenderer(int width, int height, const char* fileName):
 {
     this->displayManager = std::make_unique<DisplayManager>(width, height);
     this->scene = std::make_unique<Scene>(width, height, fileName);
-    this->frameBuffer = std::make_unique<FrameBuffer>(width, height, 2147483647);
+    this->frameBuffer = std::make_unique<FrameBuffer>(width, height, 0);
+    // TODO: this should take the far plane as argument
     this->depthBuffer = std::make_unique<DepthBuffer>(width, height, 150.f);
     
 }
@@ -62,9 +63,8 @@ void SoftwareRenderer::draw()
 void SoftwareRenderer::clear()
 {
     this->input.clear();
-    this->frameBuffer->clear(2147483647);
-    // TODO: this should take the far plane as arg
-    this->depthBuffer->clear(150.f);
+    this->frameBuffer->clear();
+    this->depthBuffer->clear();
 }
 
 void SoftwareRenderer::swapBuffers()

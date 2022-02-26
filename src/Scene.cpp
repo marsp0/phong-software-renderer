@@ -78,3 +78,8 @@ const Camera* Scene::getCamera()
 {
     return this->camera.get();
 }
+
+const std::vector<DirectionalLight>& Scene::getDirectionalLights()
+{
+    return this->directionalLights;
+}

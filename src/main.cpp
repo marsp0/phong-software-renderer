@@ -10,6 +10,7 @@
 
 void runRenderer() 
 {
+    // SoftwareRenderer renderer(WIDTH, HEIGHT, "./assets/detailed_cube/cube.obj");
     SoftwareRenderer renderer(WIDTH, HEIGHT, "./assets/cube/cube.obj");
     renderer.run();
 }
