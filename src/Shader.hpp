@@ -6,12 +6,14 @@
 #include "Buffer.hpp"
 #include "Model.hpp"
 #include "Camera.hpp"
+#include "Light.hpp"
+#include "Material.hpp"
 
 class GouraudShader
 {
     public:
         // TODO: Implement both linear and hyperbolic interpolation methods as per the wiki page
-        GouraudShader(const Model* model,const Camera* camera);
+        GouraudShader(const Model* model,const Camera* camera, DirectionalLight dirLight);
         Vector4f processVertex(const Vector4f& vertex);
         Vector4i processFragment(float w0, float w1, float w2);
 
@@ -21,11 +23,18 @@ class GouraudShader
         Matrix4 world;
         Matrix4 view;
         Matrix4 projection;
+        Material material;
 
-        // per pixel data
+        // lights
+        DirectionalLight directionalLight;
+
+        // per triangle
         Vector4f diffuseTextureV0;
         Vector4f diffuseTextureV1;
         Vector4f diffuseTextureV2;
+        Vector4f normalV0;
+        Vector4f normalV1;
+        Vector4f normalV2;
 
     private:
 };

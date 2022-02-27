@@ -18,4 +18,4 @@ Software renderer written from scratch. The goal of the project is for me to be 
 See the relevant [wiki page](https://github.com/marsp0/software-renderer/wiki/Build).
 
 ## References
-You can find a list of references I've used [here](https://github.com/marsp0/software-renderer/wiki/References).
+See the relevant [wiki page](https://github.com/marsp0/software-renderer/wiki/References).

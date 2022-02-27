@@ -5,7 +5,7 @@
 #include "Parser.hpp"
 
 Scene::Scene(int width, int height, const char* fileName): 
-             models()
+             models(), directionalLight(Vector4f(0.f, 0.f, -1.f, 1.f), Vector4f(255.f, 255.f, 255.f, 1.f))
 {
     this->models = parser::parseScene(fileName);
     this->camera = std::make_unique<Camera>(Vector4f(0.f, 0.f, 5.f, 1.f), 1.5707f, 
@@ -79,7 +79,7 @@ const Camera* Scene::getCamera()
     return this->camera.get();
 }
 
-std::vector<DirectionalLight> Scene::getDirectionalLights()
+DirectionalLight Scene::getDirectionalLight()
 {
-    return this->directionalLights;
+    return this->directionalLight;
 }

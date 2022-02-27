@@ -76,7 +76,7 @@ void SoftwareRenderer::drawModel(const Model* model)
 {
     const Camera* camera = this->scene->getCamera();
 
-    Shader shader(model, camera);
+    Shader shader(model, camera, this->scene->getDirectionalLight());
 
     const std::vector<Vector4f>& vertices = model->getVertices();
     const std::vector<Vector4f>& normals = model->getNormals();
@@ -96,18 +96,24 @@ void SoftwareRenderer::drawModel(const Model* model)
         int indexN1 = normalIndices[i + 1];
         int indexN2 = normalIndices[i + 2];
 
+        int indexT0 = diffuseTextureIndices[i];
+        int indexT1 = diffuseTextureIndices[i + 1];
+        int indexT2 = diffuseTextureIndices[i + 2];
+
         if (this->cullBackFace(vertices[indexV0], normals[indexN0], cameraPosition_M))
         {
             continue;
         }
 
-        int indexT0 = diffuseTextureIndices[i];
-        int indexT1 = diffuseTextureIndices[i + 1];
-        int indexT2 = diffuseTextureIndices[i + 2];
+        // set shader attributes
 
         shader.diffuseTextureV0 = diffuseTextureCoords[indexT0];
         shader.diffuseTextureV1 = diffuseTextureCoords[indexT1];
         shader.diffuseTextureV2 = diffuseTextureCoords[indexT2];
+
+        shader.normalV0 = normals[indexN0];
+        shader.normalV1 = normals[indexN1];
+        shader.normalV2 = normals[indexN2];
 
         // vertex shader
         std::array<Vector4f, 3> processedVertices;

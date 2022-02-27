@@ -19,12 +19,12 @@ class Scene
         void update(float deltaTime, FrameInput& input);
         const std::vector<Model*> getModels();
         const Camera* getCamera();
-        std::vector<DirectionalLight> getDirectionalLights();
+        DirectionalLight getDirectionalLight();
 
     private:
 
         // Data
-        std::vector<DirectionalLight>               directionalLights;
+        DirectionalLight                    directionalLight;
         std::unique_ptr<Camera>             camera;
         std::vector<std::unique_ptr<Model>> models;
 };

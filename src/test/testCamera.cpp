@@ -2,6 +2,7 @@
 #include "testUtils.hpp"
 
 #include "../Camera.hpp"
+#include "../Material.hpp"
 
 void testCameraPerspectiveProjection()
 {
@@ -32,13 +33,15 @@ void testCameraFrustumCull()
     vertices1.push_back(Vector4f(-1.f, -1.f, -1.f, 1.f));
     vertices1.push_back(Vector4f(1.f, 1.f, 1.f, 1.f));
     Model model1{vertices1, std::vector<Vector4f>(), std::vector<Vector4f>(),
-                 std::vector<int>(), std::vector<int>(), std::vector<int>(), std::move(buffer), QuaternionRotation(1.f, 0.f, 0.f, 0.f)};
+                 std::vector<int>(), std::vector<int>(), std::vector<int>(), std::move(buffer), QuaternionRotation(1.f, 0.f, 0.f, 0.f),
+                 Material()};
 
     std::vector<Vector4f> vertices2;
     vertices2.push_back(Vector4f(-10.f, -1.f, -1.f, 1.f));
     vertices2.push_back(Vector4f(-8.f, 1.f, 1.f, 1.f));
     Model model2{vertices2, std::vector<Vector4f>(), std::vector<Vector4f>(),
-                 std::vector<int>(), std::vector<int>(), std::vector<int>(), std::move(buffer), QuaternionRotation(1.f, 0.f, 0.f, 0.f)};
+                 std::vector<int>(), std::vector<int>(), std::vector<int>(), std::move(buffer), QuaternionRotation(1.f, 0.f, 0.f, 0.f),
+                 Material()};
 
     // test both objects visible
     Camera camera1{Vector4f(0.f, 0.f, 10.f, 1.f), 1.5707f, 800.f/600.f, 1.f, 100.f};

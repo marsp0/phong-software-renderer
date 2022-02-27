@@ -9,6 +9,7 @@
 
 #include "Model.hpp"
 #include "Vector.hpp"
+#include "Material.hpp"
 
 namespace parser
 {
@@ -42,6 +43,7 @@ namespace parser
         int height;
         int pixelDepth;
         int bytesPerPixel;
+        Material material;
         std::vector<uint32_t> data;
     };
 
