@@ -36,6 +36,9 @@ Vector4f GouraudShader::processVertex(int index, const Vector4f& vertex, const V
     float specular = material.specular * std::pow(std::max(viewDir_W.dot(reflectionDir_W), 0.f), material.shininess) * (int)(normalDotLight > 0);
 
     // store result and interpolate in fragment shader
+    // TODO: current calt uses the same light color for ambient diffuse and spec components.
+    // This can be extended to allow the light to have a different one color for ambient, another for diffuse and
+    // a third for specular
     this->lightColors[index] = directionalLight.color * (material.ambient + diffuse + specular);
 
     return this->MVP * vertex;
