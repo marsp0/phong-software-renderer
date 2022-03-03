@@ -20,7 +20,6 @@ Color::Color(float red, float green, float blue):  r(red), g(green), b(blue)
 Color Color::operator*(const Color& other) const
 {
 	return Color(this->r * other.r, this->g * other.g, this->b * other.b);
-	// return Color(std::min(this->r * other.r, 1.f), std::min(this->g * other.g, 1.f), std::min(this->b * other.b, 1.f));
 }
 
 Color Color::operator+(const Color& other) const
