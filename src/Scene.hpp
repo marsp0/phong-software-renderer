@@ -6,6 +6,7 @@
 #include "Model.hpp"
 #include "Camera.hpp"
 #include "FrameInput.hpp"
+#include "Light.hpp"
 
 class Scene 
 {
@@ -18,11 +19,12 @@ class Scene
         void update(float deltaTime, FrameInput& input);
         const std::vector<Model*> getModels();
         const Camera* getCamera();
+        DirectionalLight getDirectionalLight();
 
     private:
 
         // Data
-        std::vector<float>                  lights;
+        DirectionalLight                    directionalLight;
         std::unique_ptr<Camera>             camera;
         std::vector<std::unique_ptr<Model>> models;
 };

@@ -4,8 +4,6 @@
 #include <iostream>
 #include <array>
 
-#include "TextureMapper.hpp"
-
 const SDL_PixelFormat* Rasterizer::PIXEL_FORMAT(SDL_AllocFormat(SDL_PIXELFORMAT_RGB888));
 
 void Rasterizer::drawLine(std::array<Vector4f, 2> vertices, std::array<uint8_t, 3> color, FrameBuffer* frameBuffer, DepthBuffer* depthBuffer) 
@@ -128,8 +126,11 @@ void Rasterizer::drawTriangle(std::array<Vector4f, 3> vertices, Shader* shader, 
                     w2 = w2 * z2 * depth;
 
                     depthBuffer->set(x, y, depth);
-                    uint32_t color = shader->processFragment(w0, w1, w2);
-                    frameBuffer->set(x, y, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, color >> 24, color >> 16, color >> 8));
+                    Color color = shader->processFragment(w0, w1, w2);
+                    frameBuffer->set(x, y, SDL_MapRGB(Rasterizer::PIXEL_FORMAT, 
+                                                      std::min((int)(color.r * 255), 255), 
+                                                      std::min((int)(color.g * 255), 255), 
+                                                      std::min((int)(color.b * 255), 255)));
                 }
             }
 

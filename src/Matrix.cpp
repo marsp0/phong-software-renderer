@@ -144,7 +144,7 @@ bool Matrix4::operator!=(const Matrix4& other) const
 
 Matrix4 Matrix4::inverse() 
 {
-    return this->gaussJordanInverse();
+    return this->gluInverse();
 }
 
 Matrix4 Matrix4::gaussJordanInverse() 

@@ -6,35 +6,47 @@
 #include "Buffer.hpp"
 #include "Model.hpp"
 #include "Camera.hpp"
+#include "Light.hpp"
+#include "Material.hpp"
+#include "Color.hpp"
 
-class Shader
+class GouraudShader
 {
     public:
-        virtual Vector4f processVertex(const Vector4f& vertex) = 0;
-        virtual uint32_t processFragment(float w0, float w1, float w2) = 0;
-    private:
-};
-
-class BasicShader: public Shader
-{
-    public:
-    
-        BasicShader(const Model* model,const Camera* camera);
-        ~BasicShader();
-        Vector4f processVertex(const Vector4f& vertex);
-        uint32_t processFragment(float w0, float w1, float w2);
+        // TODO: Implement both linear and hyperbolic interpolation methods as per the wiki page
+        GouraudShader(const Model* model,const Camera* camera, DirectionalLight dirLight);
+        Vector4f processVertex(int index, const Vector4f& vertex, const Vector4f& normal);
+        Color processFragment(float w0, float w1, float w2);
 
         // per model data
         const TextureBuffer* diffuseTextureBuffer;
-        Matrix4 modelViewProjection;
-        Matrix4 world;
-        Matrix4 view;
-        Matrix4 projection;
+        Matrix4 MVP;
+        Matrix4 worldTransform;
+        Matrix4 viewTransform;
+        Matrix4 projectionTransform;
+        Matrix4 normalTransform;
+        Material material;
+        Vector4f cameraPosition;
 
-        // per pixel data
+        // lights
+        DirectionalLight directionalLight;
+
+        // per triangle
         Vector4f diffuseTextureV0;
         Vector4f diffuseTextureV1;
         Vector4f diffuseTextureV2;
+        std::array<Color, 3> lightColors;
+
+        // per vertex
+
+        // per fragment
 
     private:
 };
+
+#if GOURAUD_SHADER
+    typedef GouraudShader Shader;
+#elif FLAT_SHADER
+#elif PHONG_SHADER
+#else
+#endif

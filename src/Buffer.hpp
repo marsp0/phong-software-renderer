@@ -11,10 +11,12 @@ class Buffer {
     
     public:
 
-        Buffer(int width, int height, T initialValue = (T)0): width(width), height(height), origin(width * height - width)
+        Buffer(int width, int height, T initialValue = (T)0): 
+               width(width), height(height), origin(width * height - width),
+               initialValue(initialValue)
         {
             this->buffer.resize(this->width * this->height);
-            this->clear(initialValue);
+            this->clear();
         }
         ~Buffer() 
         {
@@ -42,11 +44,11 @@ class Buffer {
             return this->buffer.data();
         }
 
-        void clear(T value = (T)0)
+        void clear()
         {
             for (int i = 0; i < this->width * this->height; i++)
             {
-                this->buffer[i] = value;
+                this->buffer[i] = this->initialValue;
             }
         }
 
@@ -54,6 +56,7 @@ class Buffer {
         int width;
         int height;
         int origin;
+        T   initialValue;
         std::vector<T> buffer;
     
     private:

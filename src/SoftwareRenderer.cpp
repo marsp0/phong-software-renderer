@@ -10,7 +10,8 @@ SoftwareRenderer::SoftwareRenderer(int width, int height, const char* fileName):
 {
     this->displayManager = std::make_unique<DisplayManager>(width, height);
     this->scene = std::make_unique<Scene>(width, height, fileName);
-    this->frameBuffer = std::make_unique<FrameBuffer>(width, height, 2147483647);
+    this->frameBuffer = std::make_unique<FrameBuffer>(width, height, 0);
+    // TODO: this should take the far plane as argument
     this->depthBuffer = std::make_unique<DepthBuffer>(width, height, 150.f);
     
 }
@@ -56,15 +57,14 @@ void SoftwareRenderer::draw()
         this->drawModel(models[i]);
     }
     std::chrono::steady_clock::time_point after = std::chrono::steady_clock::now();
-    std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(after - before).count() << std::endl;
+    std::cout << "Rendering took: " << std::chrono::duration_cast<std::chrono::milliseconds>(after - before).count() << "ms" << std::endl;
 }
 
 void SoftwareRenderer::clear()
 {
     this->input.clear();
-    this->frameBuffer->clear(2147483647);
-    // TODO: this should take the far plane as arg
-    this->depthBuffer->clear(150.f);
+    this->frameBuffer->clear();
+    this->depthBuffer->clear();
 }
 
 void SoftwareRenderer::swapBuffers()
@@ -76,12 +76,7 @@ void SoftwareRenderer::drawModel(const Model* model)
 {
     const Camera* camera = this->scene->getCamera();
 
-    // Shader creation
-    #if BASIC_SHADER
-
-    BasicShader shader(model, camera);
-    
-    #endif
+    Shader shader(model, camera, this->scene->getDirectionalLight());
 
     const std::vector<Vector4f>& vertices = model->getVertices();
     const std::vector<Vector4f>& normals = model->getNormals();
@@ -101,29 +96,26 @@ void SoftwareRenderer::drawModel(const Model* model)
         int indexN1 = normalIndices[i + 1];
         int indexN2 = normalIndices[i + 2];
 
+        int indexT0 = diffuseTextureIndices[i];
+        int indexT1 = diffuseTextureIndices[i + 1];
+        int indexT2 = diffuseTextureIndices[i + 2];
+
         if (this->cullBackFace(vertices[indexV0], normals[indexN0], cameraPosition_M))
         {
             continue;
         }
 
-        // Shader setup
-        #if BASIC_SHADER
-        
-        int indexT0 = diffuseTextureIndices[i];
-        int indexT1 = diffuseTextureIndices[i + 1];
-        int indexT2 = diffuseTextureIndices[i + 2];
+        // set shader attributes
 
         shader.diffuseTextureV0 = diffuseTextureCoords[indexT0];
         shader.diffuseTextureV1 = diffuseTextureCoords[indexT1];
         shader.diffuseTextureV2 = diffuseTextureCoords[indexT2];
 
-        #endif
-
         // vertex shader
         std::array<Vector4f, 3> processedVertices;
-        processedVertices[0] = shader.processVertex(vertices[indexV0]);
-        processedVertices[1] = shader.processVertex(vertices[indexV1]);
-        processedVertices[2] = shader.processVertex(vertices[indexV2]);
+        processedVertices[0] = shader.processVertex(0, vertices[indexV0], normals[indexN0]);
+        processedVertices[1] = shader.processVertex(1, vertices[indexV1], normals[indexN1]);
+        processedVertices[2] = shader.processVertex(2, vertices[indexV2], normals[indexN2]);
 
         // perspective divide
         processedVertices[0] = processedVertices[0] / processedVertices[0].w;

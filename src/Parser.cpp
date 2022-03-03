@@ -62,7 +62,8 @@ namespace parser
                                                      mesh.normalIndices,
                                                      mesh.textureIndices,
                                                      std::move(textureBuffer),
-                                                     QuaternionRotation(1.f, 0.f, 0.f, 0.f)));
+                                                     QuaternionRotation(1.f, 0.f, 0.f, 0.f),
+                                                     textureInfo.material));
         }
         return std::move(models);
     }
@@ -73,16 +74,17 @@ namespace parser
 
         std::string line;
         std::string token;
-        std::string material;
+        std::string materialName;
         MaterialMap materialInfoMap;
         while (!file.eof() && file.good())
         {
             std::getline(file, line);
             std::istringstream lineBuffer(line);
             lineBuffer >> token;
+            Material material;
             if (token == "newmtl")
             {
-                lineBuffer >> material;
+                lineBuffer >> materialName;
                 while (true)
                 {
                     if (((unsigned char)file.peek() == 'n') || (file.eof()))       // new material or eof
@@ -100,10 +102,32 @@ namespace parser
                         lineBuffer >> token;
                         std::filesystem::path textureFileName(token);
                         std::filesystem::path textureFilePath(materialFile.parent_path() / textureFileName);
-                        materialInfoMap[material] = parseTexture(textureFilePath);
+                        materialInfoMap[materialName] = parseTexture(textureFilePath);
+                    }
+                    else if (token == "Ka")
+                    {
+                        lineBuffer >> token;
+                        material.ambient = std::stof(token);
+                    }
+                    else if (token == "Kd")
+                    {
+                        lineBuffer >> token;
+                        material.diffuse = std::stof(token);
+                    }
+                    else if (token == "Ks")
+                    {
+                        lineBuffer >> token;
+                        material.specular = std::stof(token);
+                    }
+                    else if (token == "Ns")
+                    {
+                        lineBuffer >> token;
+                        material.shininess = std::stof(token);
                     }
                 }
+                materialInfoMap[materialName].material = material;
             }
+
         }
         return std::move(materialInfoMap);
     }
