@@ -7,23 +7,45 @@
 // // // // // // // // // //
 
 GouraudShader::GouraudShader(const Model* model, const Camera* camera, DirectionalLight dirLight):
-                             world(model->getWorldTransform()), view(camera->getViewTransform()), 
-                             projection(camera->getProjectionTransform()), diffuseTextureBuffer(model->getDiffuseTextureBuffer()),
-                             directionalLight(dirLight), material(model->getMaterial())
+                             worldTransform(model->getWorldTransform()), 
+                             viewTransform(camera->getViewTransform()), 
+                             projectionTransform(camera->getProjectionTransform()), 
+                             normalTransform(model->getWorldTransform().inverse().transpose()),
+                             diffuseTextureBuffer(model->getDiffuseTextureBuffer()),
+                             directionalLight(dirLight), 
+                             material(model->getMaterial()),
+                             cameraPosition(camera->getPosition())
 {
-    this->MVP = this->projection * this->view * this->world;
+    this->MVP = this->projectionTransform * this->viewTransform * this->worldTransform;
 }
 
-Vector4f GouraudShader::processVertex(const Vector4f& vertex)
+Vector4f GouraudShader::processVertex(int index, const Vector4f& vertex, const Vector4f& normal)
 {
+    Vector4f normal_W = this->normalTransform * normal;
+
+    // diffuse
+    float normalDotLight = normal_W.dot(-directionalLight.direction);
+    float diffuse = material.diffuse * std::max(normalDotLight, 0.f);
+
+    // specular
+    Vector4f vertex_W = this->worldTransform * vertex;
+    Vector4f viewDir_W = this->cameraPosition - vertex_W;
+    Vector4f reflectionDir_W = (normal_W * 2 * normalDotLight) + directionalLight.direction;
+    viewDir_W.normalize();
+    reflectionDir_W.normalize();
+    float specular = material.specular * std::pow(std::max(viewDir_W.dot(reflectionDir_W), 0.f), material.shininess) * (int)(normalDotLight > 0);
+
+    // store result and interpolate in fragment shader
+    this->lightColors[index] = directionalLight.color * (material.ambient + diffuse + specular);
+
     return this->MVP * vertex;
 }
 
-Vector4i GouraudShader::processFragment(float w0, float w1, float w2) 
+Color GouraudShader::processFragment(float w0, float w1, float w2) 
 {
-    
-    uint32_t sample = Sampler::sample<TextureBuffer>(this->diffuseTextureBuffer, 
-                                                     this->diffuseTextureV0, this->diffuseTextureV1, this->diffuseTextureV2, 
-                                                     w0, w1, w2);
-    return Vector4i(sample >> 24, sample >> 16, sample >> 8, 1);
+    Color objectColor = Sampler::sample<TextureBuffer>(this->diffuseTextureBuffer, 
+                                                       this->diffuseTextureV0, this->diffuseTextureV1, this->diffuseTextureV2, 
+                                                       w0, w1, w2);
+    Color lightColor = this->lightColors[0] * w0 + this->lightColors[1] * w1 + this->lightColors[2] * w2;
+    return objectColor * lightColor;
 }

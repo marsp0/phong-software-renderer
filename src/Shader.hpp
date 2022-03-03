@@ -8,22 +8,25 @@
 #include "Camera.hpp"
 #include "Light.hpp"
 #include "Material.hpp"
+#include "Color.hpp"
 
 class GouraudShader
 {
     public:
         // TODO: Implement both linear and hyperbolic interpolation methods as per the wiki page
         GouraudShader(const Model* model,const Camera* camera, DirectionalLight dirLight);
-        Vector4f processVertex(const Vector4f& vertex);
-        Vector4i processFragment(float w0, float w1, float w2);
+        Vector4f processVertex(int index, const Vector4f& vertex, const Vector4f& normal);
+        Color processFragment(float w0, float w1, float w2);
 
         // per model data
         const TextureBuffer* diffuseTextureBuffer;
         Matrix4 MVP;
-        Matrix4 world;
-        Matrix4 view;
-        Matrix4 projection;
+        Matrix4 worldTransform;
+        Matrix4 viewTransform;
+        Matrix4 projectionTransform;
+        Matrix4 normalTransform;
         Material material;
+        Vector4f cameraPosition;
 
         // lights
         DirectionalLight directionalLight;
@@ -32,9 +35,11 @@ class GouraudShader
         Vector4f diffuseTextureV0;
         Vector4f diffuseTextureV1;
         Vector4f diffuseTextureV2;
-        Vector4f normalV0;
-        Vector4f normalV1;
-        Vector4f normalV2;
+        std::array<Color, 3> lightColors;
+
+        // per vertex
+
+        // per fragment
 
     private:
 };

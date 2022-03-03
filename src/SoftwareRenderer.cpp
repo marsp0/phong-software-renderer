@@ -111,15 +111,11 @@ void SoftwareRenderer::drawModel(const Model* model)
         shader.diffuseTextureV1 = diffuseTextureCoords[indexT1];
         shader.diffuseTextureV2 = diffuseTextureCoords[indexT2];
 
-        shader.normalV0 = normals[indexN0];
-        shader.normalV1 = normals[indexN1];
-        shader.normalV2 = normals[indexN2];
-
         // vertex shader
         std::array<Vector4f, 3> processedVertices;
-        processedVertices[0] = shader.processVertex(vertices[indexV0]);
-        processedVertices[1] = shader.processVertex(vertices[indexV1]);
-        processedVertices[2] = shader.processVertex(vertices[indexV2]);
+        processedVertices[0] = shader.processVertex(0, vertices[indexV0], normals[indexN0]);
+        processedVertices[1] = shader.processVertex(1, vertices[indexV1], normals[indexN1]);
+        processedVertices[2] = shader.processVertex(2, vertices[indexV2], normals[indexN2]);
 
         // perspective divide
         processedVertices[0] = processedVertices[0] / processedVertices[0].w;

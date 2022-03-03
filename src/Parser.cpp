@@ -119,6 +119,11 @@ namespace parser
                         lineBuffer >> token;
                         material.specular = std::stof(token);
                     }
+                    else if (token == "Ns")
+                    {
+                        lineBuffer >> token;
+                        material.shininess = std::stof(token);
+                    }
                 }
                 materialInfoMap[materialName].material = material;
             }
