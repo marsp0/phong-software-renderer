@@ -7,8 +7,8 @@
 
 struct Material
 {
-	float ambient;
-	float diffuse;
-	float specular;
-	float shininess;
+    float ambient;
+    float diffuse;
+    float specular;
+    float shininess;
 };
