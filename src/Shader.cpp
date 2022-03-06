@@ -85,6 +85,7 @@ Color PhongShader::processFragment(float w0, float w1, float w2)
                                                        this->diffuseTextureV0, this->diffuseTextureV1, this->diffuseTextureV2, 
                                                        w0, w1, w2);
     Vector4f normal_W = this->normals[0] * w0 + this->normals[1] * w1 + this->normals[2] * w2;
+    normal_W.normalize();
 
     // diffuse
     float normalDotLight = normal_W.dot(-directionalLight.direction);
