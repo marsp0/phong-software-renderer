@@ -11,6 +11,7 @@ Software renderer written from scratch. The goal of the project is for me to be 
 - Backface culling
 - Shading techniques
 	- Gouraud
+	- Phong
 - Reflection models
 	- Phong
 
