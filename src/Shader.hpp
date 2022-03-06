@@ -21,10 +21,10 @@ class GouraudShader
         // per model data
         const TextureBuffer* diffuseTextureBuffer;
         Matrix4 MVP;
-        Matrix4 worldTransform;
-        Matrix4 viewTransform;
-        Matrix4 projectionTransform;
-        Matrix4 normalTransform;
+        Matrix4 M;
+        Matrix4 V;
+        Matrix4 P;
+        Matrix4 N;
         Material material;
         Vector4f cameraPosition;
 
@@ -44,9 +44,46 @@ class GouraudShader
     private:
 };
 
+class PhongShader
+{
+    public:
+
+        PhongShader(const Model* model,const Camera* camera, DirectionalLight dirLight);
+        Vector4f processVertex(int index, const Vector4f& vertex, const Vector4f& normal);
+        Color processFragment(float w0, float w1, float w2);
+
+        // per model data
+        const TextureBuffer* diffuseTextureBuffer;
+        Matrix4 MVP;
+        Matrix4 M;
+        Matrix4 V;
+        Matrix4 P;
+        Matrix4 N;
+        Material material;
+        Vector4f cameraPosition;
+
+        // lights
+        DirectionalLight directionalLight;
+
+        // per triangle
+        Vector4f diffuseTextureV0;
+        Vector4f diffuseTextureV1;
+        Vector4f diffuseTextureV2;
+
+        std::array<Vector4f, 3> normals;
+        std::array<Vector4f, 3> viewDirections;
+
+        // per vertex
+
+        // per fragment
+
+    private:
+};
+
 #if GOURAUD_SHADER
     typedef GouraudShader Shader;
 #elif FLAT_SHADER
 #elif PHONG_SHADER
+    typedef PhongShader Shader;
 #else
 #endif
