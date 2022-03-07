@@ -36,10 +36,10 @@ endif
 all: out/$(EXECUTABLE)
 
 out/$(EXECUTABLE): $(OBJFILES)
-	@ g++ $(GCCFLAGS) $(OBJFILES) -o $@ $(LDFLAGS) && echo "[OK] $@"
+	g++ $(GCCFLAGS) $(OBJFILES) -o $@ $(LDFLAGS)
 
 $(OBJDIR)/%.o: %.cpp
-	g++ $(GCCFLAGS) -c $< -o $@ && echo "[OK]  $@"
+	g++ $(GCCFLAGS) -c $< -o $@
 
 
 .PHONY: clean
