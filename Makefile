@@ -1,32 +1,47 @@
 # https://en.wikipedia.org/wiki/Makefile
 
-CXX           	:= g++
 SRCDIR 			:= .
 OBJDIR			:= ./out
 EXECUTABLE    	:= renderer
-# CXXFLAGS      	:= -std=c++17 -DGOURAUD_SHADER -O2 #-pg -g
-CXXFLAGS      	:= -std=c++17 -DPHONG_SHADER -O2 #-pg -g
 SRCFILES	 	:= $(shell find $(SRCDIR) -name "*.cpp")
 SRCNAMES		:= $(notdir $(SRCFILES))
 OBJFILES 	    := $(SRCNAMES:%.cpp=$(OBJDIR)/%.o)
 LDFLAGS       	:= -lX11 -lXi -lSDL2
 space 			:=
 VPATH 			:= $(subst $(space),:,$(shell find . -type d))
+GCCFLAGS      	:= -std=c++17
 
-########################
-######### MAIN #########
-########################
+# select shader
+ifeq ($(shader), gouraud)
+	GCCFLAGS += -DGOURAUD_SHADER
+else ifeq ($(shader), phong)
+	GCCFLAGS += -DPHONG_SHADER
+else
+	GCCFLAGS += -DPHONG_SHADER
+endif
+
+# select reflection model
+ifeq ($(reflection), phong)
+	GCCFLAGS += -DPHONG_REFLECTION
+endif
+
+# select release or debug
+ifeq ($(config), debug)
+	GCCFLAGS += -g -pg
+else 
+	GCCFLAGS += -O2
+endif
 
 .PHONY: all
 all: out/$(EXECUTABLE)
 
 out/$(EXECUTABLE): $(OBJFILES)
-	@$(CXX) $(CXXFLAGS) $(OBJFILES) -o $@ $(LDFLAGS) && echo "[OK] $@"
+	@ g++ $(GCCFLAGS) $(OBJFILES) -o $@ $(LDFLAGS) && echo "[OK] $@"
 
 $(OBJDIR)/%.o: %.cpp
-	@$(CXX) $(CXXFLAGS) -c -g $< -o $@ $(LDFLAGS) && echo "[OK]  $@"
+	g++ $(GCCFLAGS) -c $< -o $@ && echo "[OK]  $@"
 
-####### CLEAN #######
+
 .PHONY: clean
 clean:
 	@rm -f out/* && echo "[CL]  out/"
