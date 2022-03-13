@@ -23,6 +23,7 @@ Would like to do
 - Different types of texture filtering
 - Anti aliasing
 - more reflection models
+- Point lights
 - Ambient Occlusion
 - Image based lighting
 - Gamma Correction
