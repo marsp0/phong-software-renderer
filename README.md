@@ -15,6 +15,7 @@ Software renderer written from scratch. The goal of the project is for me to be 
 	- Phong
 - Reflection models
 	- Phong
+	- Blinn Phong
 - Directional lights
 
 Would like to do
