@@ -30,10 +30,23 @@ Vector4f GouraudShader::processVertex(int index, const Vector4f& vertex, const V
     // specular
     Vector4f vertex_W = this->M * vertex;
     Vector4f viewDir_W = this->cameraPosition - vertex_W;
-    Vector4f reflectionDir_W = (normal_W * 2 * normalDotLight) + directionalLight.direction;
     viewDir_W.normalize();
-    reflectionDir_W.normalize();
-    float specular = material.specular * std::pow(std::max(viewDir_W.dot(reflectionDir_W), 0.f), material.shininess) * (int)(normalDotLight > 0);
+    
+    #if PHONG_REFLECTION
+    
+        Vector4f reflectionDir_W = (normal_W * 2 * normalDotLight) + directionalLight.direction;
+        reflectionDir_W.normalize();
+        float specModulator = std::pow(std::max(viewDir_W.dot(reflectionDir_W), 0.f), material.shininess);
+    
+    #elif BLINN_REFLECTION
+
+        Vector4f halfwayDir_W = viewDir_W - directionalLight.direction;
+        halfwayDir_W.normalize();
+        float specModulator = std::pow(std::max(normal_W.dot(halfwayDir_W), 0.f), material.shininess);
+
+    #endif
+    
+    float specular = material.specular * specModulator * (int)(normalDotLight > 0);
 
     // store result and interpolate in fragment shader
     // TODO: current calc uses the same light color for ambient diffuse and spec components.
@@ -93,10 +106,24 @@ Color PhongShader::processFragment(float w0, float w1, float w2)
 
     // specular
     Vector4f viewDir_W = this->viewDirections[0] * w0 + this->viewDirections[1] * w1 + this->viewDirections[2] * w2;
-    Vector4f reflectionDir_W = (normal_W * 2 * normalDotLight) + directionalLight.direction;
     viewDir_W.normalize();
-    reflectionDir_W.normalize();
-    float specular = material.specular * std::pow(std::max(viewDir_W.dot(reflectionDir_W), 0.f), material.shininess) * (int)(normalDotLight > 0);
+
+    #if PHONG_REFLECTION
+
+        Vector4f reflectionDir_W = (normal_W * 2 * normalDotLight) + directionalLight.direction;
+        reflectionDir_W.normalize();
+        float specModulator = std::pow(std::max(viewDir_W.dot(reflectionDir_W), 0.f), material.shininess);
+
+    #elif BLINN_REFLECTION 
+        // TODO: Add light dir interpolation once spotlights and point lights are added.
+
+        Vector4f halfwayDir_W = viewDir_W - directionalLight.direction;
+        halfwayDir_W.normalize();
+        float specModulator = std::pow(std::max(normal_W.dot(halfwayDir_W), 0.f), material.shininess);
+    
+    #endif
+
+    float specular = material.specular * specModulator * (int)(normalDotLight > 0);
 
     Color lightColor = directionalLight.color * (material.ambient + diffuse + specular);
     return objectColor * lightColor;

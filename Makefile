@@ -23,6 +23,10 @@ endif
 # select reflection model
 ifeq ($(reflection), phong)
 	GCCFLAGS += -DPHONG_REFLECTION
+else ifeq ($(reflection), blinn)
+	GCCFLAGS += -DBLINN_REFLECTION
+else 
+	GCCFLAGS += -DPHONG_REFLECTION
 endif
 
 # select release or debug

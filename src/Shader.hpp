@@ -37,10 +37,6 @@ class GouraudShader
         Vector4f diffuseTextureV2;
         std::array<Color, 3> lightColors;
 
-        // per vertex
-
-        // per fragment
-
     private:
 };
 
@@ -71,11 +67,7 @@ class PhongShader
         Vector4f diffuseTextureV2;
 
         std::array<Vector4f, 3> normals;
-        std::array<Vector4f, 3> viewDirections;
-
-        // per vertex
-
-        // per fragment
+        std::array<Vector4f, 3> viewDirections;        
 
     private:
 };
