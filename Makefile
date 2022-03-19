@@ -16,6 +16,8 @@ ifeq ($(shader), gouraud)
 	GCCFLAGS += -DGOURAUD_SHADER
 else ifeq ($(shader), phong)
 	GCCFLAGS += -DPHONG_SHADER
+else ifeq ($(shader), pbr)
+	GCCFLAGS += -DPBR_SHADER
 else
 	GCCFLAGS += -DPHONG_SHADER
 endif

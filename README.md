@@ -10,20 +10,15 @@ Software renderer written from scratch. The goal of the project is for me to be 
 - Frustum culling
 - Backface culling
 - Z-Buffer
-- Shading techniques
-	- Gouraud
-	- Phong
-- Reflection models
-	- Phong
-	- Blinn Phong
+- Shading models
+	- Gouraud - Phong and Blinn Phong reflection models
+	- Phong - Phong and Blinn Phong reflection models
+	- Metallic workflow (PBR) - Lambertian Diffuse BRDF + Cook-Torrance Specular BRDF
 - Directional lights
 
 Would like to do
-- PBR shaders (metallic workflow, specular workflow)
-- Shadows
 - Different types of texture filtering
 - Anti aliasing
-- more reflection models
 - Point lights
 - Ambient Occlusion
 - Image based lighting

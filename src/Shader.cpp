@@ -128,3 +128,32 @@ Color PhongShader::processFragment(float w0, float w1, float w2)
     Color lightColor = directionalLight.color * (material.ambient + diffuse + specular);
     return objectColor * lightColor;
 }
+
+// // // // // // // // // //
+// PBR Shader
+// // // // // // // // // //
+
+PBRShader::PBRShader(const Model* model, const Camera* camera, DirectionalLight dirLight):
+                     M(model->getWorldTransform()), 
+                     V(camera->getViewTransform()), 
+                     P(camera->getProjectionTransform()), 
+                     N(model->getWorldTransform().inverse().transpose()),
+                     directionalLight(dirLight), 
+                     cameraPosition(camera->getPosition()),
+{
+    this->MVP = this->P * this->V * this->M;
+}
+
+// Vector4f processVertex(int index, const Vector4f& vertex, const Vector4f& normal)
+// {
+//     return this->MVP * vertex;
+// }
+
+// Color processFragment(float w0, float w1, float w2)
+// {
+//     calculate diffuse
+
+//     calculate specular
+
+//     return (diffuse + specular) * lightColor * objectColor
+// }

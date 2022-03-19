@@ -72,10 +72,41 @@ class PhongShader
     private:
 };
 
+class PBRShader
+{
+    public:
+
+        PBRShader(const Model* model,const Camera* camera, DirectionalLight dirLight);
+        Vector4f processVertex(int index, const Vector4f& vertex, const Vector4f& normal);
+        Color processFragment(float w0, float w1, float w2);
+
+        // per model data
+        const TextureBuffer* albedoTexture;
+        const TextureBuffer* normalTexture;
+        const TextureBuffer* roughnessTexture;
+        const TextureBuffer* metalicTexture;
+        Matrix4 MVP;
+        Matrix4 M;
+        Matrix4 V;
+        Matrix4 P;
+        Matrix4 N;
+        Vector4f cameraPosition;
+
+        // lights
+        DirectionalLight directionalLight;
+
+        // per triangle
+        Vector4f diffuseTextureV0;
+        Vector4f diffuseTextureV1;
+        Vector4f diffuseTextureV2;
+
+    private:
+};
+
 #if GOURAUD_SHADER
     typedef GouraudShader Shader;
-#elif FLAT_SHADER
 #elif PHONG_SHADER
     typedef PhongShader Shader;
-#else
+#elif PBR_SHADER
+    typedef PBRShader Shader;
 #endif
