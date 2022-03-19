@@ -44,26 +44,16 @@ namespace parser
         for (int i = 0; i < meshes.size(); i++)
         {
             MeshInfo& mesh = meshes[i];
-            TextureInfo& textureInfo = textures[mesh.material];
-            std::unique_ptr<TextureBuffer> textureBuffer = std::make_unique<TextureBuffer>(textureInfo.width, textureInfo.height);
-
-            for (int x = 0; x < textureInfo.width; x++)
-            {
-                for (int y = 0; y < textureInfo.height; y++)
-                {
-                    textureBuffer->set(x, y, textureInfo.data[y * textureInfo.width + x]);
-                }
-            }
-
+            MaterialInfo& materialInfo = textures[mesh.material];
             models.push_back(std::make_unique<Model>(mesh.vertices, 
                                                      mesh.normals, 
                                                      mesh.textureCoords, 
                                                      mesh.vertexIndices, 
                                                      mesh.normalIndices,
                                                      mesh.textureIndices,
-                                                     std::move(textureBuffer),
+                                                     std::move(materialInfo.textureBuffer),
                                                      QuaternionRotation(1.f, 0.f, 0.f, 0.f),
-                                                     textureInfo.material));
+                                                     materialInfo.material));
         }
         return std::move(models);
     }
@@ -82,6 +72,7 @@ namespace parser
             std::istringstream lineBuffer(line);
             lineBuffer >> token;
             Material material;
+            std::unique_ptr<TextureBuffer> textureBuffer;
             if (token == "newmtl")
             {
                 lineBuffer >> materialName;
@@ -102,7 +93,7 @@ namespace parser
                         lineBuffer >> token;
                         std::filesystem::path textureFileName(token);
                         std::filesystem::path textureFilePath(materialFile.parent_path() / textureFileName);
-                        materialInfoMap[materialName] = parseTexture(textureFilePath);
+                        textureBuffer = parseTexture(textureFilePath);
                     }
                     else if (token == "Ka")
                     {
@@ -125,31 +116,31 @@ namespace parser
                         material.shininess = std::stof(token);
                     }
                 }
-                materialInfoMap[materialName].material = material;
+                MaterialInfo materialInfo{material, std::move(textureBuffer)};
+                materialInfoMap[materialName] = std::move(materialInfo);
             }
 
         }
         return std::move(materialInfoMap);
     }
 
-    TextureInfo parseTexture(const std::filesystem::path& textureFile)
+    std::unique_ptr<TextureBuffer> parseTexture(const std::filesystem::path& textureFile)
     {
         std::ifstream file(textureFile.string());
 
-        TextureInfo textureInfo;
-        textureInfo.imageIDLen              = getInt(file, 1);
-        textureInfo.colorMapType            = getInt(file, 1);
-        textureInfo.imageType               = getInt(file, 1);
-        textureInfo.colorMapFirstEntryIndex = getInt(file, 2);
-        textureInfo.colorMapSize            = getInt(file, 2);
-        textureInfo.colorMapEntrySize       = getInt(file, 1);
-        textureInfo.xOrigin                 = getInt(file, 2);
-        textureInfo.yOrigin                 = getInt(file, 2);
-        textureInfo.width                   = getInt(file, 2);
-        textureInfo.height                  = getInt(file, 2);
-        textureInfo.pixelDepth              = getInt(file, 1);
-        textureInfo.bytesPerPixel           = textureInfo.pixelDepth / 8;
-        textureInfo.data                    = std::vector<uint32_t>();
+        int imageIDLen              = getInt(file, 1);
+        int colorMapType            = getInt(file, 1);
+        int imageType               = getInt(file, 1);
+        int colorMapFirstEntryIndex = getInt(file, 2);
+        int colorMapSize            = getInt(file, 2);
+        int colorMapEntrySize       = getInt(file, 1);
+        int xOrigin                 = getInt(file, 2);
+        int yOrigin                 = getInt(file, 2);
+        int width                   = getInt(file, 2);
+        int height                  = getInt(file, 2);
+        int pixelDepth              = getInt(file, 1);
+        int bytesPerPixel           = pixelDepth / 8;
+        std::vector<uint32_t> data;
         // image descriptor shows what corner holds the first byte
         //                 4th bit      5th bit
         // bottom left -      0            0
@@ -159,44 +150,45 @@ namespace parser
         int imageDescriptor = getInt(file, 1);
         
         // additional header data
-        std::vector<char> imageInfo = parseDataBlock(file, textureInfo.imageIDLen);
+        std::vector<char> imageInfo = parseDataBlock(file, imageIDLen);
         
         // color map data (should not be needed for our textures)
-        std::vector<char> colorMapData = parseDataBlock(file, textureInfo.colorMapSize * textureInfo.colorMapEntrySize / 8);
+        std::vector<char> colorMapData = parseDataBlock(file, colorMapSize * colorMapEntrySize / 8);
 
         // texture data that we will use
-        std::vector<char> imageData = parseDataBlock(file, textureInfo.width * textureInfo.height * textureInfo.bytesPerPixel);
+        std::vector<char> imageData = parseDataBlock(file, width * height * bytesPerPixel);
 
         // convert char -> uint8
-        textureInfo.data.resize(textureInfo.width * textureInfo.height);
+        data.resize(width * height);
 
+        // convert data to bottom left start
         bool topLeft = !(imageDescriptor & 16) && (imageDescriptor & 32);
         if (topLeft)
         {
             // convert uint8_t to uint32_t
             std::vector<uint32_t> imageDataCollapsed;
-            imageDataCollapsed.resize(textureInfo.width * textureInfo.height);
-            for (int i = 0; i < imageData.size(); i += textureInfo.bytesPerPixel)
+            imageDataCollapsed.resize(width * height);
+            for (int i = 0; i < imageData.size(); i += bytesPerPixel)
             {
                 uint32_t color = 0;
                 color += reinterpret_cast<unsigned char&>(imageData[i + 0]) << 8;  // blue
                 color += reinterpret_cast<unsigned char&>(imageData[i + 1]) << 16; // green
                 color += reinterpret_cast<unsigned char&>(imageData[i + 2]) << 24; // red
-                if (textureInfo.bytesPerPixel == 4)
+                if (bytesPerPixel == 4)
                 {
                     color += reinterpret_cast<unsigned char&>(imageData[i + 3]);
                 }
-                imageDataCollapsed[i / textureInfo.bytesPerPixel] = color;
+                imageDataCollapsed[i / bytesPerPixel] = color;
             }
 
             // convert top left to bottom left
-            for (int x = 0; x < textureInfo.width; x++)
+            for (int x = 0; x < width; x++)
             {
-                for (int y = 0; y < textureInfo.height; y++)
+                for (int y = 0; y < height; y++)
                 {
-                    int dstIndex = (textureInfo.height - y - 1) * textureInfo.width + x;
-                    int srcIndex = y * textureInfo.width + x;
-                    textureInfo.data[dstIndex] = imageDataCollapsed[srcIndex];
+                    int dstIndex = (height - y - 1) * width + x;
+                    int srcIndex = y * width + x;
+                    data[dstIndex] = imageDataCollapsed[srcIndex];
                 }
             }
         }
@@ -206,7 +198,18 @@ namespace parser
             std::cerr << "Parser can only convert from topLeft";
             std::terminate();
         }
-        return textureInfo;
+
+        std::unique_ptr<TextureBuffer> textureBuffer = std::make_unique<TextureBuffer>(width, height);
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                textureBuffer->set(x, y, data[y * width + x]);
+            }
+        }
+
+        return std::move(textureBuffer);
     }
 
     MeshInfo parseMesh(std::ifstream& file, const std::string& name)

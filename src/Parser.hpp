@@ -29,40 +29,30 @@ namespace parser
         std::vector<Vector4f> textureCoords;
     };
 
-    struct TextureInfo
+    struct MaterialInfo
     {
-        int imageIDLen;
-        int colorMapType;
-        int imageType;
-        int colorMapFirstEntryIndex;
-        int colorMapSize;
-        int colorMapEntrySize;
-        int xOrigin;
-        int yOrigin;
-        int width;
-        int height;
-        int pixelDepth;
-        int bytesPerPixel;
         Material material;
-        std::vector<uint32_t> data;
+        std::unique_ptr<TextureBuffer> textureBuffer;
     };
 
-    typedef std::unordered_map<std::string, TextureInfo> MaterialMap;
+    typedef std::unordered_map<std::string, MaterialInfo> MaterialMap;
 
     // 
     // functions
     // 
 
     std::vector<std::unique_ptr<Model>> parseScene(const std::string& fileName);
-    MaterialMap parseMaterial(const std::filesystem::path& materialFile);
-    TextureInfo parseTexture(const std::filesystem::path& textureFile);
-    std::vector<char> parseDataBlock(std::ifstream& file, int size);
-    MeshInfo parseMesh(std::ifstream& file, const std::string& name);
-    void parseMeshAttribute(std::istringstream& buffer, std::vector<Vector4f>& storage, unsigned int amount);
-    void parseMeshFace(std::istringstream& buffer, 
-                       std::vector<int>& vertexIndices,
-                       std::vector<int>& normalIndices,
-                       std::vector<int>& textureIndices);
-    int getInt(std::ifstream& buffer, int len);
+    MaterialMap                         parseMaterial(const std::filesystem::path& materialFile);
+    std::unique_ptr<TextureBuffer>      parseTexture(const std::filesystem::path& textureFile);
+    std::vector<char>                   parseDataBlock(std::ifstream& file, int size);
+    MeshInfo                            parseMesh(std::ifstream& file, const std::string& name);
+    void                                parseMeshAttribute(std::istringstream& buffer, 
+                                                           std::vector<Vector4f>& storage, 
+                                                           unsigned int amount);
+    void                                parseMeshFace(std::istringstream& buffer, 
+                                                      std::vector<int>& vertexIndices,
+                                                      std::vector<int>& normalIndices,
+                                                      std::vector<int>& textureIndices);
+    int                                 getInt(std::ifstream& buffer, int len);
 
 };

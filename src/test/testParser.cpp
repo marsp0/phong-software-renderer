@@ -85,29 +85,21 @@ void testParseScene()
 
 void testParseTexture()
 {
-    parser::TextureInfo actual = parser::parseTexture("./src/test/threebythree.tga");
-    int actualWidth = actual.width;
-    int actualHeight = actual.height;
-    int bytesPerPixel = actual.bytesPerPixel;
-    std::vector<uint32_t> actualData = actual.data;
-    ASSERT_VALUE(int, actualWidth, 3);
-    ASSERT_VALUE(int, actualHeight, 3);
-    ASSERT_VALUE(int, bytesPerPixel, 4);
+    std::unique_ptr<TextureBuffer> textureBuffer = parser::parseTexture("./src/test/threebythree.tga");
+    std::vector<uint32_t> actualData;
+
+    for (int i = 0; i < textureBuffer->width; i++)
+    {
+        for (int j = 0; j < textureBuffer->height; j++)
+        {
+            actualData.push_back(textureBuffer->get(i, j));
+        }
+    }
     
-    // // assert image (actual texture) data
-    //     255, 0, 0, 255,
-    //     255, 0, 0, 255,
-    //     255, 0, 0, 255,
-    //     0, 255, 0, 255,
-    //     0, 255, 0, 255,
-    //     0, 255, 0, 255,
-    //     0, 0, 255, 255,
-    //     0, 0, 255, 255,
-    //     0, 0, 255, 255,
     std::vector<uint32_t> expectedImageDataInts{
-        65535,      65535,      65535,
-        16711935,   16711935,   16711935,
-        4278190335, 4278190335, 4278190335,
+        65535, 16711935, 4278190335,
+        65535, 16711935, 4278190335,
+        65535, 16711935, 4278190335,
     };
     ASSERT_VALUE_ARRAY(uint32_t, actualData, expectedImageDataInts);
 }
