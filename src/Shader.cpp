@@ -155,7 +155,7 @@ PBRShader::PBRShader(const Model* model, const Camera* camera, DirectionalLight 
                      albedoTexture(model->material.albedoTexture.get()),
                      metallicTexture(model->material.metallicTexture.get()),
                      roughnessTexture(model->material.roughnessTexture.get()),
-                     normalTexture(model->material.normalTexture.get()),
+                     normalTexture(model->material.normalTexture.get())
 {
     this->MVP = this->P * this->V * this->M;
 }
