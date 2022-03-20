@@ -10,8 +10,17 @@
 
 void runRenderer() 
 {
-    SoftwareRenderer renderer(WIDTH, HEIGHT, "./assets/detailed_cube/cube.obj");
-    // SoftwareRenderer renderer(WIDTH, HEIGHT, "./assets/cube/cube.obj");
+    #if !PBR_SHADER
+    
+        SoftwareRenderer renderer(WIDTH, HEIGHT, "./assets/detailed_cube/cube.obj");
+        // SoftwareRenderer renderer(WIDTH, HEIGHT, "./assets/cube/cube.obj");
+    
+    #else
+    
+        SoftwareRenderer renderer(WIDTH, HEIGHT, "./assets/coffee_cup/coffee_cup.obj");
+    
+    #endif
+    
     renderer.run();
 }
 

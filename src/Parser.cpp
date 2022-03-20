@@ -276,16 +276,22 @@ namespace parser
             for (int i = 0; i < meshes.size(); i++)
             {
                 std::unique_ptr<TextureBuffer> albedo = parseTexture(parentDir / "albedo.tga");
-                std::cout << "loaded albedo: " << albedo->width << std::endl;
-                // MeshInfo& mesh = meshes[i];
-                // models.push_back(std::make_unique<Model>(mesh.vertices, 
-                //                                          mesh.normals, 
-                //                                          mesh.textureCoords, 
-                //                                          mesh.vertexIndices, 
-                //                                          mesh.normalIndices,
-                //                                          mesh.textureIndices,
-                //                                          QuaternionRotation(1.f, 0.f, 0.f, 0.f),
-                //                                          std::move(textures[mesh.material])));
+                std::unique_ptr<TextureBuffer> metallic = parseTexture(parentDir / "metallic.tga");
+                std::unique_ptr<TextureBuffer> roughness = parseTexture(parentDir / "roughness.tga");
+                std::unique_ptr<TextureBuffer> normal = parseTexture(parentDir / "normal.tga");
+                Material material{std::move(albedo), 
+                                  std::move(metallic),
+                                  std::move(roughness),
+                                  std::move(normal)};
+                MeshInfo& mesh = meshes[i];
+                models.push_back(std::make_unique<Model>(mesh.vertices, 
+                                                         mesh.normals, 
+                                                         mesh.textureCoords, 
+                                                         mesh.vertexIndices, 
+                                                         mesh.normalIndices,
+                                                         mesh.textureIndices,
+                                                         QuaternionRotation(1.f, 0.f, 0.f, 0.f),
+                                                         std::move(material)));
             }
             return std::move(models);
         }
