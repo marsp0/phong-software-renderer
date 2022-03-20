@@ -15,7 +15,7 @@ jobs:
     - name: Set up build
       run: sudo sh ./scripts/build_setup.sh
     - name: Compile
-      run: make shader=gouraud reflection=phong
+      run: sudo make shader=gouraud reflection=phong
     - name: Run Tests
       run: ./out/renderer test
   Gouraud-Blinn:
@@ -25,7 +25,7 @@ jobs:
     - name: Set up build
       run: sudo sh ./scripts/build_setup.sh
     - name: Compile
-      run: make shader=gouraud reflection=blinn
+      run: sudo make shader=gouraud reflection=blinn
     - name: Run Tests
       run: ./out/renderer test
   Phong-Phong:
@@ -35,7 +35,7 @@ jobs:
     - name: Set up build
       run: sudo sh ./scripts/build_setup.sh
     - name: Compile
-      run: make shader=phong reflection=phong
+      run: sudo make shader=phong reflection=phong
     - name: Run Tests
       run: ./out/renderer test
   Phong-Blinn:
@@ -45,7 +45,7 @@ jobs:
     - name: Set up build
       run: sudo sh ./scripts/build_setup.sh
     - name: Compile
-      run: make shader=phong reflection=blinn
+      run: sudo make shader=phong reflection=blinn
     - name: Run Tests
       run: ./out/renderer test
   PBR:
@@ -55,6 +55,6 @@ jobs:
     - name: Set up build
       run: sudo sh ./scripts/build_setup.sh
     - name: Compile
-      run: make shader=pbr
+      run: sudo make shader=pbr
     - name: Run Tests
       run: ./out/renderer test
