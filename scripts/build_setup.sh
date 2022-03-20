@@ -6,5 +6,3 @@ apt install libsdl2-dev
 if [ ! -d "./out" ]; then
   mkdir out
 fi
-
-make
