@@ -25,7 +25,10 @@ class GouraudShader
         Matrix4 V;
         Matrix4 P;
         Matrix4 N;
-        Material material;
+        float ambientCoeff;
+        float diffuseCoeff;
+        float specularCoeff;
+        float shininess;
         Vector4f cameraPosition;
 
         // lights
@@ -55,7 +58,10 @@ class PhongShader
         Matrix4 V;
         Matrix4 P;
         Matrix4 N;
-        Material material;
+        float ambientCoeff;
+        float diffuseCoeff;
+        float specularCoeff;
+        float shininess;
         Vector4f cameraPosition;
 
         // lights

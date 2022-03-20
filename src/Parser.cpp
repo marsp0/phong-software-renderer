@@ -44,16 +44,14 @@ namespace parser
         for (int i = 0; i < meshes.size(); i++)
         {
             MeshInfo& mesh = meshes[i];
-            MaterialInfo& materialInfo = textures[mesh.material];
             models.push_back(std::make_unique<Model>(mesh.vertices, 
                                                      mesh.normals, 
                                                      mesh.textureCoords, 
                                                      mesh.vertexIndices, 
                                                      mesh.normalIndices,
                                                      mesh.textureIndices,
-                                                     std::move(materialInfo.textureBuffer),
                                                      QuaternionRotation(1.f, 0.f, 0.f, 0.f),
-                                                     materialInfo.material));
+                                                     std::move(textures[mesh.material])));
         }
         return std::move(models);
     }
@@ -93,7 +91,7 @@ namespace parser
                         lineBuffer >> token;
                         std::filesystem::path textureFileName(token);
                         std::filesystem::path textureFilePath(materialFile.parent_path() / textureFileName);
-                        textureBuffer = parseTexture(textureFilePath);
+                        material.diffuseTexture = parseTexture(textureFilePath);
                     }
                     else if (token == "Ka")
                     {
@@ -116,8 +114,7 @@ namespace parser
                         material.shininess = std::stof(token);
                     }
                 }
-                MaterialInfo materialInfo{material, std::move(textureBuffer)};
-                materialInfoMap[materialName] = std::move(materialInfo);
+                materialInfoMap[materialName] = std::move(material);
             }
 
         }

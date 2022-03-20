@@ -29,13 +29,7 @@ namespace parser
         std::vector<Vector4f> textureCoords;
     };
 
-    struct MaterialInfo
-    {
-        Material material;
-        std::unique_ptr<TextureBuffer> textureBuffer;
-    };
-
-    typedef std::unordered_map<std::string, MaterialInfo> MaterialMap;
+    typedef std::unordered_map<std::string, Material> MaterialMap;
 
     // 
     // functions
