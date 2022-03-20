@@ -6,6 +6,8 @@
 // Gouraud Shader
 // // // // // // // // // //
 
+#if GOURAUD_SHADER
+
 GouraudShader::GouraudShader(const Model* model, const Camera* camera, DirectionalLight dirLight):
                              M(model->getWorldTransform()), 
                              V(camera->getViewTransform()), 
@@ -73,6 +75,8 @@ Color GouraudShader::processFragment(float w0, float w1, float w2)
 // Phong Shader
 // // // // // // // // // //
 
+#elif PHONG_SHADER
+
 PhongShader::PhongShader(const Model* model, const Camera* camera, DirectionalLight dirLight):
                              M(model->getWorldTransform()), 
                              V(camera->getViewTransform()), 
@@ -139,6 +143,8 @@ Color PhongShader::processFragment(float w0, float w1, float w2)
 // PBR Shader
 // // // // // // // // // //
 
+#elif PBR_SHADER
+
 PBRShader::PBRShader(const Model* model, const Camera* camera, DirectionalLight dirLight):
                      M(model->getWorldTransform()), 
                      V(camera->getViewTransform()), 
@@ -163,3 +169,5 @@ PBRShader::PBRShader(const Model* model, const Camera* camera, DirectionalLight 
 
 //     return (diffuse + specular) * lightColor * objectColor
 // }
+
+#endif

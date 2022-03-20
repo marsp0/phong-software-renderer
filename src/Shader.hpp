@@ -10,6 +10,8 @@
 #include "Material.hpp"
 #include "Color.hpp"
 
+#if GOURAUD_SHADER
+
 class GouraudShader
 {
     public:
@@ -42,6 +44,9 @@ class GouraudShader
 
     private:
 };
+typedef GouraudShader Shader;
+
+#elif PHONG_SHADER
 
 class PhongShader
 {
@@ -77,6 +82,9 @@ class PhongShader
 
     private:
 };
+typedef PhongShader Shader;
+
+#elif PBR_SHADER
 
 class PBRShader
 {
@@ -108,11 +116,6 @@ class PBRShader
 
     private:
 };
+typedef PBRShader Shader;
 
-#if GOURAUD_SHADER
-    typedef GouraudShader Shader;
-#elif PHONG_SHADER
-    typedef PhongShader Shader;
-#elif PBR_SHADER
-    typedef PBRShader Shader;
 #endif
