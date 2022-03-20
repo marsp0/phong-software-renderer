@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  Build Gouraud-Phong:
+  Gouraud-Phong:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
@@ -18,7 +18,7 @@ jobs:
       run: make shader=gouraud reflection=phong
     - name: Run Tests
       run: ./out/renderer test
-  Build Gouraud-Blinn:
+  Gouraud-Blinn:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
@@ -28,7 +28,7 @@ jobs:
       run: make shader=gouraud reflection=blinn
     - name: Run Tests
       run: ./out/renderer test
-  Build Phong-Phong:
+  Phong-Phong:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
@@ -38,7 +38,7 @@ jobs:
       run: make shader=phong reflection=phong
     - name: Run Tests
       run: ./out/renderer test
-  Build Phong-Blinn:
+  Phong-Blinn:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
@@ -48,7 +48,7 @@ jobs:
       run: make shader=phong reflection=blinn
     - name: Run Tests
       run: ./out/renderer test
-  Build PBR:
+  PBR:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
