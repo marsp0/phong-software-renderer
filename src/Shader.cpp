@@ -11,7 +11,7 @@ GouraudShader::GouraudShader(const Model* model, const Camera* camera, Direction
                              V(camera->getViewTransform()), 
                              P(camera->getProjectionTransform()), 
                              N(model->getWorldTransform().inverse().transpose()),
-                             diffuseTextureBuffer(model->getDiffuseTextureBuffer()),
+                             diffuseTexture(model->getDiffuseTexture()),
                              directionalLight(dirLight), 
                              material(model->getMaterial()),
                              cameraPosition(camera->getPosition())
@@ -59,7 +59,7 @@ Vector4f GouraudShader::processVertex(int index, const Vector4f& vertex, const V
 
 Color GouraudShader::processFragment(float w0, float w1, float w2)
 {
-    Color objectColor = Sampler::sample<TextureBuffer>(this->diffuseTextureBuffer, 
+    Color objectColor = Sampler::sample<TextureBuffer>(this->diffuseTexture, 
                                                        this->diffuseTextureV0, this->diffuseTextureV1, this->diffuseTextureV2, 
                                                        w0, w1, w2);
     Color lightColor = this->lightColors[0] * w0 + this->lightColors[1] * w1 + this->lightColors[2] * w2;
@@ -75,7 +75,7 @@ PhongShader::PhongShader(const Model* model, const Camera* camera, DirectionalLi
                              V(camera->getViewTransform()), 
                              P(camera->getProjectionTransform()), 
                              N(model->getWorldTransform().inverse().transpose()),
-                             diffuseTextureBuffer(model->getDiffuseTextureBuffer()),
+                             diffuseTexture(model->getDiffuseTexture()),
                              directionalLight(dirLight), 
                              material(model->getMaterial()),
                              cameraPosition(camera->getPosition())
@@ -94,7 +94,7 @@ Vector4f PhongShader::processVertex(int index, const Vector4f& vertex, const Vec
 
 Color PhongShader::processFragment(float w0, float w1, float w2)
 {
-    Color objectColor = Sampler::sample<TextureBuffer>(this->diffuseTextureBuffer, 
+    Color objectColor = Sampler::sample<TextureBuffer>(this->diffuseTexture, 
                                                        this->diffuseTextureV0, this->diffuseTextureV1, this->diffuseTextureV2, 
                                                        w0, w1, w2);
     Vector4f normal_W = this->normals[0] * w0 + this->normals[1] * w1 + this->normals[2] * w2;
@@ -139,7 +139,7 @@ PBRShader::PBRShader(const Model* model, const Camera* camera, DirectionalLight 
                      P(camera->getProjectionTransform()), 
                      N(model->getWorldTransform().inverse().transpose()),
                      directionalLight(dirLight), 
-                     cameraPosition(camera->getPosition()),
+                     cameraPosition(camera->getPosition())
 {
     this->MVP = this->P * this->V * this->M;
 }

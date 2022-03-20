@@ -19,7 +19,7 @@ class GouraudShader
         Color processFragment(float w0, float w1, float w2);
 
         // per model data
-        const TextureBuffer* diffuseTextureBuffer;
+        const TextureBuffer* diffuseTexture;
         Matrix4 MVP;
         Matrix4 M;
         Matrix4 V;
@@ -49,7 +49,7 @@ class PhongShader
         Color processFragment(float w0, float w1, float w2);
 
         // per model data
-        const TextureBuffer* diffuseTextureBuffer;
+        const TextureBuffer* diffuseTexture;
         Matrix4 MVP;
         Matrix4 M;
         Matrix4 V;
