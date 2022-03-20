@@ -80,10 +80,10 @@ void SoftwareRenderer::drawModel(const Model* model)
 
     const std::vector<Vector4f>& vertices = model->getVertices();
     const std::vector<Vector4f>& normals = model->getNormals();
-    const std::vector<Vector4f>& diffuseTextureCoords = model->getDiffuseTextureCoords();
+    const std::vector<Vector4f>& textureCoords = model->getTextureCoords();
     const std::vector<int>& vertexIndices = model->getVertexIndices();
     const std::vector<int>& normalIndices = model->getNormalIndices();
-    const std::vector<int>& diffuseTextureIndices = model->getDiffuseTextureIndices();
+    const std::vector<int>& textureIndices = model->getTextureIndices();
     Vector4f cameraPosition_M = model->getWorldTransform().inverse() * camera->getPosition();
 
     for (int i = 0; i < vertexIndices.size(); i += 3) 
@@ -96,9 +96,9 @@ void SoftwareRenderer::drawModel(const Model* model)
         int indexN1 = normalIndices[i + 1];
         int indexN2 = normalIndices[i + 2];
 
-        int indexT0 = diffuseTextureIndices[i];
-        int indexT1 = diffuseTextureIndices[i + 1];
-        int indexT2 = diffuseTextureIndices[i + 2];
+        int indexT0 = textureIndices[i];
+        int indexT1 = textureIndices[i + 1];
+        int indexT2 = textureIndices[i + 2];
 
         if (this->cullBackFace(vertices[indexV0], normals[indexN0], cameraPosition_M))
         {
@@ -107,9 +107,9 @@ void SoftwareRenderer::drawModel(const Model* model)
 
         // set shader attributes
 
-        shader.diffuseTextureV0 = diffuseTextureCoords[indexT0];
-        shader.diffuseTextureV1 = diffuseTextureCoords[indexT1];
-        shader.diffuseTextureV2 = diffuseTextureCoords[indexT2];
+        shader.textureV0 = textureCoords[indexT0];
+        shader.textureV1 = textureCoords[indexT1];
+        shader.textureV2 = textureCoords[indexT2];
 
         // vertex shader
         std::array<Vector4f, 3> processedVertices;

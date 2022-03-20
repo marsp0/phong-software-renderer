@@ -37,9 +37,9 @@ class GouraudShader
         DirectionalLight directionalLight;
 
         // per triangle
-        Vector4f diffuseTextureV0;
-        Vector4f diffuseTextureV1;
-        Vector4f diffuseTextureV2;
+        Vector4f textureV0;
+        Vector4f textureV1;
+        Vector4f textureV2;
         std::array<Color, 3> lightColors;
 
     private:
@@ -73,9 +73,9 @@ class PhongShader
         DirectionalLight directionalLight;
 
         // per triangle
-        Vector4f diffuseTextureV0;
-        Vector4f diffuseTextureV1;
-        Vector4f diffuseTextureV2;
+        Vector4f textureV0;
+        Vector4f textureV1;
+        Vector4f textureV2;
 
         std::array<Vector4f, 3> normals;
         std::array<Vector4f, 3> viewDirections;        
@@ -98,7 +98,7 @@ class PBRShader
         const TextureBuffer* albedoTexture;
         const TextureBuffer* normalTexture;
         const TextureBuffer* roughnessTexture;
-        const TextureBuffer* metalicTexture;
+        const TextureBuffer* metallicTexture;
         Matrix4 MVP;
         Matrix4 M;
         Matrix4 V;
@@ -110,9 +110,9 @@ class PBRShader
         DirectionalLight directionalLight;
 
         // per triangle
-        Vector4f diffuseTextureV0;
-        Vector4f diffuseTextureV1;
-        Vector4f diffuseTextureV2;
+        Vector4f textureV0;
+        Vector4f textureV1;
+        Vector4f textureV2;
 
     private:
 };

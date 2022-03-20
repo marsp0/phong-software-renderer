@@ -31,16 +31,16 @@ class Model
     public:
 
         Model(std::vector<Vector4f> vertices, std::vector<Vector4f> normals,
-              std::vector<Vector4f> diffuseTextureCoords, std::vector<int> vertexIndices,
-              std::vector<int> normalIndices, std::vector<int> diffuseTextureIndices,
+              std::vector<Vector4f> textureCoords, std::vector<int> vertexIndices,
+              std::vector<int> normalIndices, std::vector<int> textureIndices,
               QuaternionRotation rotation, Material material);
         Model(std::vector<Vector4f> vertices, std::vector<Vector4f> normals,
-              std::vector<Vector4f> diffuseTextureCoords, std::vector<int> vertexIndices,
-              std::vector<int> normalIndices, std::vector<int> diffuseTextureIndices,
+              std::vector<Vector4f> textureCoords, std::vector<int> vertexIndices,
+              std::vector<int> normalIndices, std::vector<int> textureIndices,
               EulerRotation rotation, Material material);
         Model(std::vector<Vector4f> vertices, std::vector<Vector4f> normals,
-              std::vector<Vector4f> diffuseTextureCoords, std::vector<int> vertexIndices,
-              std::vector<int> normalIndices, std::vector<int> diffuseTextureIndices,
+              std::vector<Vector4f> textureCoords, std::vector<int> vertexIndices,
+              std::vector<int> normalIndices, std::vector<int> textureIndices,
               AxisAngleRotation rotation, Material material);
         ~Model();
         void update(float deltaTime);
@@ -49,10 +49,10 @@ class Model
         void setRotationType(RotationType newType);
         const std::vector<Vector4f>& getVertices() const;
         const std::vector<Vector4f>& getNormals() const;
-        const std::vector<Vector4f>& getDiffuseTextureCoords() const;
+        const std::vector<Vector4f>& getTextureCoords() const;
         const std::vector<int>& getVertexIndices() const;
         const std::vector<int>& getNormalIndices() const;
-        const std::vector<int>& getDiffuseTextureIndices() const;
+        const std::vector<int>& getTextureIndices() const;
         AABB getBoundingBox() const;
         
         RotationType rotationType;
@@ -69,8 +69,8 @@ class Model
         QuaternionRotation              quaternionRotation;
         std::vector<Vector4f>           vertices;
         std::vector<Vector4f>           normals;
-        std::vector<Vector4f>           diffuseTextureCoords;
+        std::vector<Vector4f>           textureCoords;
         std::vector<int>                vertexIndices;
         std::vector<int>                normalIndices;
-        std::vector<int>                diffuseTextureIndices;
+        std::vector<int>                textureIndices;
 };

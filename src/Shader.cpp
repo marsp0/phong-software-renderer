@@ -65,7 +65,7 @@ Vector4f GouraudShader::processVertex(int index, const Vector4f& vertex, const V
 Color GouraudShader::processFragment(float w0, float w1, float w2)
 {
     Color objectColor = Sampler::sample<TextureBuffer>(this->diffuseTexture, 
-                                                       this->diffuseTextureV0, this->diffuseTextureV1, this->diffuseTextureV2, 
+                                                       this->textureV0, this->textureV1, this->textureV2, 
                                                        w0, w1, w2);
     Color lightColor = this->lightColors[0] * w0 + this->lightColors[1] * w1 + this->lightColors[2] * w2;
     return objectColor * lightColor;
@@ -105,7 +105,7 @@ Vector4f PhongShader::processVertex(int index, const Vector4f& vertex, const Vec
 Color PhongShader::processFragment(float w0, float w1, float w2)
 {
     Color objectColor = Sampler::sample<TextureBuffer>(this->diffuseTexture, 
-                                                       this->diffuseTextureV0, this->diffuseTextureV1, this->diffuseTextureV2, 
+                                                       this->textureV0, this->textureV1, this->textureV2, 
                                                        w0, w1, w2);
     Vector4f normal_W = this->normals[0] * w0 + this->normals[1] * w1 + this->normals[2] * w2;
     normal_W.normalize();
@@ -151,7 +151,11 @@ PBRShader::PBRShader(const Model* model, const Camera* camera, DirectionalLight 
                      P(camera->getProjectionTransform()), 
                      N(model->getWorldTransform().inverse().transpose()),
                      directionalLight(dirLight), 
-                     cameraPosition(camera->getPosition())
+                     cameraPosition(camera->getPosition()),
+                     albedoTexture(model->material.albedoTexture.get()),
+                     metallicTexture(model->material.metallicTexture.get()),
+                     roughnessTexture(model->material.roughnessTexture.get()),
+                     normalTexture(model->material.normalTexture.get()),
 {
     this->MVP = this->P * this->V * this->M;
 }
