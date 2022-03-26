@@ -11,8 +11,8 @@ Software renderer written from scratch. The goal of the project is for me to be 
 - Backface culling
 - Z-Buffer
 - Shading models
-	- Gouraud - Phong and Blinn Phong reflection models
-	- Phong - Phong and Blinn Phong reflection models
+	- Gouraud Interpolation - Phong and Blinn Phong reflection models
+	- Phong Interpolation - Phong and Blinn Phong reflection models
 	- Metallic workflow (PBR) - Lambertian Diffuse BRDF + Cook-Torrance Specular BRDF
 - Directional lights
 
