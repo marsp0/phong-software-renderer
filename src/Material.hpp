@@ -7,8 +7,20 @@
 
 struct Material
 {
-    float ambient;
-    float diffuse;
-    float specular;
-    float shininess;
+    #if !PBR_SHADER
+
+        std::unique_ptr<TextureBuffer> diffuseTexture;
+        float ambient;
+        float diffuse;
+        float specular;
+        float shininess;
+
+    #else
+
+        std::unique_ptr<TextureBuffer> albedoTexture;
+        std::unique_ptr<TextureBuffer> metallicTexture;
+        std::unique_ptr<TextureBuffer> roughnessTexture;
+        std::unique_ptr<TextureBuffer> normalTexture;
+
+    #endif
 };

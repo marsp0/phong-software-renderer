@@ -28,6 +28,26 @@ Matrix4::Matrix4(std::array<std::array<float, 4>, 4> matrix): matrix(matrix)
 
 }
 
+Matrix4::Matrix4(const Vector4f& v1, const Vector4f& v2, const Vector4f& v3)
+{
+    this->matrix[0][0] = v1.x;
+    this->matrix[0][1] = v2.x;
+    this->matrix[0][2] = v3.x;
+    this->matrix[0][3] = 0.f;
+    this->matrix[1][0] = v1.y;
+    this->matrix[1][1] = v2.y;
+    this->matrix[1][2] = v3.y;
+    this->matrix[1][3] = 0.f;
+    this->matrix[2][0] = v1.z;
+    this->matrix[2][1] = v2.z;
+    this->matrix[2][2] = v3.z;
+    this->matrix[2][3] = 0.f;
+    this->matrix[3][0] = 0.f;
+    this->matrix[3][1] = 0.f;
+    this->matrix[3][2] = 0.f;
+    this->matrix[3][3] = 1.f;
+}
+
 Matrix4::~Matrix4() 
 {
 

@@ -31,3 +31,8 @@ Color Color::operator*(float scale) const
 {
 	return Color(this->r * scale, this->g * scale, this->b * scale);
 }
+
+Color Color::operator-(const Color& other) const
+{
+	return Color(this->r - other.r, this->g - other.g, this->b - other.b);
+}

@@ -10,6 +10,8 @@
 #include "Material.hpp"
 #include "Color.hpp"
 
+#if GOURAUD_SHADER
+
 class GouraudShader
 {
     public:
@@ -19,26 +21,32 @@ class GouraudShader
         Color processFragment(float w0, float w1, float w2);
 
         // per model data
-        const TextureBuffer* diffuseTextureBuffer;
+        const TextureBuffer* diffuseTexture;
         Matrix4 MVP;
         Matrix4 M;
         Matrix4 V;
         Matrix4 P;
         Matrix4 N;
-        Material material;
+        float ambientCoeff;
+        float diffuseCoeff;
+        float specularCoeff;
+        float shininess;
         Vector4f cameraPosition;
 
         // lights
         DirectionalLight directionalLight;
 
         // per triangle
-        Vector4f diffuseTextureV0;
-        Vector4f diffuseTextureV1;
-        Vector4f diffuseTextureV2;
+        Vector4f textureV0;
+        Vector4f textureV1;
+        Vector4f textureV2;
         std::array<Color, 3> lightColors;
 
     private:
 };
+typedef GouraudShader Shader;
+
+#elif PHONG_SHADER
 
 class PhongShader
 {
@@ -49,33 +57,74 @@ class PhongShader
         Color processFragment(float w0, float w1, float w2);
 
         // per model data
-        const TextureBuffer* diffuseTextureBuffer;
+        const TextureBuffer* diffuseTexture;
         Matrix4 MVP;
         Matrix4 M;
         Matrix4 V;
         Matrix4 P;
         Matrix4 N;
-        Material material;
+        float ambientCoeff;
+        float diffuseCoeff;
+        float specularCoeff;
+        float shininess;
         Vector4f cameraPosition;
 
         // lights
         DirectionalLight directionalLight;
 
         // per triangle
-        Vector4f diffuseTextureV0;
-        Vector4f diffuseTextureV1;
-        Vector4f diffuseTextureV2;
+        Vector4f textureV0;
+        Vector4f textureV1;
+        Vector4f textureV2;
 
         std::array<Vector4f, 3> normals;
         std::array<Vector4f, 3> viewDirections;        
 
     private:
 };
+typedef PhongShader Shader;
 
-#if GOURAUD_SHADER
-    typedef GouraudShader Shader;
-#elif FLAT_SHADER
-#elif PHONG_SHADER
-    typedef PhongShader Shader;
-#else
+#elif PBR_SHADER
+
+class PBRShader
+{
+    public:
+
+        PBRShader(const Model* model,const Camera* camera, DirectionalLight dirLight);
+        Vector4f processVertex(int index, const Vector4f& vertex, const Vector4f& normal);
+        Color processFragment(float w0, float w1, float w2);
+
+        // per model data
+        const TextureBuffer* albedoTexture;
+        const TextureBuffer* normalTexture;
+        const TextureBuffer* roughnessTexture;
+        const TextureBuffer* metallicTexture;
+        Matrix4 MVP;
+        Matrix4 M;
+        Matrix4 V;
+        Matrix4 P;
+        Matrix4 N;
+        Vector4f cameraPosition;
+
+        // lights
+        DirectionalLight directionalLight;
+
+        // per triangle
+        Vector4f textureV0;
+        Vector4f textureV1;
+        Vector4f textureV2;
+
+        Vector4f tangent;
+        Vector4f lightDir_T;
+        std::array<Vector4f, 3> viewDirections_T;
+
+    private:
+
+        float distributionGGX(const Vector4f& normal, const Vector4f& halfwayDir, float roughness);
+        float geometrySmith(const Vector4f& normal, const Vector4f& viewDir, const Vector4f& lightDir, float roughness);
+        float geometrySchlickGGX(float cosTheta, float roughness);
+        Color fresnelSchlick(float cosTheta, const Color& F0);
+};
+typedef PBRShader Shader;
+
 #endif

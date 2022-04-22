@@ -5,60 +5,54 @@
 
 Model::Model(std::vector<Vector4f> vertices,
              std::vector<Vector4f> normals,
-             std::vector<Vector4f> diffuseTextureCoords,
+             std::vector<Vector4f> textureCoords,
              std::vector<int> vertexIndices,
              std::vector<int> normalIndices,
-             std::vector<int> diffuseTextureIndices,
-             std::unique_ptr<TextureBuffer> diffuseTextureBuffer,
+             std::vector<int> textureIndices,
              QuaternionRotation rotation,
              Material material): 
-             vertices(vertices), normals(normals), diffuseTextureCoords(diffuseTextureCoords),
+             vertices(vertices), normals(normals), textureCoords(textureCoords),
              vertexIndices(vertexIndices), normalIndices(normalIndices),
-             diffuseTextureIndices(diffuseTextureIndices),
-             position(), diffuseTextureBuffer(std::move(diffuseTextureBuffer)),
-             quaternionRotation(rotation), rotationType(RotationType::QUATERNION),
+             textureIndices(textureIndices),
+             position(), quaternionRotation(rotation), rotationType(RotationType::QUATERNION),
              axisAngleRotation(0, Vector4f(1.f, 0.f, 0.f, 1.f)),
-             eulerRotation(0.f, 0.f, 0.f), material(material)
+             eulerRotation(0.f, 0.f, 0.f), material(std::move(material))
 {
     this->constructBoundingBox();
 }
 
 Model::Model(std::vector<Vector4f> vertices,
              std::vector<Vector4f> normals,
-             std::vector<Vector4f> diffuseTextureCoords,
+             std::vector<Vector4f> textureCoords,
              std::vector<int> vertexIndices,
              std::vector<int> normalIndices,
-             std::vector<int> diffuseTextureIndices,
-             std::unique_ptr<TextureBuffer> diffuseTextureBuffer,
+             std::vector<int> textureIndices,
              EulerRotation rotation,
              Material material): 
-             vertices(vertices), normals(normals), diffuseTextureCoords(diffuseTextureCoords),
+             vertices(vertices), normals(normals), textureCoords(textureCoords),
              vertexIndices(vertexIndices), normalIndices(normalIndices),
-             diffuseTextureIndices(diffuseTextureIndices),
-             position(), diffuseTextureBuffer(std::move(diffuseTextureBuffer)),
-             eulerRotation(rotation), rotationType(RotationType::EULER),
+             textureIndices(textureIndices),
+             position(), eulerRotation(rotation), rotationType(RotationType::EULER),
              quaternionRotation(1.f, 0.f, 0.f, 1.f), axisAngleRotation(0, Vector4f(1.f, 0.f, 0.f, 1.f)),
-             material(material)
+             material(std::move(material))
 {
     this->constructBoundingBox();
 }
 
 Model::Model(std::vector<Vector4f> vertices,
              std::vector<Vector4f> normals,
-             std::vector<Vector4f> diffuseTextureCoords,
+             std::vector<Vector4f> textureCoords,
              std::vector<int> vertexIndices,
              std::vector<int> normalIndices,
-             std::vector<int> diffuseTextureIndices,
-             std::unique_ptr<TextureBuffer> diffuseTextureBuffer,
+             std::vector<int> textureIndices,
              AxisAngleRotation rotation,
              Material material): 
-             vertices(vertices), normals(normals), diffuseTextureCoords(diffuseTextureCoords),
+             vertices(vertices), normals(normals), textureCoords(textureCoords),
              vertexIndices(vertexIndices), normalIndices(normalIndices),
-             diffuseTextureIndices(diffuseTextureIndices),
-             position(), diffuseTextureBuffer(std::move(diffuseTextureBuffer)),
-             axisAngleRotation(rotation), rotationType(RotationType::AXIS_ANGLE),
+             textureIndices(textureIndices),
+             position(), axisAngleRotation(rotation), rotationType(RotationType::AXIS_ANGLE),
              quaternionRotation(1.f, 0.f, 0.f, 1.f), eulerRotation(0.f, 0.f, 0.f),
-             material(material)
+             material(std::move(material))
 {
     this->constructBoundingBox();
 }
@@ -147,9 +141,9 @@ const std::vector<Vector4f>& Model::getNormals() const
     return this->normals;
 }
 
-const std::vector<Vector4f>& Model::getDiffuseTextureCoords() const
+const std::vector<Vector4f>& Model::getTextureCoords() const
 {
-    return this->diffuseTextureCoords;
+    return this->textureCoords;
 }
 
 const std::vector<int>& Model::getVertexIndices() const
@@ -162,14 +156,9 @@ const std::vector<int>& Model::getNormalIndices() const
     return this->normalIndices;
 }
 
-const std::vector<int>& Model::getDiffuseTextureIndices() const
+const std::vector<int>& Model::getTextureIndices() const
 {
-    return this->diffuseTextureIndices;
-}
-
-const TextureBuffer* Model::getDiffuseTextureBuffer() const
-{
-    return this->diffuseTextureBuffer.get();
+    return this->textureIndices;
 }
 
 void Model::constructBoundingBox()
@@ -192,9 +181,4 @@ void Model::constructBoundingBox()
 AABB Model::getBoundingBox() const
 {
     return this->boundingBox;
-}
-
-Material Model::getMaterial() const
-{
-    return this->material;
 }

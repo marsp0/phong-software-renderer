@@ -15,6 +15,7 @@ class Color
 		Color operator*(const Color& other) const;
 		Color operator*(float scale) const;
 		Color operator+(const Color& other) const;
+		Color operator-(const Color& other) const;
 
 		float r;
 		float g;

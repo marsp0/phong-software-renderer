@@ -2,6 +2,7 @@
 
 #include <math.h>
 #include <iostream>
+#include "Color.hpp"
 
 template<typename T>
 class Vector4 
@@ -20,6 +21,11 @@ class Vector4
         }
         
         Vector4(const Vector4<T>& other): x(other.x), y(other.y), z(other.z), w(other.w) 
+        {
+
+        }
+
+        Vector4(const Color& color): x((T)color.r), y((T)color.g), z((T)color.b), w()
         {
 
         }
