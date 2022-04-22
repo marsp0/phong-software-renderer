@@ -9,6 +9,7 @@ class Matrix4
     public:
         Matrix4();
         Matrix4(std::array<std::array<float, 4>, 4> matrix);
+        Matrix4(const Vector4f& v1, const Vector4f& v2, const Vector4f& v3);
         ~Matrix4();
 
         void set(int row, int col, float value);

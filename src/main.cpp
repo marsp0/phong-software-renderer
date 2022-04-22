@@ -17,7 +17,8 @@ void runRenderer()
     
     #else
     
-        SoftwareRenderer renderer(WIDTH, HEIGHT, "./assets/coffee_cup/coffee_cup.obj");
+        SoftwareRenderer renderer(WIDTH, HEIGHT, "./assets/gas_tank/gas_tank.obj");
+        // SoftwareRenderer renderer(WIDTH, HEIGHT, "./assets/coffee_cup/coffee_cup.obj");
     
     #endif
     

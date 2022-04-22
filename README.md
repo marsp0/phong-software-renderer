@@ -11,9 +11,16 @@ Software renderer written from scratch. The goal of the project is for me to be 
 - Backface culling
 - Z-Buffer
 - Shading models
-	- Gouraud Interpolation - Phong and Blinn Phong reflection models
-	- Phong Interpolation - Phong and Blinn Phong reflection models
-	- Metallic workflow (PBR) - Lambertian Diffuse BRDF + Cook-Torrance Specular BRDF
+	- Gouraud Interpolation 
+		- Phong reflection
+		- BlinnPhong reflection
+	- Phong Interpolation 
+		- Phong reflection
+		- BlinnPhong reflection
+	- Metallic workflow (PBR)
+	    - Lambertian Diffuse BRDF
+	    - Cook-Torrance Specular BRDF
+	    - Normal Mapping
 - Directional lights
 
 Would like to do
@@ -24,7 +31,7 @@ Would like to do
 - Image based lighting
 - Gamma Correction
 
-## Build
+## Build and Run
 See the relevant [wiki page](https://github.com/marsp0/software-renderer/wiki/Build).
 
 ## References

@@ -1,6 +1,7 @@
 #include "Shader.hpp"
 
 #include "Sampler.hpp"
+#include <algorithm>
 
 // // // // // // // // // //
 // Gouraud Shader
@@ -160,19 +161,101 @@ PBRShader::PBRShader(const Model* model, const Camera* camera, DirectionalLight 
     this->MVP = this->P * this->V * this->M;
 }
 
+float PBRShader::distributionGGX(const Vector4f& normal, const Vector4f& halfwayDir, float roughness)
+{
+
+    float r4 = roughness * roughness * roughness * roughness;
+    float nDotH = std::max(normal.dot(halfwayDir), 0.f);
+    float nDotH2 = nDotH * nDotH;
+
+    float denom = (nDotH2 * (r4 - 1.f) + 1.f);
+    denom = PI * denom * denom;
+
+    return r4 / denom;
+}
+
+Color PBRShader::fresnelSchlick(float cosTheta, const Color& F0)
+{
+    return F0 + (Color(1.f, 1.f, 1.f) + F0 * -1.f) * std::pow(std::clamp(1.f - cosTheta, 0.f, 1.f), 5.f);
+}
+
+float PBRShader::geometrySchlickGGX(float cosTheta, float roughness)
+{
+    float r = (roughness + 1.f);
+    float k = (r * r) / 8.f;
+
+    return cosTheta / (cosTheta * (1.f - k) + k);
+}
+
+float PBRShader::geometrySmith(const Vector4f& normal, const Vector4f& viewDir, const Vector4f& lightDir, float roughness)
+{
+    float nDotV = std::max(normal.dot(viewDir), 0.f);
+    float nDotL = std::max(normal.dot(lightDir), 0.f);
+
+    return this->geometrySchlickGGX(nDotV, roughness) * this->geometrySchlickGGX(nDotL, roughness);
+}
+
 Vector4f PBRShader::processVertex(int index, const Vector4f& vertex, const Vector4f& normal)
 {
+    Vector4f normal_W = this->N * normal;
+    normal_W.normalize();
+    Vector4f tangent_W = this->N * (this->tangent - normal * normal.dot(this->tangent));
+    tangent_W.normalize();
+    Vector4f bitangent_W = normal_W.cross(tangent_W);
+    bitangent_W.normalize();
+    Matrix4 transform_T_W = Matrix4(tangent_W, bitangent_W, normal_W).transpose();
+
+    this->lightDir_T = -(transform_T_W * this->directionalLight.direction);
+    this->lightDir_T.normalize();
+    this->viewDirections_T[index] = transform_T_W * (this->cameraPosition - (this->M * vertex));
+    this->viewDirections_T[index].normalize();
+
     return this->MVP * vertex;
 }
 
 Color PBRShader::processFragment(float w0, float w1, float w2)
 {
-    // calculate diffuse
+    Color albedo = Sampler::sample<TextureBuffer>(this->albedoTexture, this->textureV0, this->textureV1, this->textureV2, w0, w1, w2);
+    Color roughness = Sampler::sample<TextureBuffer>(this->roughnessTexture, this->textureV0, this->textureV1, this->textureV2, w0, w1, w2);
+    Color metalness = Sampler::sample<TextureBuffer>(this->metallicTexture, this->textureV0, this->textureV1, this->textureV2, w0, w1, w2);
+    Vector4f normal_T{Sampler::sample<TextureBuffer>(this->normalTexture, this->textureV0, this->textureV1, this->textureV2, w0, w1, w2)};
 
-    // calculate specular
+    Vector4f viewDir_T = this->viewDirections_T[0] * w0 + this->viewDirections_T[1] * w1 + this->viewDirections_T[2] * w2;
+    viewDir_T.normalize();
+    Vector4f halfwayDir_T = viewDir_T + this->lightDir_T;
+    halfwayDir_T.normalize();
 
-    // return (diffuse + specular) * lightColor * objectColor
-    return Color(0.f, 0.f, 0.f);
+    // 
+    // Cook-Torrance BRDF
+    // 
+
+    float vDotH = viewDir_T.dot(halfwayDir_T);
+    float nDotV = normal_T.dot(viewDir_T);
+    float nDotL = normal_T.dot(lightDir_T);
+
+    // normal distribution function
+    float D = this->distributionGGX(normal_T, halfwayDir_T, roughness.r);
+
+    // fresnel factor
+    Color F0 = Color(0.04f, 0.04f, 0.04f) * (1.f - metalness.r) + albedo * metalness.r; // use albedo if metalic or 0.04 if plastic
+    Color F = this->fresnelSchlick(std::max(vDotH, 0.f), F0);
+
+    // geometric attenuation
+    float G = this->geometrySmith(normal_T, viewDir_T, this->lightDir_T, roughness.r);
+
+    // total specular
+    Color numerator = F * D * G;
+    float denominator = 4.f * std::max(nDotV, 0.f) * std::max(nDotL, 0.f) + 0.0001;
+    Color specular = numerator * (1.f / denominator);
+
+    // 
+    // Lambertian BRDF
+    // 
+
+    Color diffuse = Color(1.f, 1.f, 1.f) - F;
+    diffuse = diffuse * (1.f - metalness.r);
+    // return (diffuse * albedo * this->directionalLight.color);
+    return (diffuse * albedo + specular) * this->directionalLight.color * nDotL;
 }
 
 #endif

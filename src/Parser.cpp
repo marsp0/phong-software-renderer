@@ -339,8 +339,9 @@ namespace parser
         bool fourthBit = imageDescriptor & 16;
         bool fifthBit = imageDescriptor & 32;
         bool topLeft = !fourthBit && fifthBit;
-        bool botRight = fourthBit && !fifthBit;
         bool topRight = fourthBit && fifthBit;
+        bool botLeft = !fourthBit && !fifthBit;
+        bool botRight = fourthBit && !fifthBit;
         
         // convert uint8_t to uint32_t
         std::vector<uint32_t> imageDataCollapsed;
@@ -397,7 +398,18 @@ namespace parser
                 }
             }
         }
-        else if (topRight)
+        else if (botLeft)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    int index = y * width + x;
+                    data[index] = imageDataCollapsed[index];
+                }
+            }
+        }
+        else
         {
             std::cerr << "Parser can only convert from topLeft/botLeft/botRight";
             std::terminate();

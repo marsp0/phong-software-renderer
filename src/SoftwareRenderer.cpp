@@ -106,10 +106,25 @@ void SoftwareRenderer::drawModel(const Model* model)
         }
 
         // set shader attributes
-
         shader.textureV0 = textureCoords[indexT0];
         shader.textureV1 = textureCoords[indexT1];
         shader.textureV2 = textureCoords[indexT2];
+
+        #if PBR_SHADER
+
+            // compute tangent and bitangent vectors
+            float dsA = shader.textureV1.x - shader.textureV0.x;
+            float dtA = shader.textureV1.y - shader.textureV0.y;
+            float dsB = shader.textureV2.x - shader.textureV0.x;
+            float dtB = shader.textureV2.y - shader.textureV0.y;
+            float oneOverD = 1.f / (dsA * dtB - dsB * dtA);
+            Vector4f edgeA = vertices[indexV1] - vertices[indexV0];
+            Vector4f edgeB = vertices[indexV2] - vertices[indexV0];
+            shader.tangent.x = oneOverD * dtB * edgeA.x - dtA * edgeB.x;
+            shader.tangent.y = oneOverD * dtB * edgeA.y - dtA * edgeB.y;
+            shader.tangent.z = oneOverD * dtB * edgeA.z - dtA * edgeB.z;
+
+        #endif
 
         // vertex shader
         std::array<Vector4f, 3> processedVertices;

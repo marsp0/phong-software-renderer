@@ -114,7 +114,16 @@ class PBRShader
         Vector4f textureV1;
         Vector4f textureV2;
 
+        Vector4f tangent;
+        Vector4f lightDir_T;
+        std::array<Vector4f, 3> viewDirections_T;
+
     private:
+
+        float distributionGGX(const Vector4f& normal, const Vector4f& halfwayDir, float roughness);
+        float geometrySmith(const Vector4f& normal, const Vector4f& viewDir, const Vector4f& lightDir, float roughness);
+        float geometrySchlickGGX(float cosTheta, float roughness);
+        Color fresnelSchlick(float cosTheta, const Color& F0);
 };
 typedef PBRShader Shader;
 
