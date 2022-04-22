@@ -18,17 +18,6 @@ Software renderer written from scratch. The goal of the project is for me to be 
 	- Blinn Phong
 - Directional lights
 
-Would like to do
-- PBR shaders (metallic workflow, specular workflow)
-- Shadows
-- Different types of texture filtering
-- Anti aliasing
-- more reflection models
-- Point lights
-- Ambient Occlusion
-- Image based lighting
-- Gamma Correction
-
 ## Build
 See the relevant [wiki page](https://github.com/marsp0/software-renderer/wiki/Build).
 
