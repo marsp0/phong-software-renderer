@@ -17,6 +17,7 @@ Software renderer written from scratch. The goal of the project is for me to be 
 	- Phong
 	- Blinn Phong
 - Directional lights
+- TGA and OBJ file parsers
 
 ## Build
 See the relevant [wiki page](https://github.com/marsp0/software-renderer/wiki/Build).
